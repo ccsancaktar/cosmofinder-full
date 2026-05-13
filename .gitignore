@@ -1,0 +1,49 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets / env
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# JavaScript / frontend tooling
+**/node_modules/
+**/.expo/
+**/dist/
+**/dist-ssr/
+**/coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python / backend tooling
+**/__pycache__/
+*.py[cod]
+.Python
+**/.pytest_cache/
+**/.mypy_cache/
+**/.venv/
+**/venv/
+**/env/
+**/ENV/
+**/build/
+**/site/
+**/*.egg-info/
+
+# Local app/runtime data
+.codex_tmp/
+.mongodb-data/
+frontend/.git.frontend-backup-*/
+
+# Native / generated folders
+frontend/ios/
+frontend/android/

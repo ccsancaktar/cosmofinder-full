@@ -1,0 +1,68 @@
+{
+  "expo": {
+    "name": "CosmoFinder",
+    "slug": "cosmofinder",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "scheme": "cosmofinder",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.cosmofinder.app",
+      "infoPlist": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": true,
+          "NSAllowsLocalNetworking": true,
+          "NSExceptionDomains": {
+            "cosmofinder.com": {
+              "NSExceptionAllowsInsecureHTTPLoads": false,
+              "NSExceptionMinimumTLSVersion": "1.2",
+              "NSIncludesSubdomains": true
+            }
+          }
+        }
+      }
+    },
+    "android": {
+      "usesCleartextTraffic": true,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0D0B1F"
+      },
+      "package": "com.cosmofinder.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-1621199907307145~9476009032",
+          "iosAppId": "ca-app-pub-1621199907307145~4415254045"
+        }
+      ],
+      "@react-native-community/datetimepicker",
+      "@sentry/react-native",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.cosmofinder.app"
+        }
+      ],
+      "expo-font",
+      "expo-localization",
+      "expo-router",
+      "expo-web-browser"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "0636f808-bddf-4a5a-8b65-af7b53266e04"
+      }
+    }
+  }
+}

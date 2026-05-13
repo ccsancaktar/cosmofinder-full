@@ -1,0 +1,101 @@
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./App.{js,jsx,ts,tsx}",
+    "./screens/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
+    "./navigation/**/*.{js,jsx,ts,tsx}"
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#0D0B1F',
+        accent: '#C5A100',
+        violet: '#8A4FFF',
+        surface: '#1B1B2F',
+        surfaceVariant: '#2A2A3F',
+        text: {
+          primary: '#FFFFFF',
+          secondary: '#CCCCCC',
+          muted: '#999999',
+          accent: '#C5A100',
+        },
+        success: '#10B981',
+        warning: '#F59E0B',
+        error: '#EF4444',
+        info: '#3B82F6',
+        overlay: {
+          dark: 'rgba(0, 0, 0, 0.7)',
+          light: 'rgba(255, 255, 255, 0.1)',
+          glass: 'rgba(255, 255, 255, 0.05)',
+        },
+      },
+      fontFamily: {
+        heading: ['CinzelDecorative-Regular', 'Cinzel Decorative', 'serif'],
+        headingBold: ['CinzelDecorative-Bold', 'Cinzel Decorative', 'serif'],
+        body: ['Inter-Regular', 'Inter', 'sans-serif'],
+        bodyBold: ['Inter-Bold', 'Inter', 'sans-serif'],
+        accent: ['CinzelDecorative-Regular', 'Cinzel Decorative', 'serif'],
+      },
+      fontSize: {
+        xs: 12,
+        sm: 14,
+        base: 16,
+        lg: 18,
+        xl: 20,
+        '2xl': 24,
+        '3xl': 28,
+        '4xl': 32,
+        '5xl': 36,
+      },
+      spacing: {
+        xs: 4,
+        sm: 8,
+        md: 16,
+        lg: 24,
+        xl: 32,
+        '2xl': 48,
+        '3xl': 64,
+      },
+      borderRadius: {
+        sm: 8,
+        md: 12,
+        lg: 16,
+        xl: 20,
+        '2xl': 24,
+        full: 9999,
+      },
+      boxShadow: {
+        sm: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.2,
+          shadowRadius: 2,
+          elevation: 2,
+        },
+        md: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 4,
+        },
+        lg: {
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.4,
+          shadowRadius: 16,
+          elevation: 8,
+        },
+        mystical: {
+          shadowColor: '#8A4FFF',
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+          elevation: 6,
+        },
+      },
+    },
+  },
+  plugins: [],
+} 

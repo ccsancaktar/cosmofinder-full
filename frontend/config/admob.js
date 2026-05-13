@@ -1,0 +1,27 @@
+import {
+  ADMOB_IOS_APP_ID,
+  ADMOB_ANDROID_APP_ID,
+  ADMOB_IOS_BANNER_ID,
+  ADMOB_ANDROID_BANNER_ID,
+  ADMOB_IOS_INTERSTITIAL_ID,
+  ADMOB_ANDROID_INTERSTITIAL_ID,
+  ADMOB_IOS_REWARDED_ID,
+  ADMOB_ANDROID_REWARDED_ID
+} from '@env';
+
+export const AdMobConfig = {
+  ios: {
+    appId: ADMOB_IOS_APP_ID,
+    bannerId: ADMOB_IOS_BANNER_ID,
+    interstitialId: ADMOB_IOS_INTERSTITIAL_ID,
+    rewardedId: ADMOB_IOS_REWARDED_ID
+  },
+  android: {
+    appId: ADMOB_ANDROID_APP_ID,
+    bannerId: ADMOB_ANDROID_BANNER_ID,
+    interstitialId: ADMOB_ANDROID_INTERSTITIAL_ID,
+    rewardedId: ADMOB_ANDROID_REWARDED_ID
+  }
+};
+
+export default AdMobConfig;

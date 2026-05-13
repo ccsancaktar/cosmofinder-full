@@ -1,0 +1,187 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Fonts */
+@font-face {
+  font-family: 'Cinzel Decorative';
+  src: url('/assets/fonts/CinzelDecorative-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Cinzel Decorative';
+  src: url('/assets/fonts/CinzelDecorative-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Noto Sans Runic';
+  src: url('/assets/fonts/NotoSansRunic-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --background: 222 47% 6%;
+    --foreground: 45 10% 95%;
+
+    --card: 222 40% 10%;
+    --card-foreground: 45 10% 95%;
+
+    --popover: 222 40% 10%;
+    --popover-foreground: 45 10% 95%;
+
+    --primary: 43 72% 47%;
+    --primary-foreground: 222 47% 6%;
+
+    --secondary: 222 35% 15%;
+    --secondary-foreground: 45 10% 95%;
+
+    --muted: 222 30% 18%;
+    --muted-foreground: 220 15% 60%;
+
+    --accent: 43 72% 47%;
+    --accent-foreground: 222 47% 6%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 222 30% 20%;
+    --input: 222 30% 20%;
+    --ring: 43 72% 47%;
+
+    --radius: 0.75rem;
+
+    /* Custom cosmic tokens */
+    --cosmic-glow: 43 72% 47%;
+    --cosmic-dark: 222 50% 4%;
+    --cosmic-card: 222 40% 12%;
+    --cosmic-border: 222 30% 25%;
+    --gold-gradient: linear-gradient(135deg, hsl(43 72% 47%), hsl(35 80% 55%));
+    --cosmic-gradient: linear-gradient(180deg, hsl(222 47% 8%) 0%, hsl(222 50% 4%) 100%);
+    --card-gradient: linear-gradient(180deg, hsl(222 40% 14%) 0%, hsl(222 40% 10%) 100%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "San Francisco", "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    @apply bg-background text-foreground;
+    background: linear-gradient(135deg, hsl(222 50% 4%) 0%, hsl(222 47% 6%) 50%, hsl(222 50% 4%) 100%);
+    background-attachment: fixed;
+    color: #E5E7EB;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', serif;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, hsl(43 72% 47%), hsl(35 80% 55%));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, hsl(43 72% 60%), hsl(35 80% 65%));
+}
+
+/* Text Clamp Utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.line-clamp-3 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Selection Color */
+::selection {
+  background: rgba(43, 121, 71, 0.3);
+  color: #E5E7EB;
+}
+
+/* Custom scrollbar for firefox */
+* {
+  scrollbar-color: linear-gradient(180deg, hsl(43 72% 47%), hsl(35 80% 55%)) transparent;
+}
+
+/* Focus visible styles */
+:focus-visible {
+  outline: 2px solid hsl(43 72% 47%);
+  outline-offset: 2px;
+}
+
+@layer utilities {
+  .font-display {
+    font-family: 'Cinzel', serif;
+  }
+
+  .text-gold-gradient {
+    background: linear-gradient(135deg, hsl(43 72% 47%), hsl(35 80% 55%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-cosmic-gradient {
+    background: linear-gradient(180deg, hsl(222 47% 8%) 0%, hsl(222 50% 4%) 100%);
+  }
+
+  .bg-card-gradient {
+    background: linear-gradient(180deg, hsl(222 40% 14%) 0%, hsl(222 40% 10%) 100%);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 20px hsla(43, 72%, 47%, 0.3);
+  }
+
+  .glow-gold-sm {
+    box-shadow: 0 0 10px hsla(43, 72%, 47%, 0.2);
+  }
+
+  .cosmic-card {
+    @apply bg-card-gradient rounded-xl border border-border backdrop-blur-sm;
+    transition: all 0.3s ease;
+  }
+
+  .cosmic-card:hover {
+    @apply border-primary/50 glow-gold-sm;
+    transform: translateY(-2px);
+  }
+}
