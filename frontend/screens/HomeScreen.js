@@ -6,10 +6,10 @@ import {
   Text, 
   Dimensions,
   StatusBar,
-  SafeAreaView,
   StyleSheet,
   Platform
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -202,7 +202,7 @@ export default function HomeScreen({ navigation }) {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <StatusBar 
         barStyle="light-content" 
         backgroundColor="#0D0B1F"
@@ -214,6 +214,7 @@ export default function HomeScreen({ navigation }) {
         colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']}
         style={styles.gradientBg}
       >
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
         {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerLeft}>
@@ -402,6 +403,7 @@ export default function HomeScreen({ navigation }) {
           </View>
 
         </ScrollView>
+        </SafeAreaView>
       </LinearGradient>
       
       {/* Auth Modal */}
@@ -418,7 +420,7 @@ export default function HomeScreen({ navigation }) {
         }}
       />
       
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -426,10 +428,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#0D0B1F',
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   gradientBg: {
     flex: 1,
+  },
+  safeArea: {
+    flex: 1,
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   header: {
     flexDirection: 'row',

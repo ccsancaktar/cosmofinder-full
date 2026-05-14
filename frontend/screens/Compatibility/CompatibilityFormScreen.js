@@ -21,6 +21,7 @@ import LazyImage from '../../components/LazyImage';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import TokenWarningModal from '../../components/TokenWarningModal';
+import AdMobBanner from '../../components/AdMobBanner';
 import { useCompatibilityCache } from '../../hooks/useFortuneCache';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
@@ -165,7 +166,7 @@ export default function CompatibilityFormScreen({ navigation }) {
   }, [balance, checkDuplicateRequest, currentLanguage, fetchBalance, getFortune, hasPremium, iliskiTuru, kisi1DogumTarihi, kisi1Isim, kisi2DogumTarihi, kisi2Isim, navigation, showError, t]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         <LinearGradient colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']} style={styles.gradientBg}>
@@ -323,6 +324,11 @@ export default function CompatibilityFormScreen({ navigation }) {
         />
 
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="compatibility" />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
       </View>
     </SafeAreaView>
   );
@@ -332,7 +338,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#0D0B1F' },
   container: { flex: 1, backgroundColor: '#0D0B1F' },
   gradientBg: { flex: 1 },
-  scrollContent: { paddingBottom: 36 },
+  scrollContent: { paddingBottom: 120 },
   headerSection: { height: 210, position: 'relative' },
   headerBackgroundImage: { position: 'absolute', width: '100%', height: '100%' },
   headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 22, paddingTop: 20 },
@@ -365,4 +371,5 @@ const styles = StyleSheet.create({
   modalContent: { backgroundColor: '#1B1B2F', borderRadius: 20, paddingTop: 12, paddingBottom: Platform.OS === 'ios' ? 10 : 0, borderWidth: 1, borderColor: 'rgba(197,161,0,0.14)' },
   modalDoneButton: { alignSelf: 'center', paddingHorizontal: 18, paddingVertical: 10 },
   modalDoneText: { color: '#C5A100', fontSize: 15, fontWeight: '700' },
+  bannerAdContainer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#0D0B1F' },
 });

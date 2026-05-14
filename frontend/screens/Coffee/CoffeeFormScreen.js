@@ -17,6 +17,7 @@ import TokenWarningModal from '../../components/TokenWarningModal';
 import LazyImage from '../../components/LazyImage';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -197,7 +198,7 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
   }, [images, hasPremium, balance, checkDuplicateRequest, getFortune, fetchBalance, navigation]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         
@@ -205,7 +206,7 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
           colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']}
           style={styles.gradientBg}
         >
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
           {/* Header Section */}
           <View style={styles.headerSection}>
             <LazyImage
@@ -345,6 +346,11 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
         ]}
         tips={[t('coffee.tip1'), t('coffee.tip2'), t('coffee.tip3')]}
       />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
     </View>
   </SafeAreaView>
   );
@@ -364,6 +370,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 120,
   },
   header: {
     padding: 24,
@@ -675,6 +684,13 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginLeft: 12,
     ...fontStyles.body,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

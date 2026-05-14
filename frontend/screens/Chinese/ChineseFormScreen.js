@@ -19,6 +19,7 @@ import TimePickerField from '../../components/TimePickerField';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const ChineseFormScreen = React.memo(({ navigation }) => {
@@ -182,7 +183,7 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
   }, [readingMode, profileBirthDate, profileBirthTime, dogumTarihi, dogumSaati, hasPremium, balance, checkDuplicateRequest, getFortune, fetchBalance, navigation]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         
@@ -362,6 +363,11 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
         ]}
         tips={[t('chinese.bazitip1'), t('chinese.bazitip2'), t('chinese.bazitip3')]}
       />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
 
       {/* Date Picker - Platform Specific */}
       {Platform.OS === 'ios' ? (
@@ -437,7 +443,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 0,
-    paddingBottom: 32,
+    paddingBottom: 120,
   },
   header: {
     padding: 24,
@@ -769,6 +775,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#FFFFFF',
     ...fontStyles.body,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

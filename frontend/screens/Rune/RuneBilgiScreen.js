@@ -1,21 +1,18 @@
 import React from 'react';
-import {  View, StyleSheet, ScrollView, Dimensions, Text, TouchableOpacity, StatusBar , SafeAreaView, Platform } from 'react-native';
+import {  View, StyleSheet, ScrollView, Dimensions, Text, TouchableOpacity, StatusBar , Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import LazyImage from '../../components/LazyImage';
-import AdMobBanner from '../../components/AdMobBanner';
-import { usePremium } from '../../context/PremiumContext';
 import { fontStyles } from '../../utils/fontStyles';
 
 const { width } = Dimensions.get('window');
 
 export default function RuneBilgiScreen({ navigation }) {
   const { t } = useTranslation();
-  const { hasPremium } = usePremium();
-  
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
       <StatusBar 
         barStyle="light-content" 
@@ -152,12 +149,6 @@ export default function RuneBilgiScreen({ navigation }) {
         </ScrollView>
       </LinearGradient>
       
-      {/* Banner Ad - Premium olmayan kullanıcılar için */}
-      {!hasPremium && (
-        <View style={styles.bannerAdContainer}>
-          <AdMobBanner />
-        </View>
-      )}
       </View>
     </SafeAreaView>
   );
@@ -180,7 +171,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 0,
-    paddingBottom: 120, // Banner için extra padding (320x50 banner + margin + safe area)
+    paddingBottom: 32,
   },
   content: {
     paddingHorizontal: 0,

@@ -19,6 +19,7 @@ import TimePickerField from '../../components/TimePickerField';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import ReadingModeCard from '../../components/ReadingModeCard';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const YildiznameFormScreen = React.memo(({ navigation }) => {
@@ -206,7 +207,7 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
   }, [readingMode, profileName, profileBirthDate, profileBirthTime, profileBirthPlace, isim, anneAdi, dogumTarihi, dogumYeri, dogumSaati, hasPremium, balance, navigation, fetchBalance, getFortune, checkDuplicateRequest]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         
@@ -430,6 +431,11 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
           t('yildizname.yildiznametip4'),
         ]}
       />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
 
       {/* Date Picker - Platform Specific */}
       {Platform.OS === 'ios' ? (
@@ -505,7 +511,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 0,
-    paddingBottom: 32,
+    paddingBottom: 120,
   },
 
   bilgiButton: {
@@ -864,6 +870,13 @@ const styles = StyleSheet.create({
   dateButtonText: {
     fontSize: 16,
     color: '#FFFFFF',
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

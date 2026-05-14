@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,6 +21,10 @@ export default function FortuneInfoSheet({
   tips = [],
   accentColor = '#C5A100',
 }) {
+  const { height } = useWindowDimensions();
+  const sheetMinHeight = Math.min(Math.max(height * 0.62, 500), 620);
+  const sheetMaxHeight = Math.min(height * 0.84, 760);
+
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
@@ -28,7 +33,7 @@ export default function FortuneInfoSheet({
         <View style={styles.sheetWrap}>
           <LinearGradient
             colors={['#171327', '#201B34', '#2A243F']}
-            style={styles.sheet}
+            style={[styles.sheet, { minHeight: sheetMinHeight, maxHeight: sheetMaxHeight }]}
           >
             <View style={styles.handle} />
 
@@ -86,17 +91,19 @@ const styles = StyleSheet.create({
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(7, 6, 16, 0.6)',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },
   sheetWrap: {
     paddingHorizontal: 14,
-    paddingBottom: 12,
+    width: '100%',
+    alignItems: 'center',
   },
   sheet: {
-    maxHeight: '82%',
+    width: '100%',
     borderRadius: 28,
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.16)',
@@ -141,9 +148,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.08)',
   },
   scroll: {
-    flexGrow: 0,
+    flex: 1,
   },
   scrollContent: {
+    flexGrow: 1,
     paddingHorizontal: 18,
     paddingTop: 10,
     paddingBottom: 24,

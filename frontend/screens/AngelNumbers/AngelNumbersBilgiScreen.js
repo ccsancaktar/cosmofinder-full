@@ -1,20 +1,17 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import LazyImage from '../../components/LazyImage';
-import AdMobBanner from '../../components/AdMobBanner';
 import { useAuth } from '../../context/AuthContext';
-import { usePremium } from '../../context/PremiumContext';
 
 export default function AngelNumbersBilgiScreen({ navigation }) {
   const { t } = useTranslation();
   const { isAuthenticated } = useAuth();
-  const { hasPremium } = usePremium();
-
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" translucent={false} />
         <LinearGradient colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']} style={styles.gradientBg}>
@@ -55,11 +52,6 @@ export default function AngelNumbersBilgiScreen({ navigation }) {
             </TouchableOpacity>
           </ScrollView>
         </LinearGradient>
-        {!hasPremium ? (
-          <View style={styles.bannerAdContainer}>
-            <AdMobBanner />
-          </View>
-        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -69,7 +61,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#0D0B1F' },
   container: { flex: 1, backgroundColor: '#0D0B1F' },
   gradientBg: { flex: 1 },
-  scrollContent: { paddingBottom: 120 },
+  scrollContent: { paddingBottom: 32 },
   headerSection: { height: 210, position: 'relative' },
   headerBackgroundImage: { position: 'absolute', width: '100%', height: '100%' },
   headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 20, paddingTop: 20 },

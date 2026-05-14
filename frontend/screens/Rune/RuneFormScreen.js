@@ -21,6 +21,7 @@ import { showInterstitialAd, preloadInterstitialAd } from '../../utils/interstit
 import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -119,7 +120,7 @@ const RuneFormScreen = React.memo(({ navigation }) => {
   }, [soru, hasPremium, balance, checkDuplicateRequest, getFortune, fetchBalance, navigation]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         
@@ -249,6 +250,11 @@ const RuneFormScreen = React.memo(({ navigation }) => {
         ]}
         tips={[t('rune.runetip1'), t('rune.runetip2'), t('rune.runetip3')]}
       />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
     </View>
   </SafeAreaView>
   );
@@ -271,7 +277,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 0,
-    paddingBottom: 32,
+    paddingBottom: 120,
   },
   header: {
     padding: 24,
@@ -541,6 +547,13 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginLeft: 12,
     ...fontStyles.body,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

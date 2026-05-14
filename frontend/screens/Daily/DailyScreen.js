@@ -18,6 +18,7 @@ import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const DailyScreen = () => {
@@ -196,7 +197,7 @@ const DailyScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         
@@ -399,6 +400,11 @@ const DailyScreen = () => {
           />
         )
       )}
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
     </View>
   </SafeAreaView>
   );
@@ -421,7 +427,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 0,
-    paddingBottom: 32,
+    paddingBottom: 120,
   },
   headerSection: {
     height: 240,
@@ -708,6 +714,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#0D0B1F',
     alignItems: 'center',
     paddingVertical: 10,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

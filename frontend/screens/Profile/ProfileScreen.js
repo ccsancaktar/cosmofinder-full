@@ -8,9 +8,9 @@ import {
   Alert,
   ActivityIndicator,
   Image,
-  SafeAreaView,
   Platform
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -148,7 +148,7 @@ export default function ProfileScreen({ navigation }) {
 
   if (loading) {
     return (
-      <SafeAreaView style={styles.loadingContainer}>
+      <SafeAreaView style={styles.loadingContainer} edges={['top']}>
         <ActivityIndicator size="large" color="#C5A100" />
         <Text style={[styles.loadingText, fontStyles.body]}>{t('common.loading')}</Text>
       </SafeAreaView>
@@ -157,7 +157,7 @@ export default function ProfileScreen({ navigation }) {
 
   if (!user) {
     return (
-      <SafeAreaView style={styles.errorContainer}>
+      <SafeAreaView style={styles.errorContainer} edges={['top']}>
         <Ionicons name="alert-circle" size={64} color="#C5A100" />
         <Text style={[styles.errorText, fontStyles.body]}>{t('profile.userInfoError')}</Text>
         <TouchableOpacity style={styles.retryButton} onPress={() => navigation.goBack()}>
@@ -168,7 +168,7 @@ export default function ProfileScreen({ navigation }) {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <LinearGradient
         colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']}
         style={styles.gradientBg}

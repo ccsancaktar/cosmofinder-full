@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { usePremium } from '../../context/PremiumContext';
 import LazyImage from '../../components/LazyImage';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const TarotFormScreen = React.memo(() => {
@@ -18,12 +19,12 @@ const TarotFormScreen = React.memo(() => {
   const [showInfoSheet, setShowInfoSheet] = useState(false);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
 
         <LinearGradient colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']} style={styles.gradientBg}>
-          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+          <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
             <View style={styles.headerSection}>
               <LazyImage
                 source={require('../../assets/backgrounds/tarot.jpg')}
@@ -146,6 +147,11 @@ const TarotFormScreen = React.memo(() => {
           ]}
           tips={[t('tarot.tarottip1'), t('tarot.tarottip2'), t('tarot.tarottip3')]}
         />
+        {!hasPremium && !showInfoSheet ? (
+          <View style={styles.bannerAdContainer}>
+            <AdMobBanner />
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -165,6 +171,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 120,
   },
   headerSection: {
     height: 240,
@@ -441,6 +450,13 @@ const styles = StyleSheet.create({
     color: '#C5A100',
     fontSize: 15,
     ...fontStyles.bodyBold,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

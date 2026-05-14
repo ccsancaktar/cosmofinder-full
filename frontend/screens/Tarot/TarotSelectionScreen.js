@@ -13,6 +13,7 @@ import { useNotification } from '../../context/NotificationContext';
 import { showInterstitialAd, preloadInterstitialAd } from '../../utils/interstitialAd';
 import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const REQUIRED_CARDS = 3;
@@ -395,7 +396,7 @@ const TarotSelectionScreen = React.memo(() => {
   }, [balance, checkDuplicateRequest, currentLanguage, fetchBalance, getFortune, hasPremium, navigation, niyet, selectedCards, showError, showInfo, t]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
 
@@ -610,6 +611,11 @@ const TarotSelectionScreen = React.memo(() => {
           readingType="tarot"
         />
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="tarot" />
+        {!hasPremium ? (
+          <View style={styles.bannerAdContainer}>
+            <AdMobBanner />
+          </View>
+        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -865,7 +871,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: Platform.OS === 'ios' ? 58 : 52,
     paddingHorizontal: 22,
     paddingTop: 16,
     paddingBottom: Platform.OS === 'ios' ? 22 : 18,
@@ -897,6 +903,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
     ...fontStyles.bodyBold,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

@@ -23,6 +23,7 @@ import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import AdMobBanner from '../../components/AdMobBanner';
 import { fontStyles } from '../../utils/fontStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -205,7 +206,7 @@ const KabalaScreen = React.memo(({ navigation }) => {
   }, [readingMode, profileName, profileBirthDate, isim, dogumTarihi, hasPremium, balance, checkDuplicateRequest, getFortune, fetchBalance, navigation]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         
@@ -460,6 +461,11 @@ const KabalaScreen = React.memo(({ navigation }) => {
           t('kabala.mysticalSpiritualInterpretation'),
         ]}
       />
+      {!hasPremium ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
     </View>
   </SafeAreaView>
   );
@@ -492,7 +498,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 0,
-    paddingBottom: 40,
+    paddingBottom: 120,
   },
   headerSection: {
     height: 240,
@@ -795,6 +801,13 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     marginLeft: 12,
     ...fontStyles.body,
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });
 

@@ -30,6 +30,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import { preloadInterstitialAd, showInterstitialAd } from '../../utils/interstitialAd';
+import AdMobBanner from '../../components/AdMobBanner';
 
 export default function NumerologyFormScreen({ navigation }) {
   const { t } = useTranslation();
@@ -215,7 +216,7 @@ export default function NumerologyFormScreen({ navigation }) {
   ]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
 
@@ -362,6 +363,11 @@ export default function NumerologyFormScreen({ navigation }) {
         />
 
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="numerology" />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
       </View>
     </SafeAreaView>
   );
@@ -380,7 +386,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 36,
+    paddingBottom: 120,
   },
   headerSection: {
     height: 210,
@@ -561,5 +567,12 @@ const styles = StyleSheet.create({
     color: '#C5A100',
     fontSize: 15,
     fontWeight: '700',
+  },
+  bannerAdContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: '#0D0B1F',
   },
 });

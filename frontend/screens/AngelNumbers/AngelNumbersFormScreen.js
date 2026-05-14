@@ -8,6 +8,7 @@ import LazyImage from '../../components/LazyImage';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import TokenWarningModal from '../../components/TokenWarningModal';
+import AdMobBanner from '../../components/AdMobBanner';
 import { useAngelNumbersCache } from '../../hooks/useFortuneCache';
 import { useLanguage } from '../../context/LanguageContext';
 import { useNotification } from '../../context/NotificationContext';
@@ -100,7 +101,7 @@ export default function AngelNumbersFormScreen({ navigation }) {
   }, [balance, checkDuplicateRequest, currentLanguage, fetchBalance, getFortune, hasPremium, sayi, showError, t]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" />
         <LinearGradient colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']} style={styles.gradientBg}>
@@ -186,6 +187,11 @@ export default function AngelNumbersFormScreen({ navigation }) {
         />
 
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="angelNumbers" />
+      {!hasPremium && !showInfoSheet ? (
+        <View style={styles.bannerAdContainer}>
+          <AdMobBanner />
+        </View>
+      ) : null}
       </View>
     </SafeAreaView>
   );
@@ -195,7 +201,7 @@ const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: '#0D0B1F' },
   container: { flex: 1, backgroundColor: '#0D0B1F' },
   gradientBg: { flex: 1 },
-  scrollContent: { paddingBottom: 28 },
+  scrollContent: { paddingBottom: 120 },
   headerSection: { height: 210, position: 'relative', marginBottom: 12 },
   headerBackgroundImage: { position: 'absolute', width: '100%', height: '100%' },
   headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 22, paddingTop: 20 },
@@ -219,4 +225,5 @@ const styles = StyleSheet.create({
   submitButton: { borderRadius: 18, overflow: 'hidden' },
   submitGradient: { height: 56, borderRadius: 18, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' },
   submitText: { color: '#0D0B1F', fontSize: 16, fontWeight: '800', marginLeft: 10 },
+  bannerAdContainer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#0D0B1F' },
 });

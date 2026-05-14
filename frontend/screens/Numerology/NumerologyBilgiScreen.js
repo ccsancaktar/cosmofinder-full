@@ -1,16 +1,14 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import LazyImage from '../../components/LazyImage';
-import AdMobBanner from '../../components/AdMobBanner';
-import { usePremium } from '../../context/PremiumContext';
 import { useAuth } from '../../context/AuthContext';
 
 export default function NumerologyBilgiScreen({ navigation }) {
   const { t } = useTranslation();
-  const { hasPremium } = usePremium();
   const { isAuthenticated } = useAuth();
 
   const featureRows = [
@@ -20,7 +18,7 @@ export default function NumerologyBilgiScreen({ navigation }) {
   ];
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.container}>
         <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" translucent={false} />
 
@@ -92,11 +90,6 @@ export default function NumerologyBilgiScreen({ navigation }) {
           </ScrollView>
         </LinearGradient>
 
-        {!hasPremium ? (
-          <View style={styles.bannerAdContainer}>
-            <AdMobBanner />
-          </View>
-        ) : null}
       </View>
     </SafeAreaView>
   );
@@ -115,7 +108,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingBottom: 120,
+    paddingBottom: 32,
   },
   headerSection: {
     height: 210,
