@@ -1,12 +1,14 @@
-from datetime import datetime
 import json
+import os
 import random
+from datetime import datetime
 
 from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
+import requests
 
 from clients import g4f_client
-from g4f.Provider import Blackbox, PollinationsAI, WeWordle, Yqcloud
+from g4f.Provider import Blackbox, OIVSCodeSer2, PollinationsAI, WeWordle, Yqcloud
 from chinese_data import ELEMENTS, YEAR_ELEMENTS, calculate_ba_zi
 from models import Reading, User, calculate_zodiac_sign
 from prompts.multilingual import get_prompt_by_language
@@ -30,6 +32,13 @@ INVALID_PROVIDER_MARKERS = (
 )
 
 TEXT_PROVIDERS = [Blackbox, Yqcloud, WeWordle, PollinationsAI]
+VISION_PROVIDER_ATTEMPTS = [
+    (OIVSCodeSer2, "gpt-4o-mini"),
+    (Blackbox, "gpt-4o"),
+    (PollinationsAI, "openai"),
+    (None, "gpt-4o"),
+]
+DEFAULT_GEMINI_COFFEE_MODEL = "gemini-2.5-flash"
 
 EBCED_VALUES = {
     "a": 1,
@@ -744,14 +753,18 @@ def _get_angel_number_analysis(sayi, language="tr"):
     }
 
 
-def _create_completion(prompt, timeout=None):
+def _create_completion(prompt, timeout=None, images=None):
     last_error = None
 
-    provider_attempts = [*TEXT_PROVIDERS, None]
+    provider_attempts = (
+        VISION_PROVIDER_ATTEMPTS
+        if images
+        else [(provider, "gpt-4") for provider in [*TEXT_PROVIDERS, None]]
+    )
 
-    for provider in provider_attempts:
+    for provider, model in provider_attempts:
         completion_kwargs = {
-            "model": "gpt-4",
+            "model": model,
             "messages": [{"role": "user", "content": prompt}],
             "web_search": False,
         }
@@ -759,6 +772,8 @@ def _create_completion(prompt, timeout=None):
             completion_kwargs["provider"] = provider
         if timeout is not None:
             completion_kwargs["timeout"] = timeout
+        if images:
+            completion_kwargs["media"] = images
 
         try:
             response = g4f_client.chat.completions.create(**completion_kwargs)
@@ -783,6 +798,251 @@ def _create_completion(prompt, timeout=None):
             last_error = exc
 
     raise last_error or RuntimeError("Fal yorumu olusturulamadi")
+
+
+def _strip_code_fences(text):
+    if not isinstance(text, str):
+        return text
+
+    normalized = text.strip()
+    if normalized.startswith("```"):
+        normalized = normalized.split("\n", 1)[1] if "\n" in normalized else normalized
+        if normalized.endswith("```"):
+            normalized = normalized[:-3]
+    return normalized.strip()
+
+
+def _get_gemini_coffee_model():
+    return (os.getenv("GEMINI_COFFEE_MODEL") or os.getenv("GEMINI_MODEL") or DEFAULT_GEMINI_COFFEE_MODEL).strip()
+
+
+def _build_gemini_image_part(image_value):
+    normalized = (image_value or "").strip()
+    if not normalized:
+        raise ValueError("Bos gorsel gonderildi")
+
+    default_mime_type = "image/jpeg"
+    if normalized.startswith("data:"):
+        header, _, encoded = normalized.partition(",")
+        mime_type = header[5:].split(";", 1)[0].strip() or default_mime_type
+        return {
+            "inline_data": {
+                "mime_type": mime_type,
+                "data": encoded.strip(),
+            }
+        }
+
+    return {
+        "inline_data": {
+            "mime_type": default_mime_type,
+            "data": normalized,
+        }
+    }
+
+
+def _extract_gemini_text(response_json):
+    candidates = response_json.get("candidates") or []
+    for candidate in candidates:
+        content = candidate.get("content") or {}
+        for part in content.get("parts") or []:
+            text = part.get("text")
+            if isinstance(text, str) and text.strip():
+                return text.strip()
+
+    prompt_feedback = response_json.get("promptFeedback") or {}
+    block_reason = prompt_feedback.get("blockReason")
+    if block_reason:
+        raise RuntimeError(f"Gemini istegi engelledi: {block_reason}")
+
+    raise RuntimeError("Gemini yanitinda okunabilir metin bulunamadi")
+
+
+def _get_gemini_finish_reason(response_json):
+    candidates = response_json.get("candidates") or []
+    if not candidates:
+        return None
+    return candidates[0].get("finishReason")
+
+
+def _safe_parse_gemini_json(raw_text):
+    normalized = _strip_code_fences(raw_text)
+    if not isinstance(normalized, str) or not normalized.strip():
+        raise ValueError("Gemini bos JSON metni dondurdu")
+    try:
+        return json.loads(normalized)
+    except json.JSONDecodeError:
+        start = normalized.find("{")
+        end = normalized.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            sliced = normalized[start : end + 1]
+            try:
+                return json.loads(sliced)
+            except json.JSONDecodeError:
+                normalized = sliced
+
+    sanitized = normalized.replace("\r\n", "\n").replace("\r", "\n")
+    for trailer in ("\n```", "```"):
+        if sanitized.endswith(trailer):
+            sanitized = sanitized[: -len(trailer)]
+    sanitized = sanitized.strip()
+    return json.loads(sanitized)
+
+
+def _gemini_post(contents, generation_config=None, timeout=90):
+    api_key = (os.getenv("GEMINI_API_KEY") or "").strip()
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY tanimli degil")
+    payload = {
+        "contents": contents,
+    }
+    if generation_config:
+        payload["generationConfig"] = generation_config
+
+    model = _get_gemini_coffee_model()
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+    response = requests.post(
+        url,
+        headers={
+            "x-goog-api-key": api_key,
+            "Content-Type": "application/json",
+        },
+        json=payload,
+        timeout=timeout,
+    )
+
+    if response.status_code >= 400:
+        try:
+            error_payload = response.json()
+        except ValueError:
+            error_payload = response.text.strip()
+        raise RuntimeError(f"Gemini istegi basarisiz oldu: {response.status_code} {error_payload}")
+
+    return response.json(), model
+
+
+def _gemini_generate_coffee_reading(images, language="tr", question=""):
+    reading_prompt = get_prompt_by_language(
+        "coffee",
+        language,
+        soru=question,
+        image_count=len(images),
+    ).strip()
+    response_json, model = _gemini_post(
+        contents=[
+            {
+                "parts": [
+                    {"text": reading_prompt},
+                    *[_build_gemini_image_part(image) for image in images],
+                ]
+            }
+        ],
+        generation_config={
+            "temperature": 0.55,
+            "maxOutputTokens": 4000,
+            "responseMimeType": "text/plain",
+        },
+        timeout=90,
+    )
+    finish_reason = _get_gemini_finish_reason(response_json)
+    if finish_reason == "MAX_TOKENS":
+        raise RuntimeError("Gemini kahve yorumu token sinirina takildi")
+    reading = _extract_gemini_text(response_json).strip()
+    if not reading:
+        raise RuntimeError("Gemini kahve yorumu bos dondu")
+    return {
+        "reading": reading,
+        "model": model,
+    }
+
+
+def _validate_coffee_images(images, language="tr"):
+    validation_prompt = {
+        "tr": """
+Kullanıcı 3 görsel yükledi. Görevin bunların Türk kahvesi falı için uygun olup olmadığını doğrulamak.
+
+Kontrol kriterleri:
+- Görsellerde gerçekten kahve fincanı veya fincan içi görünmeli.
+- En azından çoğunda kahve telvesi seçilebilmeli.
+- Görseller tamamen alakasız nesneler, selfie, ekran görüntüsü, manzara vb. olmamalı.
+- Fincan içi neredeyse hiç görünmüyorsa veya telve okunamayacak kadar belirsizse geçersiz say.
+
+Sadece geçerli JSON döndür. Başka hiçbir metin yazma.
+Format tam olarak şu olsun:
+{"is_valid": true, "reason": "kısa açıklama"}
+veya
+{"is_valid": false, "reason": "kısa açıklama"}
+""",
+        "en": """
+The user uploaded 3 images. Your task is to validate whether they are suitable for a Turkish coffee fortune reading.
+
+Validation criteria:
+- The images should actually show a coffee cup or the inside of a cup.
+- Coffee grounds should be visible in most of the images.
+- The images must not be unrelated objects, selfies, screenshots, landscapes, or random scenes.
+- If the inside of the cup is barely visible or the grounds are too unclear to interpret, mark them invalid.
+
+Return valid JSON only. Do not write anything else.
+Use exactly this format:
+{"is_valid": true, "reason": "short explanation"}
+or
+{"is_valid": false, "reason": "short explanation"}
+""",
+        "de": """
+Der Nutzer hat 3 Bilder hochgeladen. Deine Aufgabe ist zu pruefen, ob sie fuer eine türkische Kaffeesatz-Deutung geeignet sind.
+
+Pruefkriterien:
+- Die Bilder sollen tatsaechlich eine Kaffeetasse oder das Innere der Tasse zeigen.
+- Kaffeesatz sollte in den meisten Bildern sichtbar sein.
+- Die Bilder duerfen keine unpassenden Objekte, Selfies, Screenshots, Landschaften oder zufaellige Szenen zeigen.
+- Wenn das Innere der Tasse kaum sichtbar ist oder der Satz zu unklar fuer eine Deutung ist, markiere sie als ungueltig.
+
+Gib nur gueltiges JSON zurueck. Schreibe nichts anderes.
+Nutze genau dieses Format:
+{"is_valid": true, "reason": "kurze Erklaerung"}
+oder
+{"is_valid": false, "reason": "kurze Erklaerung"}
+""",
+    }.get(language, None) or {
+        "tr": """
+Kullanıcı 3 görsel yükledi. Görevin bunların Türk kahvesi falı için uygun olup olmadığını doğrulamak.
+
+Kontrol kriterleri:
+- Görsellerde gerçekten kahve fincanı veya fincan içi görünmeli.
+- En azından çoğunda kahve telvesi seçilebilmeli.
+- Görseller tamamen alakasız nesneler, selfie, ekran görüntüsü, manzara vb. olmamalı.
+- Fincan içi neredeyse hiç görünmüyorsa veya telve okunamayacak kadar belirsizse geçersiz say.
+
+Sadece geçerli JSON döndür. Başka hiçbir metin yazma.
+Format tam olarak şu olsun:
+{"is_valid": true, "reason": "kısa açıklama"}
+veya
+{"is_valid": false, "reason": "kısa açıklama"}
+"""
+    }["tr"]
+
+    try:
+        raw_validation = _create_completion(validation_prompt, timeout=35, images=images)
+    except Exception as exc:
+        current_app.logger.warning("Kahve gorsel validasyonu calisamadi: %s", exc)
+        return False, "__validation_unavailable__"
+
+    normalized = _strip_code_fences(raw_validation)
+
+    try:
+        parsed = json.loads(normalized)
+    except json.JSONDecodeError:
+        start = normalized.find("{")
+        end = normalized.rfind("}")
+        if start == -1 or end == -1 or end <= start:
+            current_app.logger.warning("Kahve gorsel validasyonu parse edilemedi: %s", raw_validation)
+            return False, "__validation_unavailable__"
+        try:
+            parsed = json.loads(normalized[start : end + 1])
+        except json.JSONDecodeError:
+            current_app.logger.warning("Kahve gorsel validasyonu parse edilemedi: %s", raw_validation)
+            return False, "__validation_unavailable__"
+
+    return bool(parsed.get("is_valid")), (parsed.get("reason") or "").strip() or None
 
 
 @fortune_bp.route("/yildizname", methods=["POST"])
@@ -1012,6 +1272,7 @@ def chinese_fortune():
 
 @fortune_bp.route("/coffee", methods=["POST"])
 @jwt_required()
+@fal_rate_limit()
 def coffee_fortune():
     try:
         user, user_id, error_response = _load_user_or_404()
@@ -1019,23 +1280,52 @@ def coffee_fortune():
             return error_response
 
         data = _json_body()
-        validation_error = _validate_required_fields(data, ["soru"])
-        if validation_error:
-            return validation_error
+        images = data.get("images") or []
+        if not isinstance(images, list):
+            return jsonify({"error": "images alani gecerli bir liste olmalidir"}), 422
 
+        normalized_images = [image for image in images if isinstance(image, str) and image.strip()]
+        if len(normalized_images) < 3:
+            return jsonify({"error": "En az 3 kahve fincani gorseli gereklidir"}), 422
+
+        language = data.get("language", "tr")
+        question = (data.get("soru") or data.get("question") or "").strip()
+        normalized_payload = dict(data)
+        normalized_payload["images"] = normalized_images
+        normalized_payload["soru"] = question
+        normalized_payload["question"] = question
+
+        if not user.has_active_premium():
+            token_costs = {"coffee": 6}
+            required_tokens = token_costs["coffee"]
+            current_balance = int(getattr(user, "token_balance", 0) or 0)
+            if current_balance < required_tokens:
+                return jsonify({"error": "Yetersiz token"}), 400
+
+        try:
+            reading_result = _gemini_generate_coffee_reading(
+                normalized_images,
+                language=language,
+                question=question,
+            )
+        except Exception:
+            current_app.logger.exception("Gemini kahve gorsel yorum uretimi basarisiz")
+            return (
+                jsonify(
+                    {
+                        "error": "Kahve gorselleri su an yorumlanamadi. Lutfen biraz sonra tekrar deneyin; bu denemede token harcanmadi.",
+                        "code": "coffee_generation_unavailable",
+                    }
+                ),
+                503,
+            )
+
+        yorum = reading_result["reading"]
         user, access_error = _ensure_access_for_reading(user, user_id, "coffee")
         if access_error:
             return access_error
 
-        language = data.get("language", "tr")
-        prompt = get_prompt_by_language(
-            "coffee",
-            language,
-            soru=data.get("soru", ""),
-            images=data.get("images", []),
-        )
-        yorum = _create_completion(prompt)
-        reading = _save_reading(user_id, "coffee", data, yorum)
+        reading = _save_reading(user_id, "coffee", normalized_payload, yorum)
 
         return jsonify(
             {
@@ -1043,6 +1333,7 @@ def coffee_fortune():
                 "yorum": yorum,
                 "reading_id": str(reading._id),
                 "language": language,
+                "question": question,
             }
         ), 200
     except Exception:

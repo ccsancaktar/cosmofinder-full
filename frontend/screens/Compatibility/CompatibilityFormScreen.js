@@ -29,6 +29,7 @@ import { useNotification } from '../../context/NotificationContext';
 import { usePremium } from '../../context/PremiumContext';
 import { TOKEN_COSTS, useToken } from '../../context/TokenContext';
 import { preloadInterstitialAd, showInterstitialAd } from '../../utils/interstitialAd';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 
 const RELATIONSHIP_OPTIONS = ['ask', 'arkadaslik', 'genel'];
 
@@ -52,6 +53,7 @@ export default function CompatibilityFormScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
   const didInitRef = useRef(false);
 
   const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim();
@@ -324,7 +326,7 @@ export default function CompatibilityFormScreen({ navigation }) {
         />
 
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="compatibility" />
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

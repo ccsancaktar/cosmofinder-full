@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, Animated, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import i18n from '../locales/i18n';
 
 const { width } = Dimensions.get('window');
@@ -30,6 +31,7 @@ const FEEDBACK_LABELS = {
 const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(-100)).current;
+  const insets = useSafeAreaInsets();
 
   useEffect(() => {
     if (visible) {
@@ -113,6 +115,7 @@ const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) 
     <Animated.View 
       style={[
         styles.toast,
+        { top: Math.max(insets.top + 12, 20) },
         { 
           opacity: fadeAnim,
           transform: [{ translateY: slideAnim }]
@@ -142,7 +145,6 @@ const Toast = ({ visible, message, type = 'success', onHide, duration = 3000 }) 
 const styles = StyleSheet.create({
   toast: {
     position: 'absolute',
-    top: 60,
     left: 20,
     right: 20,
     borderRadius: 18,

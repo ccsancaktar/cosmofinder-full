@@ -24,6 +24,7 @@ import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -43,6 +44,7 @@ const KabalaScreen = React.memo(({ navigation }) => {
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
   const [readingMode, setReadingMode] = useState('self');
+  const isKeyboardVisible = useKeyboardVisibility();
   const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim();
   const profileBirthDate = user?.birth_date || '';
   const hasProfileData = Boolean(profileName && profileBirthDate);
@@ -461,7 +463,7 @@ const KabalaScreen = React.memo(({ navigation }) => {
           t('kabala.mysticalSpiritualInterpretation'),
         ]}
       />
-      {!hasPremium ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

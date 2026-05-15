@@ -47,7 +47,7 @@ def user_rate_limit(max_requests, window_seconds, error_message="Rate limit exce
                     return jsonify({'error': 'Authentication required'}), 401
                 
                 # Rate limit key'i oluştur
-                key = f"user_{user_id}_{f.__name__}"
+                key = f"user_v2_{user_id}_{f.__name__}"
                 
                 # Mevcut request sayısını kontrol et
                 current_requests = redis_manager.get_counter(key) or 0
@@ -60,10 +60,19 @@ def user_rate_limit(max_requests, window_seconds, error_message="Rate limit exce
                         'window': f"{window_seconds} seconds"
                     }), 429
                 
-                # Request sayısını artır
-                redis_manager.incr(key, window_seconds)
-                
-                return f(*args, **kwargs)
+                response = f(*args, **kwargs)
+
+                status_code = 200
+                if isinstance(response, tuple) and len(response) >= 2:
+                    status_code = response[1]
+                elif hasattr(response, "status_code"):
+                    status_code = response.status_code
+
+                # Sadece başarılı istekleri limite say.
+                if 200 <= int(status_code) < 300:
+                    redis_manager.incr(key, window_seconds)
+
+                return response
                 
             except Exception as e:
                 return jsonify({'error': 'Rate limiting error'}), 500
@@ -115,7 +124,7 @@ def fal_rate_limit():
         )
     else:
         return user_rate_limit(
-            max_requests=10,  # 10 fal per hour in development
+            max_requests=50,  # 50 fal per hour in development
             window_seconds=3600,  # 1 saat
             error_message="Çok fazla fal baktırdınız. Lütfen 1 saat bekleyin."
         )
@@ -157,17 +166,17 @@ def registration_rate_limit():
 # Rate limit bilgilerini getir
 def get_rate_limit_info(user_id, endpoint):
     """Kullanıcının rate limit bilgilerini getir"""
-    key = f"user_{user_id}_{endpoint}"
+    key = f"user_v2_{user_id}_{endpoint}"
     current_requests = redis_manager.get(key) or 0
     
     # Endpoint'e göre limit'leri belirle
     limits = {
-        'yildizname': {'max': 10, 'window': 3600},
-        'rune': {'max': 10, 'window': 3600},
-        'tarot': {'max': 10, 'window': 3600},
-        'chinese': {'max': 10, 'window': 3600},
-        'coffee': {'max': 10, 'window': 3600},
-        'kabala': {'max': 10, 'window': 3600},
+        'yildizname': {'max': 50, 'window': 3600},
+        'rune': {'max': 50, 'window': 3600},
+        'tarot': {'max': 50, 'window': 3600},
+        'chinese': {'max': 50, 'window': 3600},
+        'coffee': {'max': 50, 'window': 3600},
+        'kabala': {'max': 50, 'window': 3600},
         'daily': {'max': 1, 'window': 86400}
     }
     

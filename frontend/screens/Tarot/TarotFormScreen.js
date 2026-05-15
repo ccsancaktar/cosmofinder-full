@@ -9,6 +9,7 @@ import { usePremium } from '../../context/PremiumContext';
 import LazyImage from '../../components/LazyImage';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const TarotFormScreen = React.memo(() => {
@@ -17,6 +18,7 @@ const TarotFormScreen = React.memo(() => {
   const { hasPremium } = usePremium();
   const [niyet, setNiyet] = useState('');
   const [showInfoSheet, setShowInfoSheet] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -147,7 +149,7 @@ const TarotFormScreen = React.memo(() => {
           ]}
           tips={[t('tarot.tarottip1'), t('tarot.tarottip2'), t('tarot.tarottip3')]}
         />
-        {!hasPremium && !showInfoSheet ? (
+        {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
           <View style={styles.bannerAdContainer}>
             <AdMobBanner />
           </View>

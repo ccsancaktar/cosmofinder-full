@@ -20,6 +20,7 @@ import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const YildiznameFormScreen = React.memo(({ navigation }) => {
@@ -37,6 +38,7 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [readingMode, setReadingMode] = useState('self');
   const [showInfoSheet, setShowInfoSheet] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
   
   // Tarih seçici state'leri
   const [dogumTarihi, setDogumTarihi] = useState('');
@@ -431,7 +433,7 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
           t('yildizname.yildiznametip4'),
         ]}
       />
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

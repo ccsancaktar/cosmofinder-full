@@ -14,6 +14,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { useNotification } from '../../context/NotificationContext';
 import { usePremium } from '../../context/PremiumContext';
 import { TOKEN_COSTS, useToken } from '../../context/TokenContext';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 
 const DAILY_NUMBER_SEQUENCE = ['111', '222', '333', '444', '555', '777', '888', '999', '1111'];
 
@@ -28,6 +29,7 @@ export default function AngelNumbersFormScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
   const didInitRef = useRef(false);
   const todayNumber = useMemo(() => {
     const now = new Date();
@@ -187,7 +189,7 @@ export default function AngelNumbersFormScreen({ navigation }) {
         />
 
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="angelNumbers" />
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

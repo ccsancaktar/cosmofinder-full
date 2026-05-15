@@ -112,8 +112,19 @@ export const useStore = create(
         }
         
         if (method === 'coffee') {
-          const { question } = data;
-          return `coffee_${question}`;
+          const { question, soru, images, language } = data;
+          const normalizedQuestion = (soru || question || '__general__').trim();
+          const imageFingerprint = Array.isArray(images)
+            ? images
+                .map((img, index) => {
+                  if (typeof img !== 'string' || !img.length) {
+                    return `empty_${index}`;
+                  }
+                  return `${img.length}_${img.slice(-24)}`;
+                })
+                .join('|')
+            : 'no_images';
+          return `coffee_${language || 'tr'}_${normalizedQuestion}_${imageFingerprint}`;
         }
         
         if (method === 'kabala') {

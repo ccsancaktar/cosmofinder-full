@@ -22,6 +22,7 @@ import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const { width, height } = Dimensions.get('window');
@@ -38,6 +39,7 @@ const RuneFormScreen = React.memo(({ navigation }) => {
   const [error, setError] = useState('');
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
 
   // Token ve premium durumunu yükle
   useEffect(() => {
@@ -250,7 +252,7 @@ const RuneFormScreen = React.memo(({ navigation }) => {
         ]}
         tips={[t('rune.runetip1'), t('rune.runetip2'), t('rune.runetip3')]}
       />
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

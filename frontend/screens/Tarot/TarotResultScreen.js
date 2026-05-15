@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, StyleSheet, ScrollView, Text, TouchableOpacity, StatusBar, SafeAreaView, Platform } from 'react-native';
+import { View, StyleSheet, ScrollView, Text, TouchableOpacity, StatusBar, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
@@ -246,7 +247,7 @@ export default function TarotResultScreen({ route, navigation }) {
   const getCardName = (card) => (locale === 'tr' ? card?.name_tr || card?.name : card?.name || card?.name_tr);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle="light-content" backgroundColor="#0D0B1F" translucent={false} hidden={false} />
 
       <LinearGradient colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']} style={styles.gradientBg}>

@@ -11,6 +11,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import AppNavigator from './navigation/AppNavigator';
 import * as Notifications from 'expo-notifications';
 import * as Font from 'expo-font';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from './components/SplashScreen';
 import { STRIPE_PUBLIC_KEY } from './config/env';
 import { StripeProviderWrapper } from './utils/stripeSupport';
@@ -101,22 +102,24 @@ export default function App() {
   }
 
   return (
-    <StripeProviderWrapper publishableKey={STRIPE_PUBLIC_KEY}>
-      <ErrorBoundary>
-        <LanguageProvider>
-          <QueryProvider>
-            <AuthProvider>
-              <TokenProvider>
-                <PremiumProvider>
-                  <NotificationProvider>
-                    <AppNavigator />
-                  </NotificationProvider>
-                </PremiumProvider>
-              </TokenProvider>
-            </AuthProvider>
-          </QueryProvider>
-        </LanguageProvider>
-      </ErrorBoundary>
-    </StripeProviderWrapper>
+    <SafeAreaProvider>
+      <StripeProviderWrapper publishableKey={STRIPE_PUBLIC_KEY}>
+        <ErrorBoundary>
+          <LanguageProvider>
+            <QueryProvider>
+              <AuthProvider>
+                <TokenProvider>
+                  <PremiumProvider>
+                    <NotificationProvider>
+                      <AppNavigator />
+                    </NotificationProvider>
+                  </PremiumProvider>
+                </TokenProvider>
+              </AuthProvider>
+            </QueryProvider>
+          </LanguageProvider>
+        </ErrorBoundary>
+      </StripeProviderWrapper>
+    </SafeAreaProvider>
   );
 } 

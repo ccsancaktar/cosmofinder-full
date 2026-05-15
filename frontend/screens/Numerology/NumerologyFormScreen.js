@@ -31,6 +31,7 @@ import { useNotification } from '../../context/NotificationContext';
 import { useAuth } from '../../context/AuthContext';
 import { preloadInterstitialAd, showInterstitialAd } from '../../utils/interstitialAd';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 
 export default function NumerologyFormScreen({ navigation }) {
   const { t } = useTranslation();
@@ -48,6 +49,7 @@ export default function NumerologyFormScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [showInfoSheet, setShowInfoSheet] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
   const [readingMode, setReadingMode] = useState('self');
   const didInitRef = useRef(false);
 
@@ -363,7 +365,7 @@ export default function NumerologyFormScreen({ navigation }) {
         />
 
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="numerology" />
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

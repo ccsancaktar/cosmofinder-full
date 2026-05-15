@@ -20,6 +20,7 @@ import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const ChineseFormScreen = React.memo(({ navigation }) => {
@@ -34,6 +35,7 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [readingMode, setReadingMode] = useState('self');
   const [showInfoSheet, setShowInfoSheet] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
   
   // Tarih seçici state'leri
   const [dogumTarihi, setDogumTarihi] = useState('');
@@ -363,7 +365,7 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
         ]}
         tips={[t('chinese.bazitip1'), t('chinese.bazitip2'), t('chinese.bazitip3')]}
       />
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>

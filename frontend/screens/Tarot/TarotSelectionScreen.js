@@ -14,6 +14,7 @@ import { showInterstitialAd, preloadInterstitialAd } from '../../utils/interstit
 import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const REQUIRED_CARDS = 3;
@@ -48,6 +49,7 @@ const TarotSelectionScreen = React.memo(() => {
   const { hasPremium, fetchStatus } = usePremium();
   const { getFortune, checkDuplicateRequest, isLoading: fortuneLoading } = useTarotCache();
   const { currentLanguage } = useLanguage();
+  const isKeyboardVisible = useKeyboardVisibility();
   const niyet = route.params?.niyet?.trim?.() || '';
 
   const initialDeck = useMemo(() => createShuffledDeck(), []);
@@ -611,7 +613,7 @@ const TarotSelectionScreen = React.memo(() => {
           readingType="tarot"
         />
         <FortuneLoadingOverlay visible={loading || fortuneLoading} readingType="tarot" />
-        {!hasPremium ? (
+        {!hasPremium && !isKeyboardVisible ? (
           <View style={styles.bannerAdContainer}>
             <AdMobBanner />
           </View>

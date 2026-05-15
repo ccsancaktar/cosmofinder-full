@@ -19,6 +19,7 @@ import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import ReadingModeCard from '../../components/ReadingModeCard';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
+import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
 const DailyScreen = () => {
@@ -34,6 +35,7 @@ const DailyScreen = () => {
   const [showTokenModal, setShowTokenModal] = useState(false);
   const [readingMode, setReadingMode] = useState('self');
   const [showInfoSheet, setShowInfoSheet] = useState(false);
+  const isKeyboardVisible = useKeyboardVisibility();
   
   // Tarih seçici state'leri
   const [dogumTarihi, setDogumTarihi] = useState('');
@@ -400,7 +402,7 @@ const DailyScreen = () => {
           />
         )
       )}
-      {!hasPremium && !showInfoSheet ? (
+      {!hasPremium && !showInfoSheet && !isKeyboardVisible ? (
         <View style={styles.bannerAdContainer}>
           <AdMobBanner />
         </View>
