@@ -20,6 +20,7 @@ import { showStripeDisabledAlert, shouldDisableStripe, useOptionalStripe } from 
 
 const { width } = Dimensions.get('window');
 const PLAN_CARD_WIDTH = width - 40;
+const formatTryPrice = (price) => Number(price || 0).toFixed(2);
 
 export default function PremiumScreen({ navigation }) {
   const { t } = useTranslation();
@@ -126,7 +127,7 @@ export default function PremiumScreen({ navigation }) {
       badgeText: isYearly ? (plan.discount ? `%${plan.discount.replace('%', '')} Daha Avantajlı` : 'En Avantajlı') : 'En Popüler',
       eyebrow: isYearly ? 'Uzun dönem kullanım için daha düşük maliyet' : 'Hızlı başlamak için en sade seçenek',
       description: isYearly
-        ? 'Yıl boyu premium kullan, aylık ödemeye göre daha avantajlı kal.'
+        ? 'Yıl boyu sınırsız fal kullan, aylık plana göre ciddi avantaj kazan.'
         : 'Sınırsız fal, reklamsız deneyim ve tüm premium özelliklere hemen eriş.',
     };
   };
@@ -228,7 +229,7 @@ export default function PremiumScreen({ navigation }) {
                     </View>
 
                     <View style={styles.priceRow}>
-                      <Text style={styles.priceAmount}>{plan.price}</Text>
+                      <Text style={styles.priceAmount}>{formatTryPrice(plan.price)}</Text>
                       <View style={styles.priceMeta}>
                         <Text style={styles.priceCurrency}>TL</Text>
                         <Text style={styles.pricePeriod}>/{plan.period}</Text>

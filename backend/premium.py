@@ -54,6 +54,7 @@ def get_premium_plans():
                 'name': 'Premium Aylık',
                 'price': PREMIUM_PRICES['premium_monthly'],
                 'period': 'ay',
+                'description': 'Token düşünmeden sınırsız fal deneyimine hemen geç.',
                 'features': [
                     'Sınırsız fal çekme',
                     'Reklamsız deneyim',
@@ -68,11 +69,15 @@ def get_premium_plans():
                 'name': 'Premium Yıllık',
                 'price': PREMIUM_PRICES['premium_yearly'],
                 'period': 'yıl',
-                'discount': '17%',
+                'discount': '31%',
+                'description': 'Yıl boyu premium kullan, aylık plana göre çok daha avantajlı kal.',
                 'features': [
-                    'Premium özellikleri',
-                    'Yıllık %17 indirim',
-                    'Özel içerikler'
+                    'Sınırsız fal çekme',
+                    'Reklamsız deneyim',
+                    'Tüm fal türleri',
+                    'Detaylı yorumlar',
+                    'Yıllık %31 indirim',
+                    'Öncelikli destek'
                 ]
             }
         ]

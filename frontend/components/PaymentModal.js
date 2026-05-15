@@ -18,6 +18,7 @@ import PaymentAPI from '../services/paymentAPI';
 import { showStripeDisabledAlert, shouldDisableStripe, useOptionalStripe } from '../utils/stripeSupport';
 
 const { width, height } = Dimensions.get('window');
+const formatTryPrice = (price) => `${Number(price || 0).toFixed(2)} TL`;
 
 const PaymentModal = ({ visible, onClose, paymentType = 'token', onSuccess, selectedPackage: initialSelectedPackage }) => {
   const { t } = useTranslation();
@@ -204,13 +205,13 @@ const PaymentModal = ({ visible, onClose, paymentType = 'token', onSuccess, sele
           <View style={styles.packageCard}>
             <View style={styles.packageHeader}>
               <Text style={styles.packageName}>{pkg.name}</Text>
-              <Text style={styles.packagePrice}>₺{pkg.price}</Text>
+              <Text style={styles.packagePrice}>{formatTryPrice(pkg.price)}</Text>
             </View>
             <Text style={styles.packageDescription}>{pkg.description}</Text>
             <View style={styles.tokenInfo}>
               <Text style={styles.tokenAmount}>{pkg.token_amount} {t('common.token')}</Text>
               <Text style={styles.tokenValue}>
-                ₺{(pkg.price / pkg.token_amount).toFixed(2)} / {t('common.perToken')}
+                {Number(pkg.price / pkg.token_amount).toFixed(2)} TL / {t('common.perToken')}
               </Text>
             </View>
           </View>
@@ -240,13 +241,13 @@ const PaymentModal = ({ visible, onClose, paymentType = 'token', onSuccess, sele
           >
             <View style={styles.packageHeader}>
               <Text style={styles.packageName}>{pkg.name}</Text>
-              <Text style={styles.packagePrice}>₺{pkg.price}</Text>
+              <Text style={styles.packagePrice}>{formatTryPrice(pkg.price)}</Text>
             </View>
             <Text style={styles.packageDescription}>{pkg.description}</Text>
             <View style={styles.tokenInfo}>
               <Text style={styles.tokenAmount}>{pkg.token_amount} {t('common.token')}</Text>
               <Text style={styles.tokenValue}>
-                ₺{(pkg.price / pkg.token_amount).toFixed(2)} / {t('common.perToken')}
+                {Number(pkg.price / pkg.token_amount).toFixed(2)} TL / {t('common.perToken')}
               </Text>
             </View>
           </TouchableOpacity>
@@ -283,7 +284,7 @@ const PaymentModal = ({ visible, onClose, paymentType = 'token', onSuccess, sele
             >
               <View style={styles.packageHeader}>
                 <Text style={styles.packageName}>{plan.name}</Text>
-                <Text style={styles.packagePrice}>₺{plan.price}</Text>
+                <Text style={styles.packagePrice}>{formatTryPrice(plan.price)}</Text>
               </View>
               <Text style={styles.packageDescription}>{plan.description}</Text>
               <View style={styles.featuresList}>
@@ -329,7 +330,7 @@ const PaymentModal = ({ visible, onClose, paymentType = 'token', onSuccess, sele
                   {(selectedPackage || initialSelectedPackage).name}
                 </Text>
                 <Text style={styles.selectedPackagePrice}>
-                  ₺{(selectedPackage || initialSelectedPackage).price}
+                  {formatTryPrice((selectedPackage || initialSelectedPackage).price)}
                 </Text>
               </View>
               

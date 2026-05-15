@@ -140,7 +140,7 @@ def video_reward():
         
         # AdMob'dan gelen reward miktarını al
         data = request.get_json()
-        reward_amount = data.get('reward_amount', 10)  # Sabit 10 token
+        reward_amount = data.get('reward_amount', int(os.getenv('VIDEO_REWARD_TOKENS', 4)))
         
         # 24 saat içindeki video sayısını kontrol et
         last_24_hours = datetime.now() - timedelta(hours=24)
@@ -150,7 +150,7 @@ def video_reward():
             'created_at': {'$gte': last_24_hours}
         })
         
-        daily_limit = 5  # Sabit günlük limit
+        daily_limit = int(os.getenv('FREE_DAILY_VIDEO_LIMIT', 3))
         if videos_last_24h >= daily_limit:
             return jsonify({'error': 'Günlük video limiti doldu'}), 400
         
@@ -199,7 +199,7 @@ def video_limit_status():
             'created_at': {'$gte': last_24_hours}
         })
         
-        daily_limit = 5  # Sabit günlük limit
+        daily_limit = int(os.getenv('FREE_DAILY_VIDEO_LIMIT', 3))
         limit_reached = videos_last_24h >= daily_limit
         
         # En eski video'nun tarihini bul (reset zamanı hesaplaması için)
@@ -257,7 +257,7 @@ def daily_bonus():
             }), 400
         
         # Bonus token ver
-        bonus_amount = 5  # Sabit 5 token
+        bonus_amount = int(os.getenv('FREE_DAILY_BONUS_TOKENS', 3))
         transaction = TokenTransaction(
             user_id=str(user._id),
             transaction_type='daily_bonus',
@@ -325,16 +325,16 @@ def spend_tokens_for_reading(user_id, reading_type):
         # Merkezi token maliyetleri fonksiyonu
         def get_token_costs():
             return {
-                'yildizname': int(os.getenv('YILDIZNAME_TOKEN_COST', 9)),
-                'tarot': int(os.getenv('TAROT_TOKEN_COST', 5)),
-                'coffee': int(os.getenv('COFFEE_TOKEN_COST', 6)),
-                'rune': int(os.getenv('RUNE_TOKEN_COST', 7)),
-                'chinese': int(os.getenv('CHINESE_TOKEN_COST', 5)),
-                'daily': int(os.getenv('DAILY_TOKEN_COST', 3)),
-                'kabala': int(os.getenv('KABALA_TOKEN_COST', 7)),
-                'numerology': int(os.getenv('NUMEROLOGY_TOKEN_COST', 5)),
-                'compatibility': int(os.getenv('COMPATIBILITY_TOKEN_COST', 8)),
-                'angel_numbers': int(os.getenv('ANGEL_TOKEN_COST', 1))
+                'yildizname': int(os.getenv('YILDIZNAME_TOKEN_COST', 20)),
+                'tarot': int(os.getenv('TAROT_TOKEN_COST', 10)),
+                'coffee': int(os.getenv('COFFEE_TOKEN_COST', 25)),
+                'rune': int(os.getenv('RUNE_TOKEN_COST', 12)),
+                'chinese': int(os.getenv('CHINESE_TOKEN_COST', 14)),
+                'daily': int(os.getenv('DAILY_TOKEN_COST', 5)),
+                'kabala': int(os.getenv('KABALA_TOKEN_COST', 18)),
+                'numerology': int(os.getenv('NUMEROLOGY_TOKEN_COST', 8)),
+                'compatibility': int(os.getenv('COMPATIBILITY_TOKEN_COST', 16)),
+                'angel_numbers': int(os.getenv('ANGEL_TOKEN_COST', 3))
             }
         
         fal_costs = get_token_costs()
@@ -372,7 +372,7 @@ def spend_tokens_for_reading(user_id, reading_type):
 def add_registration_bonus(user_id):
     """Yeni kullanıcıya kayıt bonusu ver"""
     try:
-        bonus_amount = 50  # Sabit 50 token
+        bonus_amount = int(os.getenv('REGISTRATION_BONUS_TOKENS', 20))
         transaction = TokenTransaction(
             user_id=user_id,
             transaction_type='registration_bonus',

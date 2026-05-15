@@ -752,6 +752,6 @@ class PremiumSubscription:
 
 # Premium fiyatları
 PREMIUM_PRICES = {
-    'premium_monthly': 39.99,
-    'premium_yearly': 399.99
-} 
+    'premium_monthly': float(os.getenv('PREMIUM_MONTHLY_PRICE', 299.99)),
+    'premium_yearly': float(os.getenv('PREMIUM_YEARLY_PRICE', 2499.99)),
+}

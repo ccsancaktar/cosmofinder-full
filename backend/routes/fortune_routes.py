@@ -1296,8 +1296,7 @@ def coffee_fortune():
         normalized_payload["question"] = question
 
         if not user.has_active_premium():
-            token_costs = {"coffee": 6}
-            required_tokens = token_costs["coffee"]
+            required_tokens = int(os.getenv("COFFEE_TOKEN_COST", 25))
             current_balance = int(getattr(user, "token_balance", 0) or 0)
             if current_balance < required_tokens:
                 return jsonify({"error": "Yetersiz token"}), 400

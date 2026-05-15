@@ -19,6 +19,8 @@ import { useTranslation } from 'react-i18next';
 import PaymentModal from '../../components/PaymentModal';
 import PaymentAPI from '../../services/paymentAPI';
 
+const formatTryPrice = (price) => `${Number(price || 0).toFixed(2)} TL`;
+
 export default function TokenPurchaseScreen({ navigation }) {
   const { t } = useTranslation();
   const { showError } = useNotification();
@@ -41,20 +43,23 @@ export default function TokenPurchaseScreen({ navigation }) {
     const tokenAmount = Number(pkg.token_amount || 0);
     const price = Number(pkg.price || 0);
     const pricePerToken = tokenAmount > 0 ? (price / tokenAmount) : 0;
-    const estimatedReadings = tokenAmount > 0 ? Math.max(1, Math.floor(tokenAmount / 15)) : 0;
-    const isPopular = index === 1;
-    const isBestValue = index === visiblePackages.length - 1 && visiblePackages.length > 2;
+    const estimatedReadings = tokenAmount > 0 ? Math.max(1, Math.floor(tokenAmount / 12)) : 0;
+    const isPopular = tokenAmount === 90 || index === 1;
+    const isBestValue = tokenAmount === 300 || (index === visiblePackages.length - 1 && visiblePackages.length > 2);
+    const isStarter = tokenAmount === 40;
 
     return {
       tokenAmount,
       pricePerToken,
       estimatedReadings,
-      badge: isBestValue ? 'En Avantajlı' : isPopular ? 'En Popüler' : null,
+      badge: isBestValue ? 'En İyi Değer' : isPopular ? 'En Popüler' : isStarter ? 'Başlangıç' : 'Daha Avantajlı',
       eyebrow: isBestValue
-        ? 'Daha fazla token, daha iyi oran'
+        ? 'Uzun kullanım için en güçlü paket'
         : isPopular
-          ? 'Çoğu kullanıcı bunu seçiyor'
-          : 'Başlamak için ideal paket',
+          ? 'Fiyat ve miktar dengesi en iyi seçim'
+          : isStarter
+            ? 'İlk denemeler için en kolay giriş'
+            : 'Düzenli kullananlar için daha avantajlı',
     };
   };
 
@@ -191,7 +196,7 @@ export default function TokenPurchaseScreen({ navigation }) {
                   <View style={styles.packageBottomRow}>
                     <View>
                       <Text style={[styles.packagePriceCaption, isSelected && styles.packagePriceCaptionSelected]}>Toplam fiyat</Text>
-                      <Text style={[styles.packagePrice, isSelected && styles.packagePriceSelected]}>{pkg.price} TL</Text>
+                      <Text style={[styles.packagePrice, isSelected && styles.packagePriceSelected]}>{formatTryPrice(pkg.price)}</Text>
                     </View>
                     <View style={[styles.selectPill, isSelected && styles.selectPillSelected]}>
                       <Text style={[styles.selectPillText, isSelected && styles.selectPillTextSelected]}>
@@ -222,7 +227,7 @@ export default function TokenPurchaseScreen({ navigation }) {
                 <>
                   <Ionicons name="card" size={20} color="#FFFFFF" />
                   <Text style={styles.purchaseButtonText}>
-                    {t('common.buyWithPrice', { price: selectedPackage.price })}
+                    {t('common.buyWithPrice', { price: formatTryPrice(selectedPackage.price) })}
                   </Text>
                 </>
               )}

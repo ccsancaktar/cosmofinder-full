@@ -14,43 +14,52 @@ def seed_token_packages():
     packages = [
         {
             'name': 'Başlangıç Paketi',
-            'token_amount': 100,
-            'price': 19.99,
-            'description': '100 token ile fal deneyimine başlayın'
+            'token_amount': 40,
+            'price': 79.99,
+            'description': 'İlk fal paketin için ideal başlangıç'
         },
         {
             'name': 'Popüler Paket',
-            'token_amount': 250,
-            'price': 44.99,
-            'description': '250 token ile daha fazla fal çektirin'
-        },
-        {
-            'name': 'Premium Paket',
-            'token_amount': 500,
-            'price': 79.99,
-            'description': '500 token ile sınırsız fal deneyimi'
-        },
-        {
-            'name': 'Mega Paket',
-            'token_amount': 1000,
+            'token_amount': 90,
             'price': 149.99,
-            'description': '1000 token ile uzun süreli kullanım'
+            'description': 'En çok tercih edilen dengeli paket'
         },
         {
-            'name': 'Ultra Paket',
-            'token_amount': 2000,
-            'price': 279.99,
-            'description': '2000 token ile maksimum değer'
+            'name': 'Avantaj Paketi',
+            'token_amount': 160,
+            'price': 249.99,
+            'description': 'Daha fazla fal ve daha iyi token oranı'
+        },
+        {
+            'name': 'Efsane Paket',
+            'token_amount': 300,
+            'price': 449.99,
+            'description': 'En güçlü değer paketi, uzun kullanım için'
         }
     ]
-    
+
+    # Eski paketleri görünmez yap, yeni seti tekrar aktifleştir.
+    db.token_packages.update_many({}, {'$set': {'is_active': False}})
+
     for package_data in packages:
-        # Paket zaten var mı kontrol et
         existing = db.token_packages.find_one({
             'name': package_data['name']
         })
         
-        if not existing:
+        if existing:
+            db.token_packages.update_one(
+                {'_id': existing['_id']},
+                {
+                    '$set': {
+                        'token_amount': package_data['token_amount'],
+                        'price': package_data['price'],
+                        'description': package_data['description'],
+                        'is_active': True,
+                    }
+                }
+            )
+            print(f"Paket güncellendi: {package_data['name']}")
+        else:
             package = TokenPackage(
                 name=package_data['name'],
                 token_amount=package_data['token_amount'],
@@ -59,8 +68,6 @@ def seed_token_packages():
             )
             package.save()
             print(f"Paket eklendi: {package_data['name']}")
-        else:
-            print(f"Paket zaten mevcut: {package_data['name']}")
 
 if __name__ == '__main__':
     print("Token paketleri ekleniyor...")

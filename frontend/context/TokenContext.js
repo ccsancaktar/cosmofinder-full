@@ -20,23 +20,23 @@ import {
 
 // Token maliyetleri - Environment variables'dan (fallback ile)
 const TOKEN_COSTS = {
-  DAILY: parseInt(DAILY_TOKEN_COST) || 3,
-  COFFEE: parseInt(COFFEE_TOKEN_COST) || 6,
-  TAROT: parseInt(TAROT_TOKEN_COST) || 5,
-  CHINESE: parseInt(CHINESE_TOKEN_COST) || 5,
-  RUNE: parseInt(RUNE_TOKEN_COST) || 7,
-  KABALA: parseInt(KABALA_TOKEN_COST) || 7,
-  YILDIZNAME: parseInt(YILDIZNAME_TOKEN_COST) || 9,
-  NUMEROLOGY: parseInt(NUMEROLOGY_TOKEN_COST) || 5,
-  COMPATIBILITY: parseInt(COMPATIBILITY_TOKEN_COST) || 8,
-  ANGEL: parseInt(ANGEL_TOKEN_COST) || 1
+  DAILY: parseInt(DAILY_TOKEN_COST) || 5,
+  COFFEE: parseInt(COFFEE_TOKEN_COST) || 25,
+  TAROT: parseInt(TAROT_TOKEN_COST) || 10,
+  CHINESE: parseInt(CHINESE_TOKEN_COST) || 14,
+  RUNE: parseInt(RUNE_TOKEN_COST) || 12,
+  KABALA: parseInt(KABALA_TOKEN_COST) || 18,
+  YILDIZNAME: parseInt(YILDIZNAME_TOKEN_COST) || 20,
+  NUMEROLOGY: parseInt(NUMEROLOGY_TOKEN_COST) || 8,
+  COMPATIBILITY: parseInt(COMPATIBILITY_TOKEN_COST) || 16,
+  ANGEL: parseInt(ANGEL_TOKEN_COST) || 3
 };
 
 // Bonus token miktarları - Environment variables'dan (fallback ile)
 const BONUS_AMOUNTS = {
-  REGISTRATION: parseInt(REGISTRATION_BONUS_TOKENS) || 8,
+  REGISTRATION: parseInt(REGISTRATION_BONUS_TOKENS) || 20,
   DAILY: parseInt(FREE_DAILY_BONUS_TOKENS) || 3,
-  VIDEO: parseInt(VIDEO_REWARD_TOKENS) || 5,
+  VIDEO: parseInt(VIDEO_REWARD_TOKENS) || 4,
   DAILY_VIDEO_LIMIT: parseInt(FREE_DAILY_VIDEO_LIMIT) || 3
 };
 
