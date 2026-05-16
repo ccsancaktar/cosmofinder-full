@@ -57,13 +57,13 @@ def build_tarot_prompt(language, **kwargs):
                 - Başlıkları aynen koru
 
                 Şu başlıklarda yaz:
-                🃏 KARTLARIN ORTAK TEMASI
-                🧩 SORUNUN GİZLİ DÜĞÜMÜ
-                ⏳ GEÇMİŞ, ŞİMDİ VE GELECEK AKIŞI
-                ❤️ DUYGUSAL VE İLİŞKİSEL ALAN
-                💼 KARARLAR, İŞ VE MADDİ YÖN
-                🔮 OLASI GELİŞME VE ZAMAN AKIŞI
-                🕯️ KARTLARDAN NET TAVSİYE
+                KARTLARIN ORTAK TEMASI
+                SORUNUN GİZLİ DÜĞÜMÜ
+                GEÇMİŞ, ŞİMDİ VE GELECEK AKIŞI
+                DUYGUSAL VE İLİŞKİSEL ALAN
+                KARARLAR, İŞ VE MADDİ YÖN
+                OLASI GELİŞME VE ZAMAN AKIŞI
+                KARTLARDAN NET TAVSİYE
                 """
 
             return f"""
@@ -81,13 +81,13 @@ def build_tarot_prompt(language, **kwargs):
             - Başlıkları aynen koru
 
             Şu başlıklarda yaz:
-            🃏 KARTLARIN ORTAK TEMASI
-            🧩 İÇSEL DÜĞÜM VE GÖRÜNMEYEN ETKİ
-            ⏳ GEÇMİŞ, ŞİMDİ VE GELECEK AKIŞI
-            ❤️ DUYGUSAL VE İLİŞKİSEL ALAN
-            💼 KARARLAR, İŞ VE MADDİ YÖN
-            🔮 OLASI GELİŞME VE ZAMAN AKIŞI
-            🕯️ KARTLARDAN NET TAVSİYE
+            KARTLARIN ORTAK TEMASI
+            İÇSEL DÜĞÜM VE GÖRÜNMEYEN ETKİ
+            GEÇMİŞ, ŞİMDİ VE GELECEK AKIŞI
+            DUYGUSAL VE İLİŞKİSEL ALAN
+            KARARLAR, İŞ VE MADDİ YÖN
+            OLASI GELİŞME VE ZAMAN AKIŞI
+            KARTLARDAN NET TAVSİYE
             """
 
         if has_question:
@@ -109,11 +109,11 @@ def build_tarot_prompt(language, **kwargs):
             - Başlıkları aynen koru
 
             Şu başlıklarda yaz:
-            🃏 AÇILIMIN ANA MESAJI
-            ⏳ GEÇMİŞTEN GELEN ETKİ
-            ✨ ŞU ANKİ ENERJİ
-            🔮 YAKIN GELECEK EĞİLİMİ
-            🕯️ KARTLARIN TAVSİYESİ
+            AÇILIMIN ANA MESAJI
+            GEÇMİŞTEN GELEN ETKİ
+            ŞU ANKİ ENERJİ
+            YAKIN GELECEK EĞİLİMİ
+            KARTLARIN TAVSİYESİ
 
             Sonunda şu fikri taşıyan tek cümlelik bir kapanış ekle:
             👉 Detaylı tarot yorumunda kartların gizli bağı, sorunun gerçek düğümü ve daha net zaman akışı açığa çıkar.
@@ -134,11 +134,11 @@ def build_tarot_prompt(language, **kwargs):
         - Başlıkları aynen koru
 
         Şu başlıklarda yaz:
-        🃏 AÇILIMIN ANA MESAJI
-        ⏳ GEÇMİŞTEN GELEN ETKİ
-        ✨ ŞU ANKİ ENERJİ
-        🔮 YAKIN GELECEK EĞİLİMİ
-        🕯️ KARTLARIN TAVSİYESİ
+        AÇILIMIN ANA MESAJI
+        GEÇMİŞTEN GELEN ETKİ
+        ŞU ANKİ ENERJİ
+        YAKIN GELECEK EĞİLİMİ
+        KARTLARIN TAVSİYESİ
 
         Sonunda şu fikri taşıyan tek cümlelik bir kapanış ekle:
         👉 Detaylı tarot yorumunda kartların gizli bağı, sorunun gerçek düğümü ve daha net zaman akışı açığa çıkar.
@@ -165,13 +165,13 @@ def build_tarot_prompt(language, **kwargs):
                 - Keep the headings exactly as written
 
                 Write under these headings:
-                🃏 THE SHARED THEME OF THE CARDS
-                🧩 THE HIDDEN KNOT OF THE QUESTION
-                ⏳ PAST, PRESENT, AND FUTURE FLOW
-                ❤️ EMOTIONAL AND RELATIONAL FIELD
-                💼 DECISIONS, WORK, AND MATERIAL DIRECTION
-                🔮 LIKELY DEVELOPMENT AND TIMING FLOW
-                🕯️ CLEAR ADVICE FROM THE CARDS
+                THE SHARED THEME OF THE CARDS
+                THE HIDDEN KNOT OF THE QUESTION
+                PAST, PRESENT, AND FUTURE FLOW
+                EMOTIONAL AND RELATIONAL FIELD
+                DECISIONS, WORK, AND MATERIAL DIRECTION
+                LIKELY DEVELOPMENT AND TIMING FLOW
+                CLEAR ADVICE FROM THE CARDS
                 """
 
             return f"""
@@ -189,13 +189,13 @@ def build_tarot_prompt(language, **kwargs):
             - Keep the headings exactly as written
 
             Write under these headings:
-            🃏 THE SHARED THEME OF THE CARDS
-            🧩 THE HIDDEN INNER KNOT
-            ⏳ PAST, PRESENT, AND FUTURE FLOW
-            ❤️ EMOTIONAL AND RELATIONAL FIELD
-            💼 DECISIONS, WORK, AND MATERIAL DIRECTION
-            🔮 LIKELY DEVELOPMENT AND TIMING FLOW
-            🕯️ CLEAR ADVICE FROM THE CARDS
+            THE SHARED THEME OF THE CARDS
+            THE HIDDEN INNER KNOT
+            PAST, PRESENT, AND FUTURE FLOW
+            EMOTIONAL AND RELATIONAL FIELD
+            DECISIONS, WORK, AND MATERIAL DIRECTION
+            LIKELY DEVELOPMENT AND TIMING FLOW
+            CLEAR ADVICE FROM THE CARDS
             """
 
         if has_question:
@@ -217,11 +217,11 @@ def build_tarot_prompt(language, **kwargs):
             - Keep the headings exactly as written
 
             Write under these headings:
-            🃏 THE MAIN MESSAGE OF THE SPREAD
-            ⏳ INFLUENCE COMING FROM THE PAST
-            ✨ THE CURRENT ENERGY
-            🔮 THE NEAR-FUTURE TENDENCY
-            🕯️ THE CARDS' ADVICE
+            THE MAIN MESSAGE OF THE SPREAD
+            INFLUENCE COMING FROM THE PAST
+            THE CURRENT ENERGY
+            THE NEAR-FUTURE TENDENCY
+            THE CARDS' ADVICE
 
             End with one sentence suggesting that the detailed tarot reading reveals the hidden bond between the cards, the real knot of the question, and a clearer time flow.
             """
@@ -241,11 +241,11 @@ def build_tarot_prompt(language, **kwargs):
         - Keep the headings exactly as written
 
         Write under these headings:
-        🃏 THE MAIN MESSAGE OF THE SPREAD
-        ⏳ INFLUENCE COMING FROM THE PAST
-        ✨ THE CURRENT ENERGY
-        🔮 THE NEAR-FUTURE TENDENCY
-        🕯️ THE CARDS' ADVICE
+        THE MAIN MESSAGE OF THE SPREAD
+        INFLUENCE COMING FROM THE PAST
+        THE CURRENT ENERGY
+        THE NEAR-FUTURE TENDENCY
+        THE CARDS' ADVICE
 
         End with one sentence suggesting that the detailed tarot reading reveals the hidden bond between the cards, the real knot of the question, and a clearer time flow.
         """
@@ -270,13 +270,13 @@ def build_tarot_prompt(language, **kwargs):
             - Behalte die Überschriften genau bei
 
             Schreibe unter diesen Überschriften:
-            🃏 DAS GEMEINSAME THEMA DER KARTEN
-            🧩 DER VERBORGENE KNOTEN DER FRAGE
-            ⏳ VERGANGENHEIT, GEGENWART UND ZUKUNFTSFLUSS
-            ❤️ EMOTIONALES UND BEZIEHUNGSFELD
-            💼 ENTSCHEIDUNGEN, BERUF UND MATERIELLE RICHTUNG
-            🔮 WAHRSCHEINLICHE ENTWICKLUNG UND ZEITFLUSS
-            🕯️ KLARER RAT DER KARTEN
+            DAS GEMEINSAME THEMA DER KARTEN
+            DER VERBORGENE KNOTEN DER FRAGE
+            VERGANGENHEIT, GEGENWART UND ZUKUNFTSFLUSS
+            EMOTIONALES UND BEZIEHUNGSFELD
+            ENTSCHEIDUNGEN, BERUF UND MATERIELLE RICHTUNG
+            WAHRSCHEINLICHE ENTWICKLUNG UND ZEITFLUSS
+            KLARER RAT DER KARTEN
             """
 
         return f"""
@@ -294,13 +294,13 @@ def build_tarot_prompt(language, **kwargs):
         - Behalte die Überschriften genau bei
 
         Schreibe unter diesen Überschriften:
-        🃏 DAS GEMEINSAME THEMA DER KARTEN
-        🧩 DER VERBORGENE INNERE KNOTEN
-        ⏳ VERGANGENHEIT, GEGENWART UND ZUKUNFTSFLUSS
-        ❤️ EMOTIONALES UND BEZIEHUNGSFELD
-        💼 ENTSCHEIDUNGEN, BERUF UND MATERIELLE RICHTUNG
-        🔮 WAHRSCHEINLICHE ENTWICKLUNG UND ZEITFLUSS
-        🕯️ KLARER RAT DER KARTEN
+        DAS GEMEINSAME THEMA DER KARTEN
+        DER VERBORGENE INNERE KNOTEN
+        VERGANGENHEIT, GEGENWART UND ZUKUNFTSFLUSS
+        EMOTIONALES UND BEZIEHUNGSFELD
+        ENTSCHEIDUNGEN, BERUF UND MATERIELLE RICHTUNG
+        WAHRSCHEINLICHE ENTWICKLUNG UND ZEITFLUSS
+        KLARER RAT DER KARTEN
         """
 
     if has_question:
@@ -322,11 +322,11 @@ def build_tarot_prompt(language, **kwargs):
         - Behalte die Überschriften genau bei
 
         Schreibe unter diesen Überschriften:
-        🃏 DIE HAUPTBOTSCHAFT DER LEGUNG
-        ⏳ DER EINFLUSS AUS DER VERGANGENHEIT
-        ✨ DIE AKTUELLE ENERGIE
-        🔮 DIE TENDENZ DER NAHEN ZUKUNFT
-        🕯️ DER RAT DER KARTEN
+        DIE HAUPTBOTSCHAFT DER LEGUNG
+        DER EINFLUSS AUS DER VERGANGENHEIT
+        DIE AKTUELLE ENERGIE
+        DIE TENDENZ DER NAHEN ZUKUNFT
+        DER RAT DER KARTEN
 
         Beende den Text mit einem Satz, der andeutet, dass die detaillierte Tarot-Deutung die verborgene Verbindung der Karten, den wahren Knoten der Frage und einen klareren Zeitverlauf sichtbar macht.
         """
@@ -346,11 +346,11 @@ def build_tarot_prompt(language, **kwargs):
     - Behalte die Überschriften genau bei
 
     Schreibe unter diesen Überschriften:
-    🃏 DIE HAUPTBOTSCHAFT DER LEGUNG
-    ⏳ DER EINFLUSS AUS DER VERGANGENHEIT
-    ✨ DIE AKTUELLE ENERGIE
-    🔮 DIE TENDENZ DER NAHEN ZUKUNFT
-    🕯️ DER RAT DER KARTEN
+    DIE HAUPTBOTSCHAFT DER LEGUNG
+    DER EINFLUSS AUS DER VERGANGENHEIT
+    DIE AKTUELLE ENERGIE
+    DIE TENDENZ DER NAHEN ZUKUNFT
+    DER RAT DER KARTEN
 
     Beende den Text mit einem Satz, der andeutet, dass die detaillierte Tarot-Deutung die verborgene Verbindung der Karten, den wahren Knoten der Frage und einen klareren Zeitverlauf sichtbar macht.
     """

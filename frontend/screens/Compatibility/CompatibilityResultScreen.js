@@ -16,8 +16,22 @@ const SECTION_ICONS = {
   '✨': 'sparkles',
 };
 
+const HEADING_ALIASES = [
+  { emoji: '❤️', patterns: [/^emotional compatibility$/i, /^emotionale kompatibilität$/i, /^duygusal uyum$/i] },
+  { emoji: '🗣️', patterns: [/^communication flow$/i, /^kommunikationsfluss$/i, /^iletişim akışı$/i] },
+  { emoji: '⚡', patterns: [/^attraction and energy$/i, /^anziehung und energie$/i, /^çekim ve enerji$/i] },
+  { emoji: '🌗', patterns: [/^challenging areas$/i, /^herausfordernde bereiche$/i, /^zorlayıcı alanlar$/i] },
+  { emoji: '🔮', patterns: [/^relationship guidance$/i, /^beziehungsorientierung$/i, /^ilişki rehberliği$/i] },
+];
+
 const cleanLine = (line) => line.replace(/\*\*/g, '').replace(/^#+\s*/, '').replace(/^[-•]\s*/, '').trim();
-const isSectionHeading = (line) => /^(❤️|🗣️|⚡|🌗|🔮|✨)/.test(cleanLine(line));
+const normalizeHeading = (line) => {
+  const cleaned = cleanLine(line);
+  if (/^(❤️|🗣️|⚡|🌗|🔮|✨)/.test(cleaned)) return cleaned;
+  const match = HEADING_ALIASES.find((item) => item.patterns.some((pattern) => pattern.test(cleaned)));
+  return match ? `${match.emoji} ${cleaned}` : cleaned;
+};
+const isSectionHeading = (line) => /^(❤️|🗣️|⚡|🌗|🔮|✨)/.test(normalizeHeading(line));
 
 const parseContent = (content, fallbackTitle = 'YORUM') => {
   if (!content) return { sections: [], cta: '' };
@@ -26,7 +40,7 @@ const parseContent = (content, fallbackTitle = 'YORUM') => {
   let currentSection = null;
   let cta = '';
   lines.forEach((rawLine) => {
-    const line = cleanLine(rawLine);
+    const line = normalizeHeading(rawLine);
     if (!line) return;
     if (line.startsWith('👉')) {
       cta = line.replace(/^👉\s*/, '');
@@ -154,7 +168,6 @@ export default function CompatibilityResultScreen({ route, navigation }) {
                     <Ionicons name={icon} size={18} color="#C5A100" />
                   </View>
                   <View style={styles.sectionTitleWrap}>
-                    <Text style={styles.sectionEmoji}>{heading.emoji}</Text>
                     <Text style={styles.sectionTitle}>{heading.text}</Text>
                   </View>
                 </View>
@@ -217,7 +230,6 @@ const styles = StyleSheet.create({
   sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
   sectionIconWrap: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197,161,0,0.12)' },
   sectionTitleWrap: { flexDirection: 'row', alignItems: 'center', marginLeft: 10, flex: 1 },
-  sectionEmoji: { fontSize: 18, marginRight: 8 },
   sectionTitle: { color: '#FFFFFF', fontSize: 16, fontWeight: '700', flex: 1 },
   pointRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
   pointDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#C5A100', marginTop: 8, marginRight: 10 },

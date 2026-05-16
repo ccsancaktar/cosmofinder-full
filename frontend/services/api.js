@@ -124,6 +124,9 @@ export const authAPI = {
   
   // Kullanıcı giriş
   login: (credentials) => api.post('/auth/login', credentials),
+
+  // Apple ile giriş
+  appleVerify: (payload) => api.post('/auth/apple/verify', payload),
   
   // Profil bilgilerini getir
   getProfile: () => api.get('/auth/profile'),

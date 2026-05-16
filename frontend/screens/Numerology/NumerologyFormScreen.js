@@ -53,7 +53,7 @@ export default function NumerologyFormScreen({ navigation }) {
   const [readingMode, setReadingMode] = useState('self');
   const didInitRef = useRef(false);
 
-  const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim();
+  const profileName = user?.first_name || user?.name || user?.username || '';
   const profileBirthDate = user?.birth_date || '';
   const hasProfileData = Boolean(profileName && profileBirthDate);
 

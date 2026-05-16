@@ -46,14 +46,16 @@ def build_kabala_prompt(language, **kwargs):
             * Her bölümde içsel nedenleri ve ruhsal etkileri açıkla
             * Korku dili kullanma
             * Gereksiz uzunluk yerine yoğun ve etkili cümleler kur
+            * Madde imi, tire ile liste, ayraç çizgisi veya "--" kullanma
+            * Sadece başlığı yaz, ardından o başlığın altında akıcı paragraf(lar) kur
 
             Aşağıdaki başlıklarda yaz:
-            🔢 GEMATRIA VE İSİM ENERJİSİ
-            🌳 SEFİROT VE RUHSAL ETKİLER
-            ⚖️ İÇSEL DENGE VE RUHSAL BLOKAJLAR
-            🛤️ RUHSAL YOL VE DÖNÜŞÜM
-            🔮 YAKLAŞAN RUHSAL DÖNEM
-            ✨ REHBERLİK VE FARKINDALIK
+            GEMATRIA VE İSİM ENERJİSİ
+            SEFİROT VE RUHSAL ETKİLER
+            İÇSEL DENGE VE RUHSAL BLOKAJLAR
+            RUHSAL YOL VE DÖNÜŞÜM
+            YAKLAŞAN RUHSAL DÖNEM
+            REHBERLİK VE FARKINDALIK
             """
 
         return f"""
@@ -77,13 +79,15 @@ def build_kabala_prompt(language, **kwargs):
         * Modern kişisel gelişim dili kullanma
         * Uzun kehanet yapma; ruhsal yön ve enerji işareti ver
         * Her şeyi açma, derin katmanların bir kısmını kapalı bırak
+        * Madde imi, tire ile liste, ayraç çizgisi veya "--" kullanma
+        * Sadece başlığı yaz, ardından o başlığın altında akıcı paragraf(lar) kur
 
         Aşağıdaki başlıklarda yaz:
-        🔢 GEMATRIA VE İSİM ENERJİSİ
-        🌳 SEFİROT VE RUHSAL ETKİLER
-        ⚖️ İÇSEL DENGE VE RUHSAL İPUCU
-        🔮 YAKLAŞAN RUHSAL TEMA
-        ✨ KISA REHBERLİK
+        GEMATRIA VE İSİM ENERJİSİ
+        SEFİROT VE RUHSAL ETKİLER
+        İÇSEL DENGE VE RUHSAL İPUCU
+        YAKLAŞAN RUHSAL TEMA
+        KISA REHBERLİK
 
         Sonunda şu fikri taşıyan tek cümlelik bir kapanış ekle:
         👉 Detaylı Kabala yorumunda ruhsal blokajların kökü, sefirotlar arası etki ve yaklaşan içsel dönem daha net açığa çıkar.
@@ -114,14 +118,16 @@ def build_kabala_prompt(language, **kwargs):
             * Make the tone deep, symbolic, and ancient
             * Explain inner causes and spiritual effects in every section
             * Do not use fear language
+            * Do not use bullet lists, dashed separators, or "--"
+            * Write the heading alone, then continue with flowing paragraphs beneath it
 
             Write under these headings:
-            🔢 GEMATRIA AND NAME ENERGY
-            🌳 SEFIROT AND SPIRITUAL INFLUENCES
-            ⚖️ INNER BALANCE AND SPIRITUAL BLOCKAGES
-            🛤️ SPIRITUAL PATH AND TRANSFORMATION
-            🔮 THE APPROACHING SPIRITUAL PHASE
-            ✨ GUIDANCE AND AWARENESS
+            GEMATRIA AND NAME ENERGY
+            SEFIROT AND SPIRITUAL INFLUENCES
+            INNER BALANCE AND SPIRITUAL BLOCKAGES
+            SPIRITUAL PATH AND TRANSFORMATION
+            THE APPROACHING SPIRITUAL PHASE
+            GUIDANCE AND AWARENESS
             """
 
         return f"""
@@ -145,13 +151,15 @@ def build_kabala_prompt(language, **kwargs):
         * Do not use modern self-help language
         * Do not make long predictions; point toward spiritual direction and inner themes
         * Leave some deeper layers unrevealed
+        * Do not use bullet lists, dashed separators, or "--"
+        * Write the heading alone, then continue with flowing paragraphs beneath it
 
         Write under these headings:
-        🔢 GEMATRIA AND NAME ENERGY
-        🌳 SEFIROT AND SPIRITUAL INFLUENCES
-        ⚖️ INNER BALANCE AND SPIRITUAL HINT
-        🔮 THE APPROACHING SPIRITUAL THEME
-        ✨ BRIEF GUIDANCE
+        GEMATRIA AND NAME ENERGY
+        SEFIROT AND SPIRITUAL INFLUENCES
+        INNER BALANCE AND SPIRITUAL HINT
+        THE APPROACHING SPIRITUAL THEME
+        BRIEF GUIDANCE
 
         End with one sentence suggesting that the detailed Kabala reading reveals the roots of spiritual blockages, the interplay of the sefirot, and the next inner phase more clearly.
         """
@@ -180,14 +188,16 @@ def build_kabala_prompt(language, **kwargs):
         * Die Sprache soll tief, symbolisch und alt wirken
         * Erkläre innere Ursachen und spirituelle Wirkungen in jedem Abschnitt
         * Verwende keine Angst-Sprache
+        * Verwende keine Aufzählungszeichen, Trennlinien oder "--"
+        * Schreibe zuerst nur die Überschrift und danach fließende Absätze darunter
 
         Schreibe unter diesen Überschriften:
-        🔢 GEMATRIA UND NAMENSENERGIE
-        🌳 SEFIROT UND SPIRITUELLE EINFLÜSSE
-        ⚖️ INNERES GLEICHGEWICHT UND SPIRITUELLE BLOCKADEN
-        🛤️ SPIRITUELLER WEG UND TRANSFORMATION
-        🔮 DIE NÄHER RÜCKENDE SPIRITUELLE PHASE
-        ✨ FÜHRUNG UND BEWUSSTSEIN
+        GEMATRIA UND NAMENSENERGIE
+        SEFIROT UND SPIRITUELLE EINFLÜSSE
+        INNERES GLEICHGEWICHT UND SPIRITUELLE BLOCKADEN
+        SPIRITUELLER WEG UND TRANSFORMATION
+        DIE NÄHER RÜCKENDE SPIRITUELLE PHASE
+        FÜHRUNG UND BEWUSSTSEIN
         """
 
     return f"""
@@ -211,13 +221,15 @@ def build_kabala_prompt(language, **kwargs):
     * Verwende keine moderne Selbsthilfe-Sprache
     * Mache keine langen Vorhersagen; deute auf innere Richtung und spirituelle Themen
     * Lasse einige tiefere Ebenen bewusst verborgen
+    * Verwende keine Aufzählungszeichen, Trennlinien oder "--"
+    * Schreibe zuerst nur die Überschrift und danach fließende Absätze darunter
 
     Schreibe unter diesen Überschriften:
-    🔢 GEMATRIA UND NAMENSENERGIE
-    🌳 SEFIROT UND SPIRITUELLE EINFLÜSSE
-    ⚖️ INNERES GLEICHGEWICHT UND SPIRITUELLER HINWEIS
-    🔮 DAS NÄHER RÜCKENDE SPIRITUELLE THEMA
-    ✨ KURZE FÜHRUNG
+    GEMATRIA UND NAMENSENERGIE
+    SEFIROT UND SPIRITUELLE EINFLÜSSE
+    INNERES GLEICHGEWICHT UND SPIRITUELLER HINWEIS
+    DAS NÄHER RÜCKENDE SPIRITUELLE THEMA
+    KURZE FÜHRUNG
 
     Beende den Text mit einem Satz, der andeutet, dass die detaillierte Kabala-Deutung die Wurzel spiritueller Blockaden, das Zusammenspiel der Sefirot und die nächste innere Phase klarer sichtbar macht.
     """

@@ -61,7 +61,22 @@ const cleanLine = (line) =>
     .replace(/^[-•]\s*/, '')
     .trim();
 
-const isSectionHeading = (line) => /^(ᚱ|⚡|⏳|🛡️|ᛟ|✨)/.test(cleanLine(line));
+const HEADING_ALIASES = [
+  { emoji: 'ᚱ', patterns: [/^the main message of the runes$/i, /^die hauptbotschaft der runen$/i, /^runelerin ana mesajı$/i] },
+  { emoji: '⚡', patterns: [/^current energy and obstacles$/i, /^aktuelle energie und hindernisse$/i, /^şu anki enerji ve engeller$/i] },
+  { emoji: '⏳', patterns: [/^near future and change$/i, /^nahe zukunft und veränderung$/i, /^yakın gelecek ve değişim$/i] },
+  { emoji: '🛡️', patterns: [/^warning and protection$/i, /^warnung und schutz$/i, /^uyarı ve korunma$/i] },
+  { emoji: 'ᛟ', patterns: [/^fate direction and choice$/i, /^schicksalsrichtung und wahl$/i, /^kader yönü ve seçim$/i] },
+];
+
+const normalizeHeading = (line) => {
+  const cleaned = cleanLine(line);
+  if (/^(ᚱ|⚡|⏳|🛡️|ᛟ|✨)/.test(cleaned)) return cleaned;
+  const match = HEADING_ALIASES.find((item) => item.patterns.some((pattern) => pattern.test(cleaned)));
+  return match ? `${match.emoji} ${cleaned}` : cleaned;
+};
+
+const isSectionHeading = (line) => /^(ᚱ|⚡|⏳|🛡️|ᛟ|✨)/.test(normalizeHeading(line));
 
 const parseRuneContent = (content, fallbackTitle = 'READING') => {
   if (!content) return { sections: [], cta: '' };
@@ -72,7 +87,7 @@ const parseRuneContent = (content, fallbackTitle = 'READING') => {
   let cta = '';
 
   lines.forEach((rawLine) => {
-    const line = cleanLine(rawLine);
+    const line = normalizeHeading(rawLine);
     if (!line) return;
 
     if (
@@ -287,7 +302,6 @@ export default function RuneResultScreen({ route, navigation }) {
                     <Ionicons name={getSectionIcon(section.title)} size={18} color="#C5A100" />
                   </View>
                   <View style={styles.sectionTitleWrap}>
-                    <Text style={styles.sectionEmoji}>{heading.emoji}</Text>
                     <Text style={styles.sectionTitle}>{heading.text}</Text>
                   </View>
                 </View>
@@ -488,7 +502,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   sectionTitleWrap: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  sectionEmoji: { fontSize: 16, marginRight: 8 },
   sectionTitle: { flex: 1, color: '#E6C57E', fontSize: 16, fontWeight: '700', lineHeight: 22 },
   pointRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
   pointDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#C5A100', marginTop: 8, marginRight: 10 },

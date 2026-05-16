@@ -17,6 +17,18 @@ class NotificationService {
   constructor() {
     this.expoPushToken = null;
     this.serverManagedTypes = ['daily_reminder', 'weekly_summary'];
+    this.legacyReminderTitleMarkers = [
+      'Günlük Falınız Hazır',
+      'Günlük falın hazır',
+      'Daily reading is ready',
+      'Haftalık Fal Özeti',
+      'Weekly summary',
+    ];
+    this.legacyReminderBodyMarkers = [
+      'Bugünkü falınızı çekmeyi unutmayın',
+      "take a look at your reading",
+      'Kontrol edin',
+    ];
   }
 
   getDefaultChannelId() {
@@ -143,8 +155,33 @@ class NotificationService {
     );
   }
 
+  isLegacyServerManagedReminder(notification) {
+    const title = notification?.content?.title || '';
+    const body = notification?.content?.body || '';
+    const type = notification?.content?.data?.type;
+
+    if (type && this.serverManagedTypes.includes(type)) {
+      return true;
+    }
+
+    return (
+      this.legacyReminderTitleMarkers.some((marker) => title.includes(marker)) ||
+      this.legacyReminderBodyMarkers.some((marker) => body.includes(marker))
+    );
+  }
+
   async clearServerManagedReminderNotifications() {
-    await this.cancelScheduledNotificationsByTypes(this.serverManagedTypes);
+    const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+
+    await Promise.all(
+      scheduled
+        .filter((item) => this.isLegacyServerManagedReminder(item))
+        .map((item) => Notifications.cancelScheduledNotificationAsync(item.identifier))
+    );
+
+    if (typeof Notifications.dismissAllNotificationsAsync === 'function') {
+      await Notifications.dismissAllNotificationsAsync();
+    }
   }
 
   async getNotificationSettings() {

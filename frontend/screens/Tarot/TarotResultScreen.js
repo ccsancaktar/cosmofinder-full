@@ -116,6 +116,16 @@ const POSITION_LABELS = {
   de: ['Vergangenheit', 'Gegenwart', 'Zukunft'],
 };
 
+const HEADING_ALIASES = [
+  { emoji: '🃏', patterns: [/^the shared theme of the cards$/i, /^the main message of the spread$/i, /^das gemeinsame thema der karten$/i, /^die hauptbotschaft der legung$/i, /^kartların ortak teması$/i, /^açılımın ana mesajı$/i] },
+  { emoji: '🧩', patterns: [/^the hidden knot of the question$/i, /^the hidden inner knot$/i, /^der verborgene knoten der frage$/i, /^der verborgene innere knoten$/i, /^sorunun gizli düğümü$/i, /^içsel düğüm ve görünmeyen etki$/i] },
+  { emoji: '⏳', patterns: [/^past, present, and future flow$/i, /^influence coming from the past$/i, /^vergangenheit, gegenwart und zukunftsfluss$/i, /^der einfluss aus der vergangenheit$/i, /^geçmiş, şimdi ve gelecek akışı$/i, /^geçmişten gelen etki$/i] },
+  { emoji: '❤️', patterns: [/^emotional and relational field$/i, /^emotionales und beziehungsfeld$/i, /^duygusal ve ilişkisel alan$/i] },
+  { emoji: '💼', patterns: [/^decisions, work, and material direction$/i, /^entscheidungen, beruf und materielle richtung$/i, /^kararlar, iş ve maddi yön$/i] },
+  { emoji: '🔮', patterns: [/^likely development and timing flow$/i, /^the near-future tendency$/i, /^wahrscheinliche entwicklung und zeitfluss$/i, /^die tendenz der nahen zukunft$/i, /^olası gelişme ve zaman akışı$/i, /^yakın gelecek eğilimi$/i] },
+  { emoji: '🕯️', patterns: [/^clear advice from the cards$/i, /^the cards'? advice$/i, /^klarer rat der karten$/i, /^der rat der karten$/i, /^kartlardan net tavsiye$/i, /^kartların tavsiyesi$/i] },
+];
+
 const cleanLine = (line) =>
   line
     .replace(/\*\*/g, '')
@@ -123,7 +133,14 @@ const cleanLine = (line) =>
     .replace(/^[-•]\s*/, '')
     .trim();
 
-const isSectionHeading = (line) => /^(🃏|🧩|⏳|❤️|💼|🔮|🕯️|✨)/.test(cleanLine(line));
+const normalizeHeading = (line) => {
+  const cleaned = cleanLine(line);
+  if (/^(🃏|🧩|⏳|❤️|💼|🔮|🕯️|✨)/.test(cleaned)) return cleaned;
+  const match = HEADING_ALIASES.find((item) => item.patterns.some((pattern) => pattern.test(cleaned)));
+  return match ? `${match.emoji} ${cleaned}` : cleaned;
+};
+
+const isSectionHeading = (line) => /^(🃏|🧩|⏳|❤️|💼|🔮|🕯️|✨)/.test(normalizeHeading(line));
 
 const parseTarotContent = (content, fallbackTitle = 'READING') => {
   if (!content) return { sections: [], cta: '' };
@@ -134,7 +151,7 @@ const parseTarotContent = (content, fallbackTitle = 'READING') => {
   let cta = '';
 
   lines.forEach((rawLine) => {
-    const line = cleanLine(rawLine);
+    const line = normalizeHeading(rawLine);
     if (!line) return;
 
     if (
@@ -330,7 +347,6 @@ export default function TarotResultScreen({ route, navigation }) {
                     <Ionicons name={getSectionIcon(section.title)} size={18} color="#C5A100" />
                   </View>
                   <View style={styles.sectionTitleWrap}>
-                    <Text style={styles.sectionEmoji}>{heading.emoji}</Text>
                     <Text style={styles.sectionTitle}>{heading.text}</Text>
                   </View>
                 </View>
@@ -543,7 +559,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   sectionTitleWrap: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  sectionEmoji: { fontSize: 16, marginRight: 8 },
   sectionTitle: { flex: 1, color: '#E6C57E', fontSize: 16, fontWeight: '700', lineHeight: 22 },
   pointRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
   pointDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#C5A100', marginTop: 8, marginRight: 10 },

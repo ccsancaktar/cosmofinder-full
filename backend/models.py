@@ -46,7 +46,7 @@ class User:
                  birth_place=None, zodiac_sign=None, chinese_element=None, 
                  theme='dark', language='tr', notifications_enabled=True, 
                  privacy_level='public', is_active=True, email_verified=False,
-                 token_balance=0, stripe_customer_id=None, google_id=None, profile_picture=None,
+                 token_balance=0, stripe_customer_id=None, google_id=None, apple_id=None, profile_picture=None,
                  push_token="", notification_settings=None, onboarding_completed=True):  # Push notification alanları eklendi
         self.username = username
         self.email = email
@@ -69,6 +69,7 @@ class User:
         self.token_balance = token_balance  # Yeni alan
         self.stripe_customer_id = stripe_customer_id  # Stripe customer ID
         self.google_id = google_id
+        self.apple_id = apple_id
         self.profile_picture = profile_picture
         self.onboarding_completed = onboarding_completed
         
@@ -176,6 +177,7 @@ class User:
             'birth_place': self.birth_place,
             'zodiac_sign': self.zodiac_sign,
             'google_id': self.google_id,
+            'apple_id': self.apple_id,
             'profile_picture': self.profile_picture,
             'onboarding_completed': self.onboarding_completed,
             'chinese_element': self.chinese_element,
@@ -231,6 +233,7 @@ class User:
             'has_premium': self.has_active_premium(),  # Premium durumu
             'is_admin': self.is_admin(),
             'google_id': self.google_id,
+            'apple_id': self.apple_id,
             'onboarding_completed': self.onboarding_completed,
             'push_token': self.push_token,  # Push token
             'notification_settings': self.notification_settings,  # Notification ayarları
@@ -288,6 +291,7 @@ class User:
             user.token_balance = user_data.get('token_balance', 0)  # Token balance alanı
             user.stripe_customer_id = user_data.get('stripe_customer_id')  # Stripe customer ID alanı
             user.google_id = user_data.get('google_id')
+            user.apple_id = user_data.get('apple_id')
             user.profile_picture = user_data.get('profile_picture')
             user.onboarding_completed = user_data.get('onboarding_completed', True)
             
@@ -351,6 +355,7 @@ class User:
             user.token_balance = user_data.get('token_balance', 0)  # Token balance alanı
             user.stripe_customer_id = user_data.get('stripe_customer_id')  # Stripe customer ID alanı
             user.google_id = user_data.get('google_id')
+            user.apple_id = user_data.get('apple_id')
             user.profile_picture = user_data.get('profile_picture')
             user.onboarding_completed = user_data.get('onboarding_completed', True)
             
@@ -376,6 +381,15 @@ class User:
             user.updated_at = user_data.get('updated_at')
             return user
         return None
+
+    @staticmethod
+    def find_by_apple_id(apple_id):
+        if not apple_id:
+            return None
+        user_data = db.users.find_one({'apple_id': apple_id})
+        if not user_data:
+            return None
+        return User.find_by_id(str(user_data['_id']))
     
     @staticmethod
     def find_by_id(user_id):
@@ -415,6 +429,7 @@ class User:
                 user.token_balance = user_data.get('token_balance', 0)  # Token balance alanı
                 user.stripe_customer_id = user_data.get('stripe_customer_id')  # Stripe customer ID alanı
                 user.google_id = user_data.get('google_id')
+                user.apple_id = user_data.get('apple_id')
                 user.profile_picture = user_data.get('profile_picture')
                 user.onboarding_completed = user_data.get('onboarding_completed', True)
                 

@@ -123,38 +123,38 @@ def build_yildizname_prompt(language, **kwargs):
 
             Aşağıdaki başlıklarda yaz:
 
-            🧿 DETAYLI YILDIZ VE EBCED ANALİZİ
+            DETAYLI YILDIZ VE EBCED ANALİZİ
             - İsim ve anne adının ebced değeri
             - Bu sayının anlamı
             - Bağlı olduğu yıldız ve gezegen
             - Kader üzerindeki etkisi
 
-            ⚖️ ENERJİ DURUMU VE GİZLİ ETKİLER
+            ENERJİ DURUMU VE GİZLİ ETKİLER
             - Enerji alanında nazar, ağırlık veya dış etki hissi olup olmadığını değerlendir
             - Çevreden gelen baskı, kıskançlık veya negatif tesir olup olmadığını yorumla
             - Enerji düşüklüğünün nedenini açıkla
 
-            💫 KISMET VE ŞANS DURUMU
+            KISMET VE ŞANS DURUMU
             - Kısmet açık mı kapalı mı net söyle
             - Gecikmelerin sebebini açıkla
             - Açılma sürecinin nasıl olacağını belirt
 
-            📅 ZAMANLAMA (EN KRİTİK)
+            ZAMANLAMA (EN KRİTİK)
             - 1-3 ay içinde olacaklar
             - 3-6 ay süreci
             - Önemli bir olayın yaklaşık zamanı
 
-            👥 ÇEVRE VE İNSAN ETKİLERİ
+            ÇEVRE VE İNSAN ETKİLERİ
             - Çevrede kıskançlık, baskı veya haset benzeri bir insan etkisi görünüp görünmediğini yorumla
             - Sana iyi gelen kişilerden bahset
             - Aşk hayatına etki eden durumları açıkla
 
-            💼 İŞ, PARA VE FIRSATLAR
+            İŞ, PARA VE FIRSATLAR
             - Maddi durumun gidişatı
             - Açılacak fırsatlar
             - Riskli dönemler
 
-            🛤️ GENEL KADER YOLU
+            GENEL KADER YOLU
             - Hayatındaki ana yön
             - Büyük değişim dönemi
 
@@ -191,20 +191,20 @@ def build_yildizname_prompt(language, **kwargs):
 
         Aşağıdaki başlıklarda yaz:
 
-        🧿 YILDIZ VE EBCED ANALİZİ
+        YILDIZ VE EBCED ANALİZİ
         - İsim ve anne adının ebced değeri
         - Bağlı olduğu yıldız/gezegen
         - Kısa karakter ve kader etkisi
 
-        ⚖️ ENERJİ DURUMU (GENEL)
+        ENERJİ DURUMU (GENEL)
         - Enerjisinde bir ağırlık olup olmadığı
         - Çok detaya girme, ipucu ver
 
-        💫 KISMET DURUMU (KISA)
+        KISMET DURUMU (KISA)
         - Kısmet açık mı kapalı mı net hüküm vermeden ima et
         - Küçük bir merak unsuru bırak
 
-        📅 YAKIN GELECEKTEN İPUÇLARI
+        YAKIN GELECEKTEN İPUÇLARI
         - Yakın zamanda bir hareketlilik olduğunu söyle
         - Ama net zaman verme
 
@@ -242,13 +242,13 @@ def build_yildizname_prompt(language, **kwargs):
 
             Write under these headings:
 
-            🧿 DETAILED STAR AND EBCED ANALYSIS
-            ⚖️ ENERGY STATE AND HIDDEN INFLUENCES
-            💫 FORTUNE AND LUCK CONDITION
-            📅 TIMING (MOST CRITICAL)
-            👥 ENVIRONMENT AND HUMAN INFLUENCES
-            💼 WORK, MONEY AND OPPORTUNITIES
-            🛤️ GENERAL DESTINY PATH
+            DETAILED STAR AND EBCED ANALYSIS
+            ENERGY STATE AND HIDDEN INFLUENCES
+            FORTUNE AND LUCK CONDITION
+            TIMING (MOST CRITICAL)
+            ENVIRONMENT AND HUMAN INFLUENCES
+            WORK, MONEY AND OPPORTUNITIES
+            GENERAL DESTINY PATH
             """
 
         return f"""
@@ -280,10 +280,10 @@ def build_yildizname_prompt(language, **kwargs):
 
         Write under these headings:
 
-        🧿 STAR AND EBCED ANALYSIS
-        ⚖️ ENERGY STATE (GENERAL)
-        💫 FORTUNE CONDITION (SHORT)
-        📅 HINTS FROM THE NEAR FUTURE
+        STAR AND EBCED ANALYSIS
+        ENERGY STATE (GENERAL)
+        FORTUNE CONDITION (SHORT)
+        HINTS FROM THE NEAR FUTURE
 
         End with a single sentence that suggests:
         In the detailed Yildizname reading, hidden influences, the true state of fortune, and clearer timing are revealed.
@@ -312,13 +312,13 @@ def build_yildizname_prompt(language, **kwargs):
         Verwende klare, starke und überzeugende Formulierungen und bleibe in der Sprache von Yildizname, Ebced, Schicksal und verborgenen Einflüssen.
 
         Schreibe unter diesen Überschriften:
-        🧿 DETAILLIERTE STERN- UND EBCED-ANALYSE
-        ⚖️ ENERGIEZUSTAND UND VERBORGENE EINFLÜSSE
-        💫 SCHICKSAL UND GLÜCKSZUSTAND
-        📅 ZEITLICHE PHASEN
-        👥 UMWELT UND MENSCHLICHE EINFLÜSSE
-        💼 ARBEIT, GELD UND CHANCEN
-        🛤️ ALLGEMEINER SCHICKSALSWEG
+        DETAILLIERTE STERN- UND EBCED-ANALYSE
+        ENERGIEZUSTAND UND VERBORGENE EINFLÜSSE
+        SCHICKSAL UND GLÜCKSZUSTAND
+        ZEITLICHE PHASEN
+        UMWELT UND MENSCHLICHE EINFLÜSSE
+        ARBEIT, GELD UND CHANCEN
+        ALLGEMEINER SCHICKSALSWEG
         """
 
     return f"""
@@ -342,8 +342,8 @@ def build_yildizname_prompt(language, **kwargs):
     Schreibe auf Deutsch, warm aber geheimnisvoll. Halte die Deutung kurz und lass bewusst Neugier offen.
 
     Schreibe unter diesen Überschriften:
-    🧿 STERN- UND EBCED-ANALYSE
-    ⚖️ ENERGIEZUSTAND (ALLGEMEIN)
-    💫 SCHICKSALSZUSTAND (KURZ)
-    📅 HINWEISE AUF DIE NAHE ZUKUNFT
+    STERN- UND EBCED-ANALYSE
+    ENERGIEZUSTAND (ALLGEMEIN)
+    SCHICKSALSZUSTAND (KURZ)
+    HINWEISE AUF DIE NAHE ZUKUNFT
     """

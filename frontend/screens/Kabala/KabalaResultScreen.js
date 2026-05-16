@@ -9,22 +9,50 @@ import LazyImage from '../../components/LazyImage';
 import { usePremium } from '../../context/PremiumContext';
 
 const SECTION_ICONS = {
-  '🔢': 'grid',
-  '🌳': 'git-network',
-  '⚖️': 'scale',
-  '🛤️': 'trail-sign',
-  '🔮': 'sparkles',
-  '✨': 'sparkles',
+  gematria: 'grid',
+  sefirot: 'git-network',
+  balance: 'scale',
+  path: 'trail-sign',
+  phase: 'sparkles',
+  guidance: 'sparkles',
 };
+
+const stripTurkish = (value = '') =>
+  value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ı/g, 'i')
+    .replace(/İ/g, 'I');
+
+const HEADING_ALIASES = [
+  { key: 'gematria', titles: ['GEMATRIA VE ISIM ENERJISI', 'GEMATRIA AND NAME ENERGY', 'GEMATRIA UND NAMENSENERGIE'] },
+  { key: 'sefirot', titles: ['SEFIROT VE RUHSAL ETKILER', 'SEFIROT AND SPIRITUAL INFLUENCES', 'SEFIROT UND SPIRITUELLE EINFLUSSE'] },
+  { key: 'balance', titles: ['ICSEL DENGE VE RUHSAL BLOKAJLAR', 'ICSEL DENGE VE RUHSAL IPUCU', 'INNER BALANCE AND SPIRITUAL BLOCKAGES', 'INNER BALANCE AND SPIRITUAL HINT', 'INNERES GLEICHGEWICHT UND SPIRITUELLE BLOCKADEN', 'INNERES GLEICHGEWICHT UND SPIRITUELLER HINWEIS'] },
+  { key: 'path', titles: ['RUHSAL YOL VE DONUSUM', 'SPIRITUAL PATH AND TRANSFORMATION', 'SPIRITUELLER WEG UND TRANSFORMATION'] },
+  { key: 'phase', titles: ['YAKLASAN RUHSAL DONEM', 'YAKLASAN RUHSAL TEMA', 'THE APPROACHING SPIRITUAL PHASE', 'THE APPROACHING SPIRITUAL THEME', 'DIE NAHER RUCKENDE SPIRITUELLE PHASE', 'DAS NAHER RUCKENDE SPIRITUELLE THEMA'] },
+  { key: 'guidance', titles: ['REHBERLIK VE FARKINDALIK', 'KISA REHBERLIK', 'GUIDANCE AND AWARENESS', 'BRIEF GUIDANCE', 'FUHRUNG UND BEWUSSTSEIN', 'KURZE FUHRUNG'] },
+];
 
 const cleanLine = (line) =>
   line
     .replace(/\*\*/g, '')
     .replace(/^#+\s*/, '')
-    .replace(/^[-•]\s*/, '')
+    .replace(/^[•·●▪◦]\s*/, '')
+    .replace(/^\-\s*/, '')
     .trim();
 
-const isSectionHeading = (line) => /^(🔢|🌳|⚖️|🛤️|🔮|✨)/.test(cleanLine(line));
+const normalizeComparable = (line) =>
+  stripTurkish(cleanLine(line))
+    .replace(/^(🔢|🌳|⚖️|🛤️|🔮|✨)\s*/u, '')
+    .replace(/[:.;]+$/g, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toUpperCase();
+
+const resolveHeadingMeta = (line) => {
+  const normalized = normalizeComparable(line);
+  return HEADING_ALIASES.find((item) => item.titles.includes(normalized)) || null;
+};
 
 const parseKabalaContent = (content, fallbackTitle = 'READING') => {
   if (!content) return { sections: [], cta: '' };
@@ -37,6 +65,7 @@ const parseKabalaContent = (content, fallbackTitle = 'READING') => {
   lines.forEach((rawLine) => {
     const line = cleanLine(rawLine);
     if (!line) return;
+    if (/^[-–—_=\s]{2,}$/.test(line)) return;
 
     if (
       line.startsWith('👉') ||
@@ -48,13 +77,14 @@ const parseKabalaContent = (content, fallbackTitle = 'READING') => {
       return;
     }
 
-    if (isSectionHeading(line)) {
+    const headingMeta = resolveHeadingMeta(line);
+    if (headingMeta) {
       if (currentSection) sections.push(currentSection);
-      currentSection = { title: line, points: [] };
+      currentSection = { title: line.replace(/[:.;]+$/g, '').trim(), key: headingMeta.key, points: [] };
       return;
     }
 
-    if (!currentSection) currentSection = { title: `✨ ${fallbackTitle}`, points: [] };
+    if (!currentSection) currentSection = { title: fallbackTitle, key: 'guidance', points: [] };
     currentSection.points.push(line);
   });
 
@@ -62,16 +92,7 @@ const parseKabalaContent = (content, fallbackTitle = 'READING') => {
   return { sections, cta };
 };
 
-const splitHeading = (heading) => {
-  const match = heading.match(/^(🔢|🌳|⚖️|🛤️|🔮|✨)\s*(.*)$/);
-  if (!match) return { emoji: '✨', text: heading };
-  return { emoji: match[1], text: match[2] };
-};
-
-const getSectionIcon = (heading) => {
-  const match = heading.match(/^(🔢|🌳|⚖️|🛤️|🔮|✨)/);
-  return match ? SECTION_ICONS[match[1]] : 'document-text';
-};
+const getSectionIcon = (sectionKey) => SECTION_ICONS[sectionKey] || 'document-text';
 
 const KabalaResultScreen = () => {
   const { t, i18n } = useTranslation();
@@ -214,16 +235,14 @@ const KabalaResultScreen = () => {
           </View>
 
           {sections.map((section, index) => {
-            const heading = splitHeading(section.title);
             return (
               <View key={`${section.title}-${index}`} style={styles.sectionCard}>
                 <View style={styles.sectionHeader}>
                   <View style={styles.sectionIconWrap}>
-                    <Ionicons name={getSectionIcon(section.title)} size={18} color="#C5A100" />
+                    <Ionicons name={getSectionIcon(section.key)} size={18} color="#C5A100" />
                   </View>
                   <View style={styles.sectionTitleWrap}>
-                    <Text style={styles.sectionEmoji}>{heading.emoji}</Text>
-                    <Text style={styles.sectionTitle}>{heading.text}</Text>
+                    <Text style={styles.sectionTitle}>{section.title}</Text>
                   </View>
                 </View>
 
@@ -296,7 +315,7 @@ const KabalaResultScreen = () => {
 
           <View style={styles.disclaimer}>
             <Ionicons name="information-circle" size={16} color="#C5A100" />
-            <Text style={styles.disclaimerText}>{t('kabala.disclaimerText')}</Text>
+            <Text style={styles.disclaimerText}>{t('kabala.disclaimer')}</Text>
           </View>
         </ScrollView>
       </LinearGradient>
@@ -418,7 +437,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   sectionTitleWrap: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  sectionEmoji: { fontSize: 16, marginRight: 8 },
   sectionTitle: { flex: 1, color: '#E6C57E', fontSize: 16, fontWeight: '700', lineHeight: 22 },
   pointRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
   pointDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#C5A100', marginTop: 8, marginRight: 10 },

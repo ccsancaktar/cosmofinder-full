@@ -13,9 +13,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useGoogleAuth } from '../../hooks/useGoogleAuth';
+import { useAppleAuth } from '../../hooks/useAppleAuth';
 import { useNotification } from '../../context/NotificationContext';
 import Logo from '../../components/Logo';
 
@@ -34,6 +36,7 @@ export default function RegisterScreen({ navigation }) {
   
   const { register } = useAuth();
   const { googleAuth } = useGoogleAuth();
+  const { appleAuth, isAppleAuthAvailable } = useAppleAuth();
 
   const updateFormData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -78,6 +81,16 @@ export default function RegisterScreen({ navigation }) {
     if (result.success) {
       return;
     } else {
+      showError(result.error);
+    }
+  };
+
+  const handleAppleSignUp = async () => {
+    setLoading(true);
+    const result = await appleAuth();
+    setLoading(false);
+
+    if (!result.success) {
       showError(result.error);
     }
   };
@@ -203,6 +216,19 @@ export default function RegisterScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
+          {Platform.OS === 'ios' && isAppleAuthAvailable ? (
+            <View style={styles.googleContainer}>
+              <AppleAuthentication.AppleAuthenticationButton
+                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_UP}
+                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                cornerRadius={14}
+                style={[styles.appleButton, loading && styles.appleButtonDisabled]}
+                onPress={handleAppleSignUp}
+                disabled={loading}
+              />
+            </View>
+          ) : null}
+
 
           {/* Login Link */}
           <View style={styles.loginContainer}>
@@ -243,6 +269,13 @@ const styles = StyleSheet.create({
 
   googleContainer: {
     marginBottom: 16,
+  },
+  appleButton: {
+    width: '100%',
+    height: 54,
+  },
+  appleButtonDisabled: {
+    opacity: 0.55,
   },
   appSubtitle: {
     fontSize: 16,

@@ -33,7 +33,6 @@ export default function EditProfileScreen({ navigation }) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [formData, setFormData] = useState({
     first_name: user?.first_name || '',
-    phone: user?.phone || '',
     birth_date: user?.birth_date || '',
     birth_time: user?.birth_time || '',
     birth_place: user?.birth_place || '',
@@ -226,7 +225,6 @@ export default function EditProfileScreen({ navigation }) {
     try {
       const updateData = {
         first_name: formData.first_name.trim(),
-        phone: formData.phone.trim(),
         birth_place: formData.birth_place.trim(),
       };
 
@@ -359,18 +357,6 @@ export default function EditProfileScreen({ navigation }) {
                 />
               </View>
 
-              <View style={styles.inputGroup}>
-                <Text style={[styles.inputLabel, fontStyles.bodyBold]}>{t('profile.phone')}</Text>
-                <TextInput
-                  style={styles.input}
-                  value={formData.phone}
-                  onChangeText={(text) => handleInputChange('phone', text)}
-                  placeholder={t('profile.phonePlaceholder')}
-                  placeholderTextColor="#666"
-                  keyboardType="phone-pad"
-                  editable={!isUpdating}
-                />
-              </View>
             </View>
 
             <View style={styles.section}>

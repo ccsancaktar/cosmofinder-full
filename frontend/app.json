@@ -46,6 +46,7 @@
           "iosAppId": "ca-app-pub-1621199907307145~4415254045"
         }
       ],
+      "expo-apple-authentication",
       "@react-native-community/datetimepicker",
       "@sentry/react-native",
       [

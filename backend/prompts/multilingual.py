@@ -230,12 +230,12 @@ User details:
 Write an original numerology reading in English. Keep it deeply personal, emotionally intelligent, and easy to read.
 
 Use these section headings exactly:
-🔢 LIFE PATH NUMBER
-🌙 SOUL URGE
-✨ CHARACTER AND TALENTS
-💼 CAREER FLOW
-❤️ RELATIONSHIP ENERGY
-🔮 THIS PERIOD'S MESSAGE
+LIFE PATH NUMBER
+SOUL URGE
+CHARACTER AND TALENTS
+CAREER FLOW
+RELATIONSHIP ENERGY
+THIS PERIOD'S MESSAGE
 
 Cover these points naturally:
 1. Explain how the Life Path Number shapes the person's direction
@@ -265,12 +265,12 @@ Angaben der Person:
 Schreibe eine originelle Numerologie-Deutung auf Deutsch. Sie soll persönlich, warm und hochwertig wirken.
 
 Nutze diese Abschnittsüberschriften exakt:
-🔢 LEBENSWEGZAHL
-🌙 SEELENIMPULS
-✨ CHARAKTER UND TALENTE
-💼 BERUFLICHER FLUSS
-❤️ BEZIEHUNGSENERGIE
-🔮 BOTSCHAFT DIESER PHASE
+LEBENSWEGZAHL
+SEELENIMPULS
+CHARAKTER UND TALENTE
+BERUFLICHER FLUSS
+BEZIEHUNGSENERGIE
+BOTSCHAFT DIESER PHASE
 
 Decke diese Punkte natürlich ab:
 1. Wie die Lebenswegzahl die Richtung und Entwicklung prägt
@@ -299,12 +299,12 @@ Kullanıcı bilgileri:
 Türkçe olarak özgün bir numeroloji yorumu yaz.
 
 Şu başlıkları aynen kullan:
-🔢 YAŞAM YOLU SAYISI
-🌙 RUH ARZUSU
-✨ KARAKTER VE YETENEKLER
-💼 KARİYER AKIŞI
-❤️ İLİŞKİ ENERJİSİ
-🔮 BU DÖNEMİN MESAJI
+YAŞAM YOLU SAYISI
+RUH ARZUSU
+KARAKTER VE YETENEKLER
+KARİYER AKIŞI
+İLİŞKİ ENERJİSİ
+BU DÖNEMİN MESAJI
 
 Yorum şu noktaları doğal biçimde kapsasın:
 1. Yaşam yolu sayısının kişinin yönünü ve ana temasını nasıl belirlediğini açıkla
@@ -370,11 +370,11 @@ Guidance theme: {guidance_theme}
 Write the reading in English. Make it warm, emotionally intelligent, and premium in tone.
 
 Use these section headings exactly:
-❤️ EMOTIONAL COMPATIBILITY
-🗣️ COMMUNICATION FLOW
-⚡ ATTRACTION AND ENERGY
-🌗 CHALLENGING AREAS
-🔮 RELATIONSHIP GUIDANCE
+EMOTIONAL COMPATIBILITY
+COMMUNICATION FLOW
+ATTRACTION AND ENERGY
+CHALLENGING AREAS
+RELATIONSHIP GUIDANCE
 
 Cover these points naturally:
 1. Explain the overall emotional chemistry
@@ -410,11 +410,11 @@ Leitmotiv: {guidance_theme}
 Schreibe die Deutung auf Deutsch. Sie soll warm, klar und hochwertig wirken.
 
 Nutze diese Abschnittsüberschriften exakt:
-❤️ EMOTIONALE KOMPATIBILITÄT
-🗣️ KOMMUNIKATIONSFLUSS
-⚡ ANZIEHUNG UND ENERGIE
-🌗 HERAUSFORDERNDE BEREICHE
-🔮 BEZIEHUNGSORIENTIERUNG
+EMOTIONALE KOMPATIBILITÄT
+KOMMUNIKATIONSFLUSS
+ANZIEHUNG UND ENERGIE
+HERAUSFORDERNDE BEREICHE
+BEZIEHUNGSORIENTIERUNG
 
 Behandle diese Punkte natürlich:
 1. Erkläre die emotionale Grundchemie
@@ -449,11 +449,11 @@ Rehber Tema: {guidance_theme}
 Türkçe olarak sıcak, duygusal zekâ taşıyan ve premium hissettiren bir uyum yorumu yaz.
 
 Şu başlıkları aynen kullan:
-❤️ DUYGUSAL UYUM
-🗣️ İLETİŞİM AKIŞI
-⚡ ÇEKİM VE ENERJİ
-🌗 ZORLAYICI ALANLAR
-🔮 İLİŞKİ REHBERLİĞİ
+DUYGUSAL UYUM
+İLETİŞİM AKIŞI
+ÇEKİM VE ENERJİ
+ZORLAYICI ALANLAR
+İLİŞKİ REHBERLİĞİ
 
 Yorum şu noktaları doğal biçimde kapsasın:
 1. Genel duygusal kimyayı açıkla
@@ -485,10 +485,10 @@ Guidance focus: {guidance_focus}
 Share line seed: {share_line}
 
 Write the response in English using these headings exactly:
-👼 MESSAGE OF THE NUMBER
-⚡ CURRENT ENERGY
-🔮 NEAR EFFECT
-✨ GUIDANCE
+MESSAGE OF THE NUMBER
+CURRENT ENERGY
+NEAR EFFECT
+GUIDANCE
 
 Each section should be 1-2 short sentences only.
 Keep it concise, personal, emotionally clear, and easy to share.
@@ -506,10 +506,10 @@ Leitfokus: {guidance_focus}
 Teilbare Kernzeile: {share_line}
 
 Schreibe die Antwort auf Deutsch mit diesen Überschriften:
-👼 BOTSCHAFT DER ZAHL
-⚡ AKTUELLE ENERGIE
-🔮 NAHE WIRKUNG
-✨ ORIENTIERUNG
+BOTSCHAFT DER ZAHL
+AKTUELLE ENERGIE
+NAHE WIRKUNG
+ORIENTIERUNG
 
 Jeder Abschnitt soll nur 1-2 kurze Sätze enthalten.
 Halte die Deutung kurz, persönlich, klar und gut teilbar.
@@ -526,10 +526,10 @@ Rehber Odağı: {guidance_focus}
 Paylaşım Cümlesi Tohumu: {share_line}
 
 Yanıtı Türkçe olarak şu başlıklarla yaz:
-👼 SAYININ MESAJI
-⚡ ŞU ANKİ ENERJİ
-🔮 YAKIN ETKİ
-✨ TAVSİYE
+SAYININ MESAJI
+ŞU ANKİ ENERJİ
+YAKIN ETKİ
+TAVSİYE
 
 Her bölüm sadece 1-2 kısa cümle olsun.
 Yorum kısa, kişisel, net ve kolay paylaşılabilir olsun.

@@ -63,7 +63,7 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
   };
   
   const [dogumSaati, setDogumSaati] = useState('');
-  const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim();
+  const profileName = user?.first_name || user?.name || user?.username || '';
   const profileBirthDate = user?.birth_date || '';
   const profileBirthTime = user?.birth_time || '';
   const profileBirthPlace = user?.birth_place || '';

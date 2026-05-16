@@ -16,6 +16,15 @@ const SECTION_ICONS = {
   '🔮': 'planet',
 };
 
+const HEADING_ALIASES = [
+  { emoji: '🔢', patterns: [/^life path number$/i, /^lebenswegzahl$/i, /^yaşam yolu sayısı$/i] },
+  { emoji: '🌙', patterns: [/^soul urge$/i, /^seelenimpuls$/i, /^ruh arzusu$/i] },
+  { emoji: '✨', patterns: [/^character and talents$/i, /^charakter und talente$/i, /^karakter ve yetenekler$/i] },
+  { emoji: '💼', patterns: [/^career flow$/i, /^beruflicher fluss$/i, /^kariyer akışı$/i] },
+  { emoji: '❤️', patterns: [/^relationship energy$/i, /^beziehungsenergie$/i, /^ilişki enerjisi$/i] },
+  { emoji: '🔮', patterns: [/^this period'?s message$/i, /^botschaft dieser phase$/i, /^bu dönemin mesajı$/i] },
+];
+
 const cleanLine = (line) =>
   line
     .replace(/\*\*/g, '')
@@ -23,7 +32,14 @@ const cleanLine = (line) =>
     .replace(/^[-•]\s*/, '')
     .trim();
 
-const isSectionHeading = (line) => /^(🔢|🌙|✨|💼|❤️|🔮)/.test(cleanLine(line));
+const normalizeHeading = (line) => {
+  const cleaned = cleanLine(line);
+  if (/^(🔢|🌙|✨|💼|❤️|🔮)/.test(cleaned)) return cleaned;
+  const match = HEADING_ALIASES.find((item) => item.patterns.some((pattern) => pattern.test(cleaned)));
+  return match ? `${match.emoji} ${cleaned}` : cleaned;
+};
+
+const isSectionHeading = (line) => /^(🔢|🌙|✨|💼|❤️|🔮)/.test(normalizeHeading(line));
 
 const parseNumerologyContent = (content, fallbackTitle = 'YORUM') => {
   if (!content) return { sections: [], cta: '' };
@@ -33,7 +49,7 @@ const parseNumerologyContent = (content, fallbackTitle = 'YORUM') => {
   let cta = '';
 
   lines.forEach((rawLine) => {
-    const line = cleanLine(rawLine);
+    const line = normalizeHeading(rawLine);
     if (!line) return;
 
     if (line.startsWith('👉')) {
@@ -186,7 +202,6 @@ export default function NumerologyResultScreen({ route, navigation }) {
                     <Ionicons name={iconName} size={18} color="#C5A100" />
                   </View>
                   <View style={styles.sectionTitleWrap}>
-                    <Text style={styles.sectionEmoji}>{heading.emoji}</Text>
                     <Text style={styles.sectionTitle}>{heading.text}</Text>
                   </View>
                 </View>
@@ -358,10 +373,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 10,
     flex: 1,
-  },
-  sectionEmoji: {
-    fontSize: 18,
-    marginRight: 8,
   },
   sectionTitle: {
     color: '#FFFFFF',

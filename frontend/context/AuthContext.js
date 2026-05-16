@@ -40,6 +40,11 @@ export const AuthProvider = ({ children }) => {
         // Önce state'i güncelle (synchronous)
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
+
+        // Sunucu tarafında yönetilen reminder'ların eski local kopyalarını her açılışta temizle.
+        notificationService.clearServerManagedReminderNotifications().catch((error) => {
+          console.error('Eski local reminder temizleme hatası:', error);
+        });
         
         // Uygulama başlangıç yüklemesi tamamlandı
         setInitializing(false);
@@ -110,43 +115,41 @@ export const AuthProvider = ({ children }) => {
     await AsyncStorage.setItem('auth_user', JSON.stringify(sessionUser));
   };
 
+  const finalizeAuthenticatedSession = async (sessionToken, sessionUser) => {
+    await persistAuthSession(sessionToken, sessionUser);
+
+    setToken(sessionToken);
+    setUser(sessionUser);
+
+    await refreshProfile({ force: true });
+
+    console.log('🔔 Push notification izni alınıyor...');
+    const pushToken = await notificationService.registerForPushNotificationsAsync();
+    console.log('🔔 Push token alındı:', pushToken);
+
+    if (pushToken) {
+      console.log('🔔 Backend\'e push token kaydediliyor...');
+      try {
+        const result = await notificationAPI.registerToken(pushToken);
+        console.log('🔔 Push token başarıyla kaydedildi:', result);
+      } catch (error) {
+        console.error('❌ Push token kaydedilemedi:', error);
+        console.error('❌ Error details:', error.response?.data);
+      }
+    } else {
+      console.log('⚠️ Push token alınamadı!');
+    }
+
+    await notificationService.clearServerManagedReminderNotifications();
+  };
+
   const login = async (credentials) => {
     try {
       setLoading(true);
       const response = await authAPI.login(credentials);
       
       const { token: newToken, user: userData } = response.data;
-      
-      await persistAuthSession(newToken, userData);
-      
-      setToken(newToken);
-      setUser(userData);
-      
-      // Profil bilgilerini güncelle
-      await refreshProfile({ force: true });
-      
-      // Push notification izni al ve token'ı kaydet
-      console.log('🔔 Push notification izni alınıyor...');
-      const pushToken = await notificationService.registerForPushNotificationsAsync();
-      console.log('🔔 Push token alındı:', pushToken);
-      
-      if (pushToken) {
-        // Backend'e push token'ı gönder
-        console.log('🔔 Backend\'e push token kaydediliyor...');
-        try {
-          const result = await notificationAPI.registerToken(pushToken);
-          console.log('🔔 Push token başarıyla kaydedildi:', result);
-        } catch (error) {
-          console.error('❌ Push token kaydedilemedi:', error);
-          console.error('❌ Error details:', error.response?.data);
-        }
-      } else {
-        console.log('⚠️ Push token alınamadı!');
-      }
-
-      // Daily/weekly reminder'lar artık sunucu tarafında yönetiliyor.
-      // Eski local schedule'ların kopya üretmemesi için temizle.
-      await notificationService.clearServerManagedReminderNotifications();
+      await finalizeAuthenticatedSession(newToken, userData);
       
       return { success: true };
     } catch (error) {
@@ -166,37 +169,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authAPI.register(userData);
       
       const { token: newToken, user: newUser } = response.data;
-      
-      await persistAuthSession(newToken, newUser);
-      
-      setToken(newToken);
-      setUser(newUser);
-      
-      // Profil bilgilerini güncelle
-      await refreshProfile({ force: true });
-      
-      // Push notification izni al ve token'ı kaydet
-      console.log('🔔 Push notification izni alınıyor...');
-      const pushToken = await notificationService.registerForPushNotificationsAsync();
-      console.log('🔔 Push token alındı:', pushToken);
-      
-      if (pushToken) {
-        // Backend'e push token'ı gönder
-        console.log('🔔 Backend\'e push token kaydediliyor...');
-        try {
-          const result = await notificationAPI.registerToken(pushToken);
-          console.log('🔔 Push token başarıyla kaydedildi:', result);
-        } catch (error) {
-          console.error('❌ Push token kaydedilemedi:', error);
-          console.error('❌ Error details:', error.response?.data);
-        }
-      } else {
-        console.log('⚠️ Push token alınamadı!');
-      }
-
-      // Daily/weekly reminder'lar artık sunucu tarafında yönetiliyor.
-      // Eski local schedule'ların kopya üretmemesi için temizle.
-      await notificationService.clearServerManagedReminderNotifications();
+      await finalizeAuthenticatedSession(newToken, newUser);
       
       return { success: true };
     } catch (error) {
@@ -320,6 +293,7 @@ export const AuthProvider = ({ children }) => {
     changePassword,
     forgotPassword,
     refreshProfile,
+    finalizeAuthenticatedSession,
     setToken,
     setUser,
     isAuthenticated: !!token

@@ -26,12 +26,12 @@ def build_daily_prompt(language, **kwargs):
         * Şanslı sayı, renk ve saat yoruma doğal bağlansın
 
         Aşağıdaki başlıklarda yaz:
-        🌟 GÜNÜN ENERJİSİ
-        ❤️ AŞK VE İLETİŞİM
-        💼 İŞ VE PARA
-        ⚡ DİKKAT EDİLMESİ GEREKENLER
-        🍀 ŞANSLI ENERJİLER
-        🔮 GÜNÜN MESAJI
+        GÜNÜN ENERJİSİ
+        AŞK VE İLETİŞİM
+        İŞ VE PARA
+        DİKKAT EDİLMESİ GEREKENLER
+        ŞANSLI ENERJİLER
+        GÜNÜN MESAJI
 
         EK TALİMAT:
         * Yorumlar mobil ekranda rahat okunacak uzunlukta olsun
@@ -59,12 +59,12 @@ def build_daily_prompt(language, **kwargs):
         * Make the lucky number, color, and hour feel naturally connected to the reading
 
         Write under these headings:
-        🌟 TODAY'S ENERGY
-        ❤️ LOVE AND COMMUNICATION
-        💼 WORK AND MONEY
-        ⚡ THINGS TO WATCH OUT FOR
-        🍀 LUCKY ENERGIES
-        🔮 MESSAGE OF THE DAY
+        TODAY'S ENERGY
+        LOVE AND COMMUNICATION
+        WORK AND MONEY
+        THINGS TO WATCH OUT FOR
+        LUCKY ENERGIES
+        MESSAGE OF THE DAY
 
         EXTRA INSTRUCTIONS:
         * Keep it comfortable to read on a mobile screen
@@ -91,12 +91,12 @@ def build_daily_prompt(language, **kwargs):
     * Glückszahl, Farbe und Stunde sollen natürlich zur Deutung passen
 
     Schreibe unter diesen Überschriften:
-    🌟 ENERGIE DES TAGES
-    ❤️ LIEBE UND KOMMUNIKATION
-    💼 ARBEIT UND GELD
-    ⚡ WORAUF MAN ACHTEN SOLLTE
-    🍀 GLÜCKSENERGIEN
-    🔮 BOTSCHAFT DES TAGES
+    ENERGIE DES TAGES
+    LIEBE UND KOMMUNIKATION
+    ARBEIT UND GELD
+    WORAUF MAN ACHTEN SOLLTE
+    GLÜCKSENERGIEN
+    BOTSCHAFT DES TAGES
 
     ZUSATZ:
     * Die Deutung soll angenehm auf dem Handy lesbar sein

@@ -13,9 +13,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import * as AppleAuthentication from 'expo-apple-authentication';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { useGoogleAuth } from '../../hooks/useGoogleAuth';
+import { useAppleAuth } from '../../hooks/useAppleAuth';
 import { useNotification } from '../../context/NotificationContext';
 import Logo from '../../components/Logo';
 
@@ -29,6 +31,7 @@ export default function LoginScreen({ navigation }) {
   
   const { login } = useAuth();
   const { googleAuth } = useGoogleAuth();
+  const { appleAuth, isAppleAuthAvailable } = useAppleAuth();
 
   const handleLogin = async () => {
     if (!username.trim() || !password.trim()) {
@@ -55,6 +58,16 @@ export default function LoginScreen({ navigation }) {
     if (result.success) {
       return;
     } else {
+      showError(result.error);
+    }
+  };
+
+  const handleAppleSignIn = async () => {
+    setLoading(true);
+    const result = await appleAuth();
+    setLoading(false);
+
+    if (!result.success) {
       showError(result.error);
     }
   };
@@ -157,6 +170,19 @@ export default function LoginScreen({ navigation }) {
               <Text style={styles.googleButtonText}>{t('auth.continueWithGoogle')}</Text>
             </TouchableOpacity>
           </View>
+
+          {Platform.OS === 'ios' && isAppleAuthAvailable ? (
+            <View style={styles.appleContainer}>
+              <AppleAuthentication.AppleAuthenticationButton
+                buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+                buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+                cornerRadius={14}
+                style={[styles.appleButton, loading && styles.appleButtonDisabled]}
+                onPress={handleAppleSignIn}
+                disabled={loading}
+              />
+            </View>
+          ) : null}
 
 
           {/* Register Link */}
@@ -295,6 +321,13 @@ const styles = StyleSheet.create({
     shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
     shadowRadius: Platform.OS === 'ios' ? 8 : 0,
     elevation: Platform.OS === 'android' ? 8 : 0,
+  },
+  appleButton: {
+    width: '100%',
+    height: 54,
+  },
+  appleButtonDisabled: {
+    opacity: 0.55,
   },
   googleButtonDisabled: {
     opacity: 0.6,

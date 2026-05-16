@@ -6,7 +6,9 @@ from datetime import datetime, timedelta
 from tokens import add_registration_bonus
 from google_auth_oauthlib.flow import Flow
 from google.oauth2 import id_token
-from google.auth.transport import requests
+from google.auth.transport import requests as google_requests
+import requests as http_requests
+import jwt
 import os
 import re
 import secrets
@@ -25,6 +27,50 @@ GOOGLE_REDIRECT_URI = os.getenv(
     'GOOGLE_REDIRECT_URI',
     f"{get_backend_public_url()}/api/auth/google/callback"
 )
+APPLE_APP_ID = os.getenv('APPLE_APP_ID', 'com.cosmofinder.app')
+APPLE_SERVICE_ID = os.getenv('APPLE_SERVICE_ID', '')
+APPLE_KEYS_URL = 'https://appleid.apple.com/auth/keys'
+
+
+def get_allowed_apple_audiences():
+    audiences = {APPLE_APP_ID}
+    if APPLE_SERVICE_ID:
+        audiences.add(APPLE_SERVICE_ID)
+    return {aud for aud in audiences if aud}
+
+
+def fetch_apple_public_keys():
+    response = http_requests.get(APPLE_KEYS_URL, timeout=10)
+    response.raise_for_status()
+    payload = response.json()
+    return payload.get('keys', [])
+
+
+def verify_apple_identity_token(identity_token):
+    if not identity_token:
+        raise ValueError('Apple identity token gereklidir')
+
+    header = jwt.get_unverified_header(identity_token)
+    key_id = header.get('kid')
+    algorithm = header.get('alg', 'RS256')
+
+    apple_keys = fetch_apple_public_keys()
+    public_key = None
+    for jwk in apple_keys:
+        if jwk.get('kid') == key_id:
+            public_key = jwt.algorithms.RSAAlgorithm.from_jwk(jwk)
+            break
+
+    if public_key is None:
+        raise ValueError('Apple public key bulunamadi')
+
+    return jwt.decode(
+        identity_token,
+        public_key,
+        algorithms=[algorithm],
+        audience=list(get_allowed_apple_audiences()),
+        issuer='https://appleid.apple.com',
+    )
 
 def validate_email(email):
     """Email formatını kontrol et"""
@@ -60,6 +106,10 @@ def generate_unique_username(email, first_name=""):
         counter += 1
 
     return candidate
+
+
+def build_display_name(user):
+    return (user.first_name or '').strip() or user.username or user.email
 
 
 def create_password_reset_token(user_id, expires_minutes=30):
@@ -153,7 +203,7 @@ def register():
         
         user_dict = user.to_dict()
         # Frontend için 'name' field'ı ekle
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
         
         return jsonify({
             'message': 'Kullanıcı başarıyla oluşturuldu',
@@ -193,7 +243,7 @@ def login():
         
         user_dict = user.to_dict()
         # Frontend için 'name' field'ı ekle
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
         
         return jsonify({
             'message': 'Giriş başarılı',
@@ -221,7 +271,7 @@ def get_profile():
         
         user_dict = user.to_dict()
         # Frontend için 'name' field'ı ekle
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
         
         return jsonify({
             'user': user_dict,
@@ -248,7 +298,7 @@ def update_profile():
         
         # Güncellenebilir alanlar
         updatable_fields = [
-            'first_name', 'last_name', 'phone', 'profile_image',
+            'first_name', 'profile_image',
             'birth_date', 'birth_time', 'birth_place',
             'theme', 'language', 'notifications_enabled', 'privacy_level',
             'onboarding_completed',
@@ -272,7 +322,7 @@ def update_profile():
         
         user_dict = user.to_dict()
         # Frontend için 'name' field'ı ekle
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
         
         return jsonify({
             'message': 'Profil güncellendi',
@@ -302,7 +352,7 @@ def upload_profile_image():
         user.save()
 
         user_dict = user.to_dict()
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
 
         return jsonify({
             'success': True,
@@ -327,7 +377,7 @@ def delete_profile_image():
         user.save()
 
         user_dict = user.to_dict()
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
 
         return jsonify({
             'success': True,
@@ -573,7 +623,7 @@ def google_callback():
         # ID token'dan kullanıcı bilgilerini al
         id_info = id_token.verify_oauth2_token(
             flow.credentials.id_token, 
-            requests.Request(), 
+            google_requests.Request(), 
             GOOGLE_CLIENT_ID
         )
         
@@ -620,7 +670,7 @@ def google_callback():
         
         user_dict = user.to_dict()
         # Frontend için 'name' field'ı ekle
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
         
         return jsonify({
             'message': 'Google ile giriş başarılı',
@@ -644,7 +694,7 @@ def google_verify():
         # ID token'ı doğrula
         id_info = id_token.verify_oauth2_token(
             id_token_str, 
-            requests.Request(), 
+            google_requests.Request(), 
             GOOGLE_CLIENT_ID
         )
         
@@ -691,7 +741,7 @@ def google_verify():
         
         user_dict = user.to_dict()
         # Frontend için 'name' field'ı ekle
-        user_dict['name'] = f"{user.first_name} {user.last_name}".strip()
+        user_dict['name'] = build_display_name(user)
         
         return jsonify({
             'message': 'Google ile giriş başarılı',
@@ -701,3 +751,100 @@ def google_verify():
         
     except Exception as e:
         return jsonify({'error': f'Google verify hatası: {str(e)}'}), 500 
+
+
+@auth_bp.route('/apple/verify', methods=['POST'])
+def apple_verify():
+    """Apple identity token'ı doğrula ve giriş yap"""
+    try:
+        data = request.get_json() or {}
+        identity_token = data.get('identity_token')
+        provided_email = (data.get('email') or '').strip().lower()
+        apple_user = data.get('apple_user')
+        first_name = (data.get('first_name') or '').strip()
+        last_name = (data.get('last_name') or '').strip()
+
+        claims = verify_apple_identity_token(identity_token)
+        apple_id = claims.get('sub') or apple_user
+        email = (claims.get('email') or provided_email).strip().lower()
+        email_verified = str(claims.get('email_verified', '')).lower() == 'true'
+
+        if not apple_id:
+            return jsonify({'error': 'Apple kullanıcı kimliği doğrulanamadı'}), 400
+
+        user = User.find_by_apple_id(apple_id)
+
+        if not user and email:
+            user = User.find_by_email(email)
+            if user:
+                user.apple_id = apple_id
+                if not user.email_verified and email_verified:
+                    user.email_verified = True
+                if first_name and not user.first_name:
+                    user.first_name = first_name
+                if last_name and not user.last_name:
+                    user.last_name = last_name
+                user.updated_at = datetime.now()
+                user.save()
+
+        if not user:
+            if not email:
+                return jsonify({
+                    'error': 'Apple hesabından email alınamadı. İlk girişte email paylaşımına izin vererek tekrar deneyin.'
+                }), 400
+
+            username = generate_unique_username(email, first_name)
+            user = User(
+                username=username,
+                email=email,
+                first_name=first_name or None,
+                last_name=last_name or None,
+                apple_id=apple_id,
+                email_verified=email_verified or bool(email),
+                onboarding_completed=False,
+            )
+            user.save()
+            add_registration_bonus(str(user._id))
+        else:
+            changed = False
+            if not getattr(user, 'apple_id', None):
+                user.apple_id = apple_id
+                changed = True
+            if email and not user.email:
+                user.email = email
+                changed = True
+            if email_verified and not user.email_verified:
+                user.email_verified = True
+                changed = True
+            if first_name and not user.first_name:
+                user.first_name = first_name
+                changed = True
+            if last_name and not user.last_name:
+                user.last_name = last_name
+                changed = True
+            if changed:
+                user.updated_at = datetime.now()
+                user.save()
+
+        access_token = create_access_token(
+            identity=str(user._id),
+            expires_delta=timedelta(days=30)
+        )
+
+        user_dict = user.to_dict()
+        user_dict['name'] = build_display_name(user)
+
+        return jsonify({
+            'message': 'Apple ile giriş başarılı',
+            'user': user_dict,
+            'token': access_token
+        }), 200
+
+    except jwt.ExpiredSignatureError:
+        return jsonify({'error': 'Apple oturum doğrulaması zaman aşımına uğradı'}), 400
+    except jwt.InvalidTokenError as exc:
+        return jsonify({'error': f'Apple identity token geçersiz: {str(exc)}'}), 400
+    except ValueError as exc:
+        return jsonify({'error': str(exc)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Apple verify hatası: {str(e)}'}), 500

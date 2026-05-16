@@ -68,6 +68,17 @@ const ELEMENT_COLORS = {
   Earth: '#D4A561',
 };
 
+const HEADING_ALIASES = [
+  { emoji: '🌿', patterns: [/^day master and destiny structure$/i, /^day master and core nature$/i, /^day master und schicksalsstruktur$/i, /^day master und grundnatur$/i, /^day master ve kader yapısı$/i, /^day master ve temel karakter$/i] },
+  { emoji: '⚖️', patterns: [/^element balance and the main life issue$/i, /^element balance \(general\)$/i, /^elementgleichgewicht und das hauptproblem im leben$/i, /^elementgleichgewicht \(allgemein\)$/i, /^element dengesi ve hayattaki ana sorun$/i, /^element dengesi \(genel\)$/i] },
+  { emoji: '💼', patterns: [/^money, career and power analysis$/i, /^geld, karriere und machtanalyse$/i, /^para, kariyer ve güç analizi$/i] },
+  { emoji: '❤️', patterns: [/^relationship and love dynamics$/i, /^beziehungs- und liebesdynamik$/i, /^ilişki ve aşk dinamikleri$/i] },
+  { emoji: '📅', patterns: [/^luck cycles and timing$/i, /^near-future hint$/i, /^glückszyklen und zeitliche phasen$/i, /^hinweis auf die nahe zukunft$/i, /^şans döngüleri ve zamanlama$/i, /^yakın gelecek ipucu$/i] },
+  { emoji: '💡', patterns: [/^element balancing and life guidance$/i, /^elementausgleich und lebenshinweise$/i, /^element dengeleme ve yaşam önerileri$/i] },
+  { emoji: '🛤️', patterns: [/^general destiny flow$/i, /^allgemeiner schicksalsverlauf$/i, /^genel kader akışı$/i] },
+  { emoji: '💫', patterns: [/^general flow and luck$/i, /^allgemeiner fluss und glück$/i, /^genel akış ve şans$/i] },
+];
+
 const cleanLine = (line) =>
   line
     .replace(/\*\*/g, '')
@@ -75,7 +86,14 @@ const cleanLine = (line) =>
     .replace(/^[-•]\s*/, '')
     .trim();
 
-const isSectionHeading = (line) => /^(🌿|⚖️|💼|❤️|📅|💡|🛤️|💫)/.test(cleanLine(line));
+const normalizeHeading = (line) => {
+  const cleaned = cleanLine(line);
+  if (/^(🌿|⚖️|💼|❤️|📅|💡|🛤️|💫)/.test(cleaned)) return cleaned;
+  const match = HEADING_ALIASES.find((item) => item.patterns.some((pattern) => pattern.test(cleaned)));
+  return match ? `${match.emoji} ${cleaned}` : cleaned;
+};
+
+const isSectionHeading = (line) => /^(🌿|⚖️|💼|❤️|📅|💡|🛤️|💫)/.test(normalizeHeading(line));
 
 const parseBaziContent = (content, fallbackTitle = 'ANALYSIS') => {
   if (!content) {
@@ -88,7 +106,7 @@ const parseBaziContent = (content, fallbackTitle = 'ANALYSIS') => {
   let cta = '';
 
   lines.forEach((rawLine) => {
-    const line = cleanLine(rawLine);
+    const line = normalizeHeading(rawLine);
     if (!line) return;
 
     if (
@@ -313,7 +331,6 @@ export default function ChineseResultScreen({ route, navigation }) {
                     <Ionicons name={getSectionIcon(section.title)} size={18} color="#D9A34A" />
                   </View>
                   <View style={styles.sectionTitleWrap}>
-                    <Text style={styles.sectionEmoji}>{heading.emoji}</Text>
                     <Text style={styles.sectionTitle}>{heading.text}</Text>
                   </View>
                 </View>
@@ -533,7 +550,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   sectionTitleWrap: { flexDirection: 'row', alignItems: 'center', flex: 1 },
-  sectionEmoji: { fontSize: 16, marginRight: 8 },
   sectionTitle: { flex: 1, color: '#E6C57E', fontSize: 16, fontWeight: '700', lineHeight: 22 },
   pointRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
   pointDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#D29A17', marginTop: 8, marginRight: 10 },

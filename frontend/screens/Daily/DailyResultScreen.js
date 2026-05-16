@@ -41,15 +41,15 @@ const cleanLine = (line) =>
     .trim();
 
 const NUMERIC_HEADING_MAP = [
-  { pattern: /^1\.\s*(bugünün genel enerjisi|today'?s general energy|energie des tages)/i, emoji: '🌟', title: { tr: 'Günün Enerjisi', en: "Today's Energy", de: 'Energie des Tages' } },
-  { pattern: /^2\.\s*(burç özelliklerine göre günlük yorum|daily interpretation based on zodiac|deutung basierend auf dem sternzeichen)/i, emoji: '🌟', title: { tr: 'Burç Akışı', en: 'Zodiac Flow', de: 'Sternzeichen-Fluss' } },
-  { pattern: /^3\.\s*(aşk ve ilişkiler açısından bugün|love and relationships|liebe und beziehungen)/i, emoji: '❤️', title: { tr: 'Aşk ve İletişim', en: 'Love and Communication', de: 'Liebe und Kommunikation' } },
-  { pattern: /^4\.\s*(kariyer ve iş hayatı için bugün|career and work life|karriere und arbeit)/i, emoji: '💼', title: { tr: 'İş ve Para', en: 'Work and Money', de: 'Arbeit und Geld' } },
-  { pattern: /^5\.\s*(sağlık ve enerji durumu|health and energy|gesundheit und energie)/i, emoji: '⚡', title: { tr: 'Enerji Dengesi', en: 'Energy Balance', de: 'Energiebalance' } },
-  { pattern: /^6\.\s*(bugün dikkat edilmesi gerekenler|things to watch out for|worauf man achten sollte)/i, emoji: '⚡', title: { tr: 'Dikkat Edilmesi Gerekenler', en: 'Things to Watch Out For', de: 'Worauf man Achten Sollte' } },
-  { pattern: /^7\.\s*(bugün yapılması önerilen aktiviteler|recommended activities|empfohlene aktivitäten)/i, emoji: '🍀', title: { tr: 'Önerilen Aktiviteler', en: 'Recommended Activities', de: 'Empfohlene Aktivitäten' } },
-  { pattern: /^8\.\s*(yarın için hazırlık önerileri|preparation suggestions for tomorrow|vorbereitung für morgen)/i, emoji: '🔮', title: { tr: 'Yarına Hazırlık', en: 'Preparation for Tomorrow', de: 'Vorbereitung für Morgen' } },
-  { pattern: /^(son söz|closing message|schlussbotschaft)/i, emoji: '🔮', title: { tr: 'Günün Mesajı', en: 'Message of the Day', de: 'Botschaft des Tages' } },
+  { pattern: /^(1\.\s*)?(bugünün genel enerjisi|today'?s general energy|energie des tages|günün enerjisi)$/i, emoji: '🌟', title: { tr: 'Günün Enerjisi', en: "Today's Energy", de: 'Energie des Tages' } },
+  { pattern: /^(2\.\s*)?(burç özelliklerine göre günlük yorum|daily interpretation based on zodiac|deutung basierend auf dem sternzeichen|burç akışı|zodiac flow|sternzeichen-fluss)$/i, emoji: '🌟', title: { tr: 'Burç Akışı', en: 'Zodiac Flow', de: 'Sternzeichen-Fluss' } },
+  { pattern: /^(3\.\s*)?(aşk ve ilişkiler açısından bugün|love and relationships|liebe und beziehungen|aşk ve iletişim|love and communication)$/i, emoji: '❤️', title: { tr: 'Aşk ve İletişim', en: 'Love and Communication', de: 'Liebe und Kommunikation' } },
+  { pattern: /^(4\.\s*)?(kariyer ve iş hayatı için bugün|career and work life|karriere und arbeit|iş ve para|work and money|arbeit und geld)$/i, emoji: '💼', title: { tr: 'İş ve Para', en: 'Work and Money', de: 'Arbeit und Geld' } },
+  { pattern: /^(5\.\s*)?(sağlık ve enerji durumu|health and energy|gesundheit und energie|enerji dengesi|energy balance|energiebalance)$/i, emoji: '⚡', title: { tr: 'Enerji Dengesi', en: 'Energy Balance', de: 'Energiebalance' } },
+  { pattern: /^(6\.\s*)?(bugün dikkat edilmesi gerekenler|things to watch out for|worauf man achten sollte|dikkat edilmesi gerekenler)$/i, emoji: '⚡', title: { tr: 'Dikkat Edilmesi Gerekenler', en: 'Things to Watch Out For', de: 'Worauf man Achten Sollte' } },
+  { pattern: /^(7\.\s*)?(bugün yapılması önerilen aktiviteler|recommended activities|empfohlene aktivitäten|önerilen aktiviteler)$/i, emoji: '🍀', title: { tr: 'Önerilen Aktiviteler', en: 'Recommended Activities', de: 'Empfohlene Aktivitäten' } },
+  { pattern: /^(8\.\s*)?(yarın için hazırlık önerileri|preparation suggestions for tomorrow|vorbereitung für morgen|yarına hazırlık|preparation for tomorrow)$/i, emoji: '🔮', title: { tr: 'Yarına Hazırlık', en: 'Preparation for Tomorrow', de: 'Vorbereitung für Morgen' } },
+  { pattern: /^(son söz|closing message|schlussbotschaft|günün mesajı|message of the day|botschaft des tages)$/i, emoji: '🔮', title: { tr: 'Günün Mesajı', en: 'Message of the Day', de: 'Botschaft des Tages' } },
 ];
 
 const normalizeLegacyHeading = (line, localeKey) => {
@@ -279,7 +279,6 @@ export default function DailyResultScreen({ route, navigation }) {
                     <Ionicons name={sectionMeta.icon} size={18} color="#F5D277" />
                   </View>
                   <View style={styles.sectionHeadingWrap}>
-                    <Text style={styles.sectionEmoji}>{emoji}</Text>
                     <Text style={styles.sectionTitle}>{text}</Text>
                   </View>
                 </View>
@@ -498,10 +497,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  sectionEmoji: {
-    fontSize: 17,
-    marginRight: 8,
   },
   sectionTitle: {
     flex: 1,

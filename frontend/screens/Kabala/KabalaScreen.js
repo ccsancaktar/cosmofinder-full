@@ -45,7 +45,7 @@ const KabalaScreen = React.memo(({ navigation }) => {
   const [showInfoSheet, setShowInfoSheet] = useState(false);
   const [readingMode, setReadingMode] = useState('self');
   const isKeyboardVisible = useKeyboardVisibility();
-  const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(' ').trim();
+  const profileName = user?.first_name || user?.name || user?.username || '';
   const profileBirthDate = user?.birth_date || '';
   const hasProfileData = Boolean(profileName && profileBirthDate);
 

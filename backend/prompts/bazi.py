@@ -111,13 +111,13 @@ def build_bazi_prompt(language, **kwargs):
             * Modern motivasyon dili kullanma; element, yapı, denge ve döngü mantığıyla yaz
 
             Aşağıdaki başlıklarda yaz:
-            🌿 DAY MASTER VE KADER YAPISI
-            ⚖️ ELEMENT DENGESİ VE HAYATTAKİ ANA SORUN
-            💼 PARA, KARİYER VE GÜÇ ANALİZİ
-            ❤️ İLİŞKİ VE AŞK DİNAMİKLERİ
-            📅 ŞANS DÖNGÜLERİ VE ZAMANLAMA (EN KRİTİK BÖLÜM)
-            💡 ELEMENT DENGELEME VE YAŞAM ÖNERİLERİ
-            🛤️ GENEL KADER AKIŞI
+            DAY MASTER VE KADER YAPISI
+            ELEMENT DENGESİ VE HAYATTAKİ ANA SORUN
+            PARA, KARİYER VE GÜÇ ANALİZİ
+            İLİŞKİ VE AŞK DİNAMİKLERİ
+            ŞANS DÖNGÜLERİ VE ZAMANLAMA (EN KRİTİK BÖLÜM)
+            ELEMENT DENGELEME VE YAŞAM ÖNERİLERİ
+            GENEL KADER AKIŞI
             """
 
         return f"""
@@ -145,10 +145,10 @@ def build_bazi_prompt(language, **kwargs):
         * Kesin hükümler yerine işaret ve eğilim dili kullan
 
         Aşağıdaki başlıklarda yaz:
-        🌿 DAY MASTER VE TEMEL KARAKTER
-        ⚖️ ELEMENT DENGESİ (GENEL)
-        💫 GENEL AKIŞ VE ŞANS
-        📅 YAKIN GELECEK İPUCU
+        DAY MASTER VE TEMEL KARAKTER
+        ELEMENT DENGESİ (GENEL)
+        GENEL AKIŞ VE ŞANS
+        YAKIN GELECEK İPUCU
 
         Sonunda şu fikri taşıyan tek cümlelik bir kapanış ekle:
         Detaylı analizde kader döngülerin, para ve ilişki dönemlerin net olarak açıklanır.
@@ -189,13 +189,13 @@ def build_bazi_prompt(language, **kwargs):
             * Keep the analysis rooted in element balance, Day Master, and cycles
 
             Write under these headings:
-            🌿 DAY MASTER AND DESTINY STRUCTURE
-            ⚖️ ELEMENT BALANCE AND THE MAIN LIFE ISSUE
-            💼 MONEY, CAREER AND POWER ANALYSIS
-            ❤️ RELATIONSHIP AND LOVE DYNAMICS
-            📅 LUCK CYCLES AND TIMING
-            💡 ELEMENT BALANCING AND LIFE GUIDANCE
-            🛤️ GENERAL DESTINY FLOW
+            DAY MASTER AND DESTINY STRUCTURE
+            ELEMENT BALANCE AND THE MAIN LIFE ISSUE
+            MONEY, CAREER AND POWER ANALYSIS
+            RELATIONSHIP AND LOVE DYNAMICS
+            LUCK CYCLES AND TIMING
+            ELEMENT BALANCING AND LIFE GUIDANCE
+            GENERAL DESTINY FLOW
             """
 
         return f"""
@@ -223,10 +223,10 @@ def build_bazi_prompt(language, **kwargs):
         * Leave curiosity for the detailed version
 
         Write under these headings:
-        🌿 DAY MASTER AND CORE NATURE
-        ⚖️ ELEMENT BALANCE (GENERAL)
-        💫 GENERAL FLOW AND LUCK
-        📅 NEAR-FUTURE HINT
+        DAY MASTER AND CORE NATURE
+        ELEMENT BALANCE (GENERAL)
+        GENERAL FLOW AND LUCK
+        NEAR-FUTURE HINT
 
         End with one sentence suggesting that the detailed analysis reveals destiny cycles, money periods, and relationship timing more clearly.
         """
@@ -256,13 +256,13 @@ def build_bazi_prompt(language, **kwargs):
         * Output: {output_label}
 
         Schreibe unter diesen Überschriften:
-        🌿 DAY MASTER UND SCHICKSALSSTRUKTUR
-        ⚖️ ELEMENTGLEICHGEWICHT UND DAS HAUPTPROBLEM IM LEBEN
-        💼 GELD, KARRIERE UND MACHTANALYSE
-        ❤️ BEZIEHUNGS- UND LIEBESDYNAMIK
-        📅 GLÜCKSZYKLEN UND ZEITLICHE PHASEN
-        💡 ELEMENTAUSGLEICH UND LEBENSHINWEISE
-        🛤️ ALLGEMEINER SCHICKSALSVERLAUF
+        DAY MASTER UND SCHICKSALSSTRUKTUR
+        ELEMENTGLEICHGEWICHT UND DAS HAUPTPROBLEM IM LEBEN
+        GELD, KARRIERE UND MACHTANALYSE
+        BEZIEHUNGS- UND LIEBESDYNAMIK
+        GLÜCKSZYKLEN UND ZEITLICHE PHASEN
+        ELEMENTAUSGLEICH UND LEBENSHINWEISE
+        ALLGEMEINER SCHICKSALSVERLAUF
         """
 
     return f"""
@@ -286,8 +286,8 @@ def build_bazi_prompt(language, **kwargs):
     Schreibe kurz und lasse bewusst Neugier offen.
 
     Schreibe unter diesen Überschriften:
-    🌿 DAY MASTER UND GRUNDNATUR
-    ⚖️ ELEMENTGLEICHGEWICHT (ALLGEMEIN)
-    💫 ALLGEMEINER FLUSS UND GLÜCK
-    📅 HINWEIS AUF DIE NAHE ZUKUNFT
+    DAY MASTER UND GRUNDNATUR
+    ELEMENTGLEICHGEWICHT (ALLGEMEIN)
+    ALLGEMEINER FLUSS UND GLÜCK
+    HINWEIS AUF DIE NAHE ZUKUNFT
     """

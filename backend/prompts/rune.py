@@ -48,11 +48,11 @@ def build_rune_prompt(language, **kwargs):
             - Başlıkları aynen koru
 
             Şu başlıklarda yaz:
-            ᚱ RUNELERİN ANA MESAJI
-            ⚡ ŞU ANKİ ENERJİ VE ENGELLER
-            ⏳ YAKIN GELECEK VE DEĞİŞİM
-            🛡️ UYARI VE KORUNMA
-            ᛟ KADER YÖNÜ VE SEÇİM
+            RUNELERİN ANA MESAJI
+            ŞU ANKİ ENERJİ VE ENGELLER
+            YAKIN GELECEK VE DEĞİŞİM
+            UYARI VE KORUNMA
+            KADER YÖNÜ VE SEÇİM
             """
 
         return f"""
@@ -74,10 +74,10 @@ def build_rune_prompt(language, **kwargs):
         - Başlıkları aynen koru
 
         Şu başlıklarda yaz:
-        ᚱ RUNELERİN ANA MESAJI
-        ⚡ ŞU ANKİ ENERJİ VE ENGELLER
-        ⏳ YAKIN GELECEK VE DEĞİŞİM
-        🛡️ UYARI VE KORUNMA
+        RUNELERİN ANA MESAJI
+        ŞU ANKİ ENERJİ VE ENGELLER
+        YAKIN GELECEK VE DEĞİŞİM
+        UYARI VE KORUNMA
 
         Sonunda şu fikri taşıyan tek cümlelik bir kapanış ekle:
         👉 Detaylı rune yorumunda runelerin kader yönü, gizli çatışması ve hangi seçimin neyi açacağı daha net görünür.
@@ -104,11 +104,11 @@ def build_rune_prompt(language, **kwargs):
             - Keep the headings exactly as written
 
             Write under these headings:
-            ᚱ THE MAIN MESSAGE OF THE RUNES
-            ⚡ CURRENT ENERGY AND OBSTACLES
-            ⏳ NEAR FUTURE AND CHANGE
-            🛡️ WARNING AND PROTECTION
-            ᛟ FATE DIRECTION AND CHOICE
+            THE MAIN MESSAGE OF THE RUNES
+            CURRENT ENERGY AND OBSTACLES
+            NEAR FUTURE AND CHANGE
+            WARNING AND PROTECTION
+            FATE DIRECTION AND CHOICE
             """
 
         return f"""
@@ -130,10 +130,10 @@ def build_rune_prompt(language, **kwargs):
         - Keep the headings exactly as written
 
         Write under these headings:
-        ᚱ THE MAIN MESSAGE OF THE RUNES
-        ⚡ CURRENT ENERGY AND OBSTACLES
-        ⏳ NEAR FUTURE AND CHANGE
-        🛡️ WARNING AND PROTECTION
+        THE MAIN MESSAGE OF THE RUNES
+        CURRENT ENERGY AND OBSTACLES
+        NEAR FUTURE AND CHANGE
+        WARNING AND PROTECTION
 
         End with one sentence suggesting that the detailed rune reading reveals the direction of fate, the hidden conflict, and which choice opens which path.
         """
@@ -158,11 +158,11 @@ def build_rune_prompt(language, **kwargs):
         - Behalte die Überschriften genau bei
 
         Schreibe unter diesen Überschriften:
-        ᚱ DIE HAUPTBOTSCHAFT DER RUNEN
-        ⚡ AKTUELLE ENERGIE UND HINDERNISSE
-        ⏳ NAHE ZUKUNFT UND VERÄNDERUNG
-        🛡️ WARNUNG UND SCHUTZ
-        ᛟ SCHICKSALSRICHTUNG UND WAHL
+        DIE HAUPTBOTSCHAFT DER RUNEN
+        AKTUELLE ENERGIE UND HINDERNISSE
+        NAHE ZUKUNFT UND VERÄNDERUNG
+        WARNUNG UND SCHUTZ
+        SCHICKSALSRICHTUNG UND WAHL
         """
 
     return f"""
@@ -184,10 +184,10 @@ def build_rune_prompt(language, **kwargs):
     - Behalte die Überschriften genau bei
 
     Schreibe unter diesen Überschriften:
-    ᚱ DIE HAUPTBOTSCHAFT DER RUNEN
-    ⚡ AKTUELLE ENERGIE UND HINDERNISSE
-    ⏳ NAHE ZUKUNFT UND VERÄNDERUNG
-    🛡️ WARNUNG UND SCHUTZ
+    DIE HAUPTBOTSCHAFT DER RUNEN
+    AKTUELLE ENERGIE UND HINDERNISSE
+    NAHE ZUKUNFT UND VERÄNDERUNG
+    WARNUNG UND SCHUTZ
 
     Beende den Text mit einem Satz, der andeutet, dass die detaillierte Runen-Deutung die Schicksalsrichtung, den verborgenen Konflikt und die Wirkung möglicher Entscheidungen klarer offenbart.
     """
