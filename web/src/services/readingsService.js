@@ -58,6 +58,27 @@ const readingsService = {
         tokenCost: 45,
         backgroundImage: "/assets/images/kabala-bg.jpg",
       },
+      numerology: {
+        id: "numerology",
+        name: "Numeroloji",
+        description: "İsminiz ve doğum tarihinizden yaşam yolu ve kader analizi",
+        tokenCost: 5,
+        backgroundImage: "/assets/images/yildizname-bg.jpg",
+      },
+      compatibility: {
+        id: "compatibility",
+        name: "Uyum Analizi",
+        description: "İki kişi arasındaki duygusal bağ, iletişim ve enerji uyumu",
+        tokenCost: 8,
+        backgroundImage: "/assets/images/tarot-bg.jpg",
+      },
+      "angel-numbers": {
+        id: "angel-numbers",
+        name: "Melek Sayıları",
+        description: "Tekrarlayan sayıların kısa ama derin spiritüel mesajı",
+        tokenCost: 5,
+        backgroundImage: "/assets/images/daily-bg.jpg",
+      },
     };
     return readings[type];
   },
@@ -70,6 +91,18 @@ const readingsService = {
   // Fal geçmişi
   getReadingHistory: async () => {
     return API.get(`/readings/history`);
+  },
+
+  getReadingDetail: async (readingId) => {
+    return API.get(`/readings/history/${readingId}`);
+  },
+
+  deleteReading: async (readingId) => {
+    return API.delete(`/readings/history/${readingId}`);
+  },
+
+  toggleVisibility: async (readingId, isPublic) => {
+    return API.put(`/readings/history/${readingId}/visibility`, { is_public: isPublic });
   },
 };
 

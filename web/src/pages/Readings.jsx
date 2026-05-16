@@ -8,6 +8,7 @@ import kahveImg from "../assets/kahve-fali.jpg";
 import kablImg from "../assets/kabala.jpg";
 import runeImg from "../assets/rune.jpg";
 import cinImg from "../assets/cin-fali.jpg";
+import dailyImg from "../assets/tarot.jpg";
 
 const allReadings = [
   {
@@ -30,6 +31,7 @@ const allReadings = [
     description: "Kahve fincanı fotografı ile geleneksel Türk kahve falı. 3 adet fotoğraf yükleyerek detaylı analiz alın.",
     tokenCost: 25,
     backgroundImage: kahveImg,
+    mobileOnly: true,
   },
   {
     id: "rune",
@@ -50,7 +52,7 @@ const allReadings = [
     name: "Günlük Burç Yorumu",
     description: "Burcunuza göre günlük astroloji yorumu. Her gün yeni ve güncel yorum ile başlayın.",
     tokenCost: 15,
-    backgroundImage: tarotImg,
+    backgroundImage: dailyImg,
   },
   {
     id: "kabala",
@@ -58,6 +60,27 @@ const allReadings = [
     description: "İbrani mistik geleceği ile ruhsal yorum. Numeroloji ve mistik sembolleriyle detaylı analiz.",
     tokenCost: 45,
     backgroundImage: kablImg,
+  },
+  {
+    id: "numerology",
+    name: "Numeroloji",
+    description: "İsminiz ve doğum tarihiniz üzerinden yaşam yolu, kader ve kişilik sayı analizi.",
+    tokenCost: 5,
+    backgroundImage: yildiznameImg,
+  },
+  {
+    id: "compatibility",
+    name: "Uyum Analizi",
+    description: "İki kişi arasındaki çekim, iletişim, sürtünme ve duygusal uyumu yorumlar.",
+    tokenCost: 8,
+    backgroundImage: tarotImg,
+  },
+  {
+    id: "angel-numbers",
+    name: "Melek Sayıları",
+    description: "Sık gördüğünüz sayı dizilerinin kısa, modern ve spiritüel açıklamasını verir.",
+    tokenCost: 5,
+    backgroundImage: cinImg,
   },
 ];
 

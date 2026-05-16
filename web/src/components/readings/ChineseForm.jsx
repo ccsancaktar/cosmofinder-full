@@ -6,6 +6,8 @@ import { Calendar, Clock, MessageCircle, Sparkles } from "lucide-react";
 import API from "../../services/api";
 import authService from "../../services/authService";
 import { setBalance } from "../../store/tokensSlice";
+import ReadingModePanel from "./ReadingModePanel";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function ChineseForm() {
   const [formData, setFormData] = useState({
@@ -19,6 +21,12 @@ export default function ChineseForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const tokenBalance = useSelector((state) => state.tokens.balance);
+  const { user } = useAuth();
+  const [readingMode, setReadingMode] = useState("self");
+  const profileBirthDate = user?.birth_date || "";
+  const profileBirthTime = user?.birth_time || "";
+  const canUseProfile = Boolean(profileBirthDate && profileBirthTime);
+  const language = user?.language || "tr";
 
   const CHINESE_COST = 40;
 
@@ -37,11 +45,13 @@ export default function ChineseForm() {
   };
 
   const validateForm = () => {
-    if (!formData.birth_date) {
+    const effectiveBirthDate = readingMode === "self" ? profileBirthDate : formData.birth_date;
+    const effectiveBirthTime = readingMode === "self" ? profileBirthTime : formData.birth_time;
+    if (!effectiveBirthDate) {
       setError("Lütfen doğum tarihinizi girin");
       return false;
     }
-    if (!formData.birth_time) {
+    if (!effectiveBirthTime) {
       setError("Lütfen doğum saatinizi girin");
       return false;
     }
@@ -65,11 +75,14 @@ export default function ChineseForm() {
     setLoading(true);
 
     try {
+      const effectiveBirthDate = readingMode === "self" ? profileBirthDate : formData.birth_date;
+      const effectiveBirthTime = readingMode === "self" ? profileBirthTime : formData.birth_time;
       const response = await API.post("/chinese", {
-        dogumTarihi: formData.birth_date,
-        dogumSaati: formData.birth_time,
+        dogumTarihi: effectiveBirthDate,
+        dogumSaati: effectiveBirthTime,
         soru: formData.question || "Ba Zi analizi yapınız",
-        language: "tr",
+        language,
+        reading_for: readingMode,
       });
 
       if (response.data.success) {
@@ -132,9 +145,22 @@ export default function ChineseForm() {
         <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-gradient-to-r from-yellow-300 via-primary to-yellow-500 bg-clip-text mb-4">
           Ba Zi Analizi
         </h1>
-        <p className="text-gray-300 text-lg max-w-xl mx-auto">
-          Doğum tarih ve saatinizi girin, kozmik enerjilerinizi keşfedin
-        </p>
+              <p className="text-gray-300 text-lg max-w-xl mx-auto">
+                Doğum tarih ve saatinizi girin, kozmik enerjilerinizi keşfedin
+              </p>
+      </motion.div>
+
+      <motion.div variants={itemVariants}>
+        <ReadingModePanel
+          mode={readingMode}
+          onChangeMode={setReadingMode}
+          canUseProfile={canUseProfile}
+          summaryLines={[
+            profileBirthDate ? `Doğum tarihi: ${profileBirthDate}` : null,
+            profileBirthTime ? `Doğum saati: ${profileBirthTime}` : null,
+          ].filter(Boolean)}
+          summaryDescription="Profilindeki doğum tarihi ve saat bu analiz için doğrudan kullanılacak."
+        />
       </motion.div>
 
       <form onSubmit={handleSubmit} className="space-y-10">
@@ -158,7 +184,13 @@ export default function ChineseForm() {
             <Calendar className="w-5 h-5" />
             Doğum Bilgileri
           </h2>
-          
+          {readingMode === "self" && !canUseProfile ? (
+            <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100 mb-4">
+              Profilinde doğum tarihi veya saat eksik. `Kendim için` analiz almak istersen önce profilini tamamlamalısın.
+            </div>
+          ) : null}
+
+          {readingMode === "other" ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Birth Date */}
             <motion.div variants={itemVariants} className="space-y-2">
@@ -196,6 +228,13 @@ export default function ChineseForm() {
               />
             </motion.div>
           </div>
+          ) : (
+            <div className="rounded-2xl border border-primary/20 bg-primary/10 p-5 space-y-2">
+              <p className="text-sm font-semibold text-white">Profilindeki doğum bilgileri kullanılacak</p>
+              <p className="text-sm text-gray-300">{profileBirthDate || "Doğum tarihi eksik"}</p>
+              <p className="text-sm text-gray-400">{profileBirthTime || "Doğum saati eksik"}</p>
+            </div>
+          )}
         </motion.div>
 
         {/* Question Section */}
@@ -274,4 +313,3 @@ export default function ChineseForm() {
     </motion.div>
   );
 }
-

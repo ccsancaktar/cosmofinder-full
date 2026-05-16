@@ -14,7 +14,7 @@ except ImportError:  # pragma: no cover - opsiyonel dependency
     FlaskIntegration = None
 
 from auth import auth_bp
-from config import TAROT_ASSETS_DIR, get_allowed_origins, load_environment
+from config import COFFEE_UPLOADS_DIR, TAROT_ASSETS_DIR, get_allowed_origins, load_environment
 from payment_system import payment_bp
 from premium import premium_bp
 from rate_limiting import create_limiter
@@ -49,12 +49,13 @@ def create_app():
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET")
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=365)
     app.config["TAROT_ASSETS_DIR"] = str(TAROT_ASSETS_DIR)
+    app.config["COFFEE_UPLOADS_DIR"] = str(COFFEE_UPLOADS_DIR)
 
     CORS(
         app,
         origins=get_allowed_origins(),
         supports_credentials=True,
-        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allow_headers=["Content-Type", "Authorization"],
     )
     JWTManager(app)

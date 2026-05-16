@@ -1,7 +1,11 @@
+import base64
 import json
 import os
 import random
+import re
+import uuid
 from datetime import datetime
+from pathlib import Path
 
 from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
@@ -10,6 +14,7 @@ import requests
 from clients import g4f_client
 from g4f.Provider import Blackbox, OIVSCodeSer2, PollinationsAI, WeWordle, Yqcloud
 from chinese_data import ELEMENTS, YEAR_ELEMENTS, calculate_ba_zi
+from config import get_backend_public_url
 from models import Reading, User, calculate_zodiac_sign
 from prompts.multilingual import get_prompt_by_language
 from rate_limiting import daily_fal_rate_limit, fal_rate_limit
@@ -30,6 +35,16 @@ INVALID_PROVIDER_MARKERS = (
     'data: {"type":"error"',
     "data: [DONE]",
 )
+
+DATA_URL_RE = re.compile(r"^data:(?P<mime>[\w/+.-]+);base64,(?P<data>.+)$", re.DOTALL)
+COFFEE_MIME_EXTENSIONS = {
+    "image/jpeg": ".jpg",
+    "image/jpg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+    "image/heic": ".heic",
+    "image/heif": ".heif",
+}
 
 TEXT_PROVIDERS = [Blackbox, Yqcloud, WeWordle, PollinationsAI]
 VISION_PROVIDER_ATTEMPTS = [
@@ -800,6 +815,40 @@ def _create_completion(prompt, timeout=None, images=None):
     raise last_error or RuntimeError("Fal yorumu olusturulamadi")
 
 
+def _persist_coffee_images(images, user_id):
+    upload_root = Path(current_app.config["COFFEE_UPLOADS_DIR"])
+    dated_dir = upload_root / datetime.now().strftime("%Y/%m/%d") / str(user_id)
+    dated_dir.mkdir(parents=True, exist_ok=True)
+
+    public_base = get_backend_public_url()
+    persisted = []
+
+    for index, image in enumerate(images, start=1):
+        match = DATA_URL_RE.match((image or "").strip())
+        if not match:
+            persisted.append({"path": None, "url": None})
+            continue
+
+        mime_type = match.group("mime").lower()
+        encoded_data = match.group("data")
+        extension = COFFEE_MIME_EXTENSIONS.get(mime_type, ".jpg")
+        filename = f"{datetime.now().strftime('%H%M%S')}_{index}_{uuid.uuid4().hex[:10]}{extension}"
+        file_path = dated_dir / filename
+
+        binary = base64.b64decode(encoded_data, validate=False)
+        file_path.write_bytes(binary)
+
+        relative_path = file_path.relative_to(upload_root).as_posix()
+        persisted.append(
+            {
+                "path": relative_path,
+                "url": f"{public_base}/uploads/coffee/{relative_path}",
+            }
+        )
+
+    return persisted
+
+
 def _strip_code_fences(text):
     if not isinstance(text, str):
         return text
@@ -1291,7 +1340,6 @@ def coffee_fortune():
         language = data.get("language", "tr")
         question = (data.get("soru") or data.get("question") or "").strip()
         normalized_payload = dict(data)
-        normalized_payload["images"] = normalized_images
         normalized_payload["soru"] = question
         normalized_payload["question"] = question
 
@@ -1320,6 +1368,9 @@ def coffee_fortune():
             )
 
         yorum = reading_result["reading"]
+        persisted_images = _persist_coffee_images(normalized_images, user_id)
+        normalized_payload["images"] = [item["url"] for item in persisted_images if item.get("url")]
+        normalized_payload["image_paths"] = [item["path"] for item in persisted_images if item.get("path")]
         user, access_error = _ensure_access_for_reading(user, user_id, "coffee")
         if access_error:
             return access_error

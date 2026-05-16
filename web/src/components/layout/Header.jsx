@@ -120,9 +120,9 @@ const Header = () => {
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-primary hover:bg-white/5 transition flex items-center gap-2"
                   >
-                    <span>👤</span> Profil (Panel)
+                    <span>👤</span> Hesabım
                   </button>
-                  
+
                   {!user?.is_premium && (
                     <button 
                       onClick={() => {
@@ -232,9 +232,9 @@ const Header = () => {
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-primary hover:bg-white/5 rounded transition flex items-center gap-2"
                   >
-                    <span>👤</span> Profil (Panel)
+                    <span>👤</span> Hesabım
                   </button>
-                  
+
                   {!user?.is_premium && (
                     <button 
                       onClick={() => {

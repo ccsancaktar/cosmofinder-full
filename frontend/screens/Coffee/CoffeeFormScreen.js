@@ -135,9 +135,9 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
 
         const manipulatedImage = await ImageManipulator.manipulateAsync(
           uri,
-          [{ resize: { width: 1024, height: 1024 } }],
+          [{ resize: { width: 896 } }],
           {
-            compress: 0.65,
+            compress: 0.55,
             format: ImageManipulator.SaveFormat.JPEG,
             base64: true,
           }

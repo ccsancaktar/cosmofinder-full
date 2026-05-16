@@ -8,7 +8,10 @@ BASE_DIR = Path(__file__).resolve().parent
 ENV_FILE = BASE_DIR / ".env"
 ASSETS_DIR = BASE_DIR / "assets"
 TAROT_ASSETS_DIR = ASSETS_DIR / "tarot"
+UPLOADS_DIR = BASE_DIR / "uploads"
+COFFEE_UPLOADS_DIR = UPLOADS_DIR / "coffee"
 DEFAULT_BACKEND_PUBLIC_URL = "http://localhost:5050"
+DEFAULT_COFFEE_UPLOAD_RETENTION_HOURS = 72
 
 
 def load_environment():

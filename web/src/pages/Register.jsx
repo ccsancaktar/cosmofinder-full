@@ -64,7 +64,7 @@ export default function Register() {
       
       dispatch(loginSuccess(userData));
       Toast.success("Başarıyla kayıt oldunuz!");
-      navigate("/dashboard");
+      navigate("/onboarding");
     } catch (error) {
       Toast.error(error.response?.data?.message || "Kayıt başarısız oldu");
     } finally {

@@ -1,10 +1,16 @@
 import { Info, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Toast } from "../common/Toast";
 
 export default function ReadingCard({ reading, onClick }) {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    if (reading.mobileOnly) {
+      Toast.info("Kahve falı şu an en iyi deneyim için yalnızca mobil uygulamada kullanılabiliyor.");
+      return;
+    }
+
     // Tarot, Yildizname, Rune, Chinese, Kabala ve Daily için doğrudan sayfaya git
     if (reading.id === "tarot") {
       navigate("/tarot");
@@ -18,6 +24,12 @@ export default function ReadingCard({ reading, onClick }) {
       navigate("/kabala");
     } else if (reading.id === "daily") {
       navigate("/daily");
+    } else if (reading.id === "numerology") {
+      navigate("/numerology");
+    } else if (reading.id === "compatibility") {
+      navigate("/compatibility");
+    } else if (reading.id === "angel-numbers") {
+      navigate("/angel-numbers");
     } else if (onClick) {
       onClick();
     } else {
@@ -55,7 +67,9 @@ export default function ReadingCard({ reading, onClick }) {
         <div className="absolute top-3 left-3">
           <div className="flex items-center gap-1 glass px-3 py-1 rounded-full border border-primary/30">
             <Sparkles size={14} className="text-primary" />
-            <span className="text-xs font-semibold text-primary">{reading.tokenCost} Token</span>
+            <span className="text-xs font-semibold text-primary">
+              {reading.mobileOnly ? "Sadece Mobil" : `${reading.tokenCost} Token`}
+            </span>
           </div>
         </div>
       </div>

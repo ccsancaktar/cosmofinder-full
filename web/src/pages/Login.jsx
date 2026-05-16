@@ -39,7 +39,7 @@ export default function Login() {
       dispatch(loginSuccess(userData));
       
       Toast.success("Başarıyla giriş yapıldı!");
-      navigate("/dashboard");
+      navigate(userData?.onboarding_completed === false ? "/onboarding" : "/readings");
     } catch (error) {
       Toast.error(error.response?.data?.message || "Giriş başarısız oldu");
     } finally {
@@ -107,6 +107,14 @@ export default function Login() {
                   placeholder="••••••••"
                   className="w-full pl-10 pr-4 py-2.5 glass border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary/50 transition"
                 />
+              </div>
+              <div className="mt-2 text-right">
+                <Link
+                  to="/forgot-password"
+                  className="text-sm text-primary hover:text-cyan-400 transition font-medium"
+                >
+                  Şifremi unuttum
+                </Link>
               </div>
             </div>
 

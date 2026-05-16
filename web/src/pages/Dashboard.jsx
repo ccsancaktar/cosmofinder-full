@@ -162,12 +162,16 @@ export default function Dashboard() {
                     Fal Çek
                   </Button>
                 </Link>
-                <Button variant="secondary" className="w-full">
-                  Token Al
-                </Button>
-                <Button variant="ghost" className="w-full">
-                  Geçmişi Gör
-                </Button>
+                <Link to="/add-balance">
+                  <Button variant="secondary" className="w-full">
+                    Token Al
+                  </Button>
+                </Link>
+                <Link to="/reading-history">
+                  <Button variant="ghost" className="w-full">
+                    Geçmişi Gör
+                  </Button>
+                </Link>
                 <Link to="/edit-profile" className="w-full">
                   <Button variant="outline" className="w-full">
                     Profili Düzenle
@@ -180,7 +184,7 @@ export default function Dashboard() {
             <div className="glass rounded-xl p-8 border border-white/10 hover:border-primary/20 transition">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold gradient-text">Son Fallarınız</h2>
-                <Link to="/readings">
+                <Link to="/reading-history">
                   <ArrowRight size={20} className="text-primary hover:translate-x-1 transition" />
                 </Link>
               </div>
@@ -191,10 +195,12 @@ export default function Dashboard() {
                   </div>
                 ) : recentReadings.length > 0 ? (
                   recentReadings.map((reading, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between p-4 glass rounded-lg border border-white/10 hover:border-primary/30 hover:bg-white/5 transition cursor-pointer group"
+                    <Link
+                      key={reading.id || idx}
+                      to={`/reading-history/${reading.id}`}
+                      className="block"
                     >
+                      <div className="flex items-center justify-between p-4 glass rounded-lg border border-white/10 hover:border-primary/30 hover:bg-white/5 transition cursor-pointer group">
                       <div>
                         <p className="font-semibold text-white group-hover:text-primary transition">
                           {reading.type_display || reading.reading_type}
@@ -205,7 +211,8 @@ export default function Dashboard() {
                         <Zap size={16} className="text-primary" />
                         <span className="text-primary font-bold text-sm">{reading.tokens || '-'}</span>
                       </div>
-                    </div>
+                      </div>
+                    </Link>
                   ))
                 ) : (
                   <div className="text-center py-8">
@@ -230,9 +237,11 @@ export default function Dashboard() {
                   <p className="text-gray-300 mb-6 text-sm leading-relaxed">
                     Sınırsız fal çekmek, reklamsız deneyim ve daha pek çok özel özelliğin keyfini çıkar.
                   </p>
-                  <Button className="w-full" variant="accent">
-                    Premium'a Geç
-                  </Button>
+                  <Link to="/premium">
+                    <Button className="w-full" variant="accent">
+                      Premium'a Geç
+                    </Button>
+                  </Link>
                 </div>
               </div>
             )}
@@ -266,6 +275,11 @@ export default function Dashboard() {
                     Profili Düzenle
                   </Button>
                 </Link>
+                <Link to="/change-password">
+                  <Button variant="ghost" className="w-full text-sm">
+                    Şifre Değiştir
+                  </Button>
+                </Link>
               </div>
             </div>
 
@@ -282,6 +296,18 @@ export default function Dashboard() {
                     <span className="text-white font-bold text-primary">{stat.value}</span>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 grid grid-cols-1 gap-3">
+                <Link to="/token-history">
+                  <Button variant="ghost" className="w-full text-sm">
+                    Token Geçmişi
+                  </Button>
+                </Link>
+                <Link to="/reading-history">
+                  <Button variant="outline" className="w-full text-sm">
+                    Tüm Falları Gör
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>

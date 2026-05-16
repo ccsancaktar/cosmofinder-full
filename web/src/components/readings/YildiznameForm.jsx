@@ -6,6 +6,8 @@ import API from "../../services/api";
 import authService from "../../services/authService";
 import { setBalance } from "../../store/tokensSlice";
 import { Sparkles, Calendar, Clock, MapPin, MessageCircle } from "lucide-react";
+import ReadingModePanel from "./ReadingModePanel";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function YildiznameForm() {
   const [formData, setFormData] = useState({
@@ -21,6 +23,14 @@ export default function YildiznameForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const tokenBalance = useSelector((state) => state.tokens.balance);
+  const { user } = useAuth();
+  const [readingMode, setReadingMode] = useState("self");
+  const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(" ").trim();
+  const profileBirthDate = user?.birth_date || "";
+  const profileBirthTime = user?.birth_time || "";
+  const profileBirthPlace = user?.birth_place || "";
+  const canUseProfile = Boolean(profileName && profileBirthDate && profileBirthTime && profileBirthPlace);
+  const language = user?.language || "tr";
 
   const YILDIZNAME_COST = 50;
 
@@ -39,7 +49,12 @@ export default function YildiznameForm() {
   };
 
   const validateForm = () => {
-    if (!formData.name.trim()) {
+    const effectiveName = readingMode === "self" ? profileName : formData.name;
+    const effectiveBirthDate = readingMode === "self" ? profileBirthDate : formData.birth_date;
+    const effectiveBirthTime = readingMode === "self" ? profileBirthTime : formData.birth_time;
+    const effectiveBirthPlace = readingMode === "self" ? profileBirthPlace : formData.birth_place;
+
+    if (!effectiveName.trim()) {
       setError("Lütfen adınızı girin");
       return false;
     }
@@ -47,15 +62,15 @@ export default function YildiznameForm() {
       setError("Lütfen annenizin adını girin");
       return false;
     }
-    if (!formData.birth_date) {
+    if (!effectiveBirthDate) {
       setError("Lütfen doğum tarihinizi girin");
       return false;
     }
-    if (!formData.birth_time) {
+    if (!effectiveBirthTime) {
       setError("Lütfen doğum saatinizi girin");
       return false;
     }
-    if (!formData.birth_place.trim()) {
+    if (!effectiveBirthPlace.trim()) {
       setError("Lütfen doğum yerinizi girin");
       return false;
     }
@@ -79,13 +94,19 @@ export default function YildiznameForm() {
     setLoading(true);
 
     try {
+      const effectiveName = readingMode === "self" ? profileName : formData.name;
+      const effectiveBirthDate = readingMode === "self" ? profileBirthDate : formData.birth_date;
+      const effectiveBirthTime = readingMode === "self" ? profileBirthTime : formData.birth_time;
+      const effectiveBirthPlace = readingMode === "self" ? profileBirthPlace : formData.birth_place;
+
       const response = await API.post("/yildizname", {
-        isim: formData.name,
+        isim: effectiveName,
         anneAdi: formData.mother_name,
-        dogumTarihi: formData.birth_date,
-        dogumSaati: formData.birth_time,
-        dogumYeri: formData.birth_place,
-        language: "tr",
+        dogumTarihi: effectiveBirthDate,
+        dogumSaati: effectiveBirthTime,
+        dogumYeri: effectiveBirthPlace,
+        language,
+        reading_for: readingMode,
       });
 
       if (response.data.success) {
@@ -97,7 +118,13 @@ export default function YildiznameForm() {
           state: {
             type: "yildizname",
             title: "Yıldızname Yorumu",
-            data: formData,
+            data: {
+              ...formData,
+              name: effectiveName,
+              birth_date: effectiveBirthDate,
+              birth_time: effectiveBirthTime,
+              birth_place: effectiveBirthPlace,
+            },
             fortune: response.data.yorum,
             readingId: response.data.reading_id,
           },
@@ -165,6 +192,20 @@ export default function YildiznameForm() {
         </motion.div>
       )}
 
+      <motion.div variants={itemVariants}>
+        <ReadingModePanel
+          mode={readingMode}
+          onChangeMode={setReadingMode}
+          canUseProfile={canUseProfile}
+          summaryLines={[
+            profileName ? `İsim: ${profileName}` : null,
+            profileBirthDate ? `Doğum tarihi: ${profileBirthDate}` : null,
+            profileBirthTime ? `Doğum saati: ${profileBirthTime}` : null,
+            profileBirthPlace ? `Doğum yeri: ${profileBirthPlace}` : null,
+          ].filter(Boolean)}
+        />
+      </motion.div>
+
       {/* Personal Information Section */}
       <motion.div
         variants={itemVariants}
@@ -172,6 +213,14 @@ export default function YildiznameForm() {
       >
         <h3 className="text-lg font-semibold text-gray-200 mb-4">Kişisel Bilgiler</h3>
         <div className="space-y-4">
+          {readingMode === "self" && !canUseProfile ? (
+            <div className="rounded-2xl border border-amber-400/20 bg-amber-400/10 p-4 text-sm text-amber-100">
+              Profilinde eksik bilgi var. `Kendim için` modu tam çalışsın diye ad, doğum tarihi, doğum saati ve doğum yerini profilinde tamamlamalısın.
+            </div>
+          ) : null}
+
+          {readingMode === "other" ? (
+            <>
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
               Adınız
@@ -187,6 +236,16 @@ export default function YildiznameForm() {
               disabled={loading}
             />
           </div>
+            </>
+          ) : (
+            <div className="rounded-2xl border border-primary/20 bg-primary/10 p-5 space-y-2">
+              <p className="text-sm font-semibold text-white">Profilindeki bilgilerle yıldızname hazırlanacak</p>
+              <p className="text-sm text-gray-300">{profileName || "İsim eksik"}</p>
+              <p className="text-sm text-gray-400">{profileBirthDate || "Doğum tarihi eksik"}</p>
+              <p className="text-sm text-gray-400">{profileBirthTime || "Doğum saati eksik"}</p>
+              <p className="text-sm text-gray-400">{profileBirthPlace || "Doğum yeri eksik"}</p>
+            </div>
+          )}
 
           <div>
             <label htmlFor="mother_name" className="block text-sm font-medium text-gray-300 mb-2">
@@ -207,11 +266,12 @@ export default function YildiznameForm() {
       </motion.div>
 
       {/* Birth Information Section */}
-      <motion.div
-        variants={itemVariants}
+      <motion.div 
+        variants={itemVariants} 
         className="bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 border border-primary/20 rounded-2xl p-6 md:p-8 backdrop-blur-sm"
       >
         <h3 className="text-lg font-semibold text-gray-200 mb-4">Doğum Bilgileri</h3>
+        {readingMode === "other" ? (
         <div className="space-y-4">
           <div>
             <label htmlFor="birth_date" className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
@@ -259,6 +319,7 @@ export default function YildiznameForm() {
             />
           </div>
         </div>
+        ) : null}
       </motion.div>
 
       {/* Token Cost */}

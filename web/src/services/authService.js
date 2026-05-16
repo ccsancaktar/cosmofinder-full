@@ -39,6 +39,21 @@ const authService = {
     return API.put("/auth/profile", profileData);
   },
 
+  forgotPassword: async (email) => {
+    return API.post("/auth/forgot-password", { email });
+  },
+
+  resetPassword: async (token, newPassword) => {
+    return API.post("/auth/reset-password", { token, new_password: newPassword });
+  },
+
+  changePassword: async (currentPassword, newPassword) => {
+    return API.post("/auth/change-password", {
+      current_password: currentPassword,
+      new_password: newPassword,
+    });
+  },
+
   // Çıkış
   logout: () => {
     localStorage.removeItem("jwt_token");

@@ -25,6 +25,10 @@ const tokensService = {
   getTransactions: async (userId) => {
     return API.get(`/tokens/transactions/${userId}`);
   },
+
+  getHistory: async () => {
+    return API.get("/tokens/history");
+  },
 };
 
 export default tokensService;

@@ -2,8 +2,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from notifications import NotificationService
 from models import User, db
+from config import COFFEE_UPLOADS_DIR, DEFAULT_COFFEE_UPLOAD_RETENTION_HOURS
 from datetime import datetime, timedelta
 import logging
+import os
+from pathlib import Path
 from pymongo.errors import DuplicateKeyError
 
 scheduler = BackgroundScheduler()
@@ -340,6 +343,43 @@ def check_special_days():
     except Exception as e:
         logger.error(f"Special day check job hatası: {e}")
 
+
+def cleanup_old_coffee_uploads():
+    """Kısa süreli saklanan kahve görsellerini temizle."""
+    try:
+        retention_hours = int(os.getenv("COFFEE_UPLOAD_RETENTION_HOURS", DEFAULT_COFFEE_UPLOAD_RETENTION_HOURS))
+        cutoff = datetime.now() - timedelta(hours=retention_hours)
+        root = Path(COFFEE_UPLOADS_DIR)
+
+        if not root.exists():
+            logger.info("Coffee upload dizini bulunamadı, cleanup atlandı")
+            return
+
+        deleted_files = 0
+        deleted_dirs = 0
+
+        for file_path in root.rglob("*"):
+            if not file_path.is_file():
+                continue
+            modified_at = datetime.fromtimestamp(file_path.stat().st_mtime)
+            if modified_at < cutoff:
+                file_path.unlink(missing_ok=True)
+                deleted_files += 1
+
+        for dir_path in sorted(root.rglob("*"), reverse=True):
+            if dir_path.is_dir() and not any(dir_path.iterdir()):
+                dir_path.rmdir()
+                deleted_dirs += 1
+
+        logger.info(
+            "Coffee upload cleanup tamamlandı: %s dosya, %s klasör silindi (retention=%s saat)",
+            deleted_files,
+            deleted_dirs,
+            retention_hours,
+        )
+    except Exception as exc:
+        logger.error(f"Coffee upload cleanup hatası: {exc}")
+
 def setup_scheduler():
     """Scheduler'ı başlat ve job'ları ekle"""
     try:
@@ -387,6 +427,14 @@ def setup_scheduler():
             CronTrigger(hour=11, minute=0),
             id='special_days_check',
             name='Özel Gün Kontrolü',
+            replace_existing=True,
+        )
+
+        scheduler.add_job(
+            cleanup_old_coffee_uploads,
+            CronTrigger(hour=4, minute=0),
+            id='coffee_upload_cleanup',
+            name='Kahve Upload Temizliği',
             replace_existing=True,
         )
         

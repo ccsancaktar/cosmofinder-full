@@ -2,10 +2,11 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { BookOpenText, Calendar, Crown, Sparkles } from "lucide-react";
 import API from "../../services/api";
 import authService from "../../services/authService";
 import { setBalance } from "../../store/tokensSlice";
-import { Sparkles, Calendar, MessageCircle } from "lucide-react";
+import { useAuth } from "../../hooks/useAuth";
 
 export default function KabalaForm() {
   const [formData, setFormData] = useState({
@@ -18,6 +19,9 @@ export default function KabalaForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const tokenBalance = useSelector((state) => state.tokens.balance);
+  const { user } = useAuth();
+  const profileName = user?.name || [user?.first_name, user?.last_name].filter(Boolean).join(" ").trim();
+  const profileBirthDate = user?.birth_date || "";
 
   const KABALA_COST = 45;
 
@@ -35,13 +39,22 @@ export default function KabalaForm() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const fillFromProfile = () => {
+    setFormData((prev) => ({
+      ...prev,
+      name: profileName || prev.name,
+      birth_date: profileBirthDate || prev.birth_date,
+    }));
+    setError("");
+  };
+
   const validateForm = () => {
     if (!formData.name.trim()) {
-      setError("Lütfen adınızı girin");
+      setError("Lütfen adını gir.");
       return false;
     }
     if (!formData.birth_date) {
-      setError("Lütfen doğum tarihinizi girin");
+      setError("Lütfen doğum tarihini seç.");
       return false;
     }
     return true;
@@ -51,7 +64,6 @@ export default function KabalaForm() {
     e.preventDefault();
     setError("");
 
-    // Token kontrolü
     if (tokenBalance < KABALA_COST) {
       setError(`Yeterli token yok. Gerekli: ${KABALA_COST}, Sahip olunan: ${tokenBalance}`);
       return;
@@ -71,10 +83,7 @@ export default function KabalaForm() {
       });
 
       if (response.data.success) {
-        // Token balance'ı güncelle
         await refreshTokenBalance();
-
-        // Sonuç sayfasına yönlendir
         navigate("/reading/kabala", {
           state: {
             type: "kabala",
@@ -101,68 +110,56 @@ export default function KabalaForm() {
     }
   };
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4 },
-    },
-  };
-
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={containerVariants}
-      className="w-full max-w-4xl mx-auto px-4 py-8 space-y-6"
-    >
-      {/* Header */}
-      <motion.div variants={itemVariants} className="text-center mb-8">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="w-full max-w-4xl mx-auto px-4 py-8 space-y-6">
+      <div className="text-center mb-10">
         <motion.div
           animate={{ rotate: [0, 5, -5, 0] }}
           transition={{ duration: 4, repeat: Infinity }}
-          className="inline-block mb-4"
+          className="inline-flex h-16 w-16 items-center justify-center rounded-[1.5rem] border border-violet-400/20 bg-violet-400/10 mb-5"
         >
-          <Sparkles className="w-10 h-10 text-purple-400" />
+          <Sparkles className="w-8 h-8 text-violet-300" />
         </motion.div>
-        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-300 via-primary to-purple-500 bg-clip-text text-transparent">
+        <h2 className="text-4xl md:text-5xl font-black font-decorative bg-gradient-to-r from-violet-300 via-primary to-fuchsia-400 bg-clip-text text-transparent mb-4">
           Kabala Analizi
         </h2>
-        <p className="text-gray-400 mt-2">İbrani mistik geleneğinin bilgeliğini keşfet</p>
-      </motion.div>
+        <p className="text-gray-300 text-lg max-w-2xl mx-auto leading-8">
+          İsminin titreşimini, indirgenmiş sayını ve mistik ağın açtığı ruhsal kapıları daha temiz bir ritüelle okuyalım.
+        </p>
+      </div>
 
-      {/* Error Message */}
-      {error && (
-        <motion.div
-          variants={itemVariants}
-          className="bg-red-500/10 border border-red-500/30 rounded-xl p-4"
-        >
-          <p className="text-sm text-red-400">{error}</p>
-        </motion.div>
-      )}
+      {error ? (
+        <div className="rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4">
+          <p className="text-sm text-red-200">{error}</p>
+        </div>
+      ) : null}
 
-      {/* Personal Information Section */}
-      <motion.div
-        variants={itemVariants}
-        className="bg-gradient-to-br from-purple/5 via-transparent to-secondary/5 border border-purple-500/20 rounded-2xl p-6 md:p-8 backdrop-blur-sm"
-      >
-        <h3 className="text-lg font-semibold text-gray-200 mb-4">Kişisel Bilgiler</h3>
-        <div className="space-y-4">
+      <div className="glass rounded-[2rem] border border-white/10 p-6 md:p-8 space-y-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="h-12 w-12 rounded-2xl border border-violet-300/20 bg-violet-300/10 flex items-center justify-center">
+              <BookOpenText className="w-5 h-5 text-violet-300" />
+            </div>
+            <div>
+              <p className="text-xs uppercase tracking-[0.28em] text-violet-300/80 mb-1">Ruhsal Kimlik</p>
+              <h3 className="text-2xl font-bold text-white">İsim ve doğum izi</h3>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={fillFromProfile}
+            className="inline-flex items-center gap-2 rounded-full border border-violet-300/25 bg-violet-300/10 px-4 py-2 text-sm font-medium text-violet-200 hover:bg-violet-300/15 transition"
+          >
+            <Crown size={14} />
+            Profil bilgilerimi kullan
+          </button>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-5">
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-              Adınız
+              Tam adın
             </label>
             <input
               id="name"
@@ -171,99 +168,72 @@ export default function KabalaForm() {
               value={formData.name}
               onChange={handleChange}
               placeholder="Örn: Ahmet Yılmaz"
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-purple-500/20 text-white placeholder-gray-500 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all"
+              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-gray-500 focus:outline-none focus:border-violet-300"
               disabled={loading}
-              autoCapitalize="words"
             />
             <p className="text-xs text-gray-500 mt-2">
-              İbrani numeroloji için tam adınız kullanılır.
+              İbrani numerolojisi için tam isim daha güçlü bir analiz üretir.
             </p>
           </div>
 
           <div>
-            <label htmlFor="birth_date" className="block text-sm font-medium text-gray-300 mb-2 flex items-center gap-2">
-              <Calendar size={16} /> Doğum Tarihi
+            <label htmlFor="birth_date" className="block text-sm font-medium text-gray-300 mb-2">
+              Doğum tarihi
             </label>
-            <input
-              id="birth_date"
-              type="date"
-              name="birth_date"
-              value={formData.birth_date}
-              onChange={handleChange}
-              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-purple-500/20 text-white focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 focus:outline-none transition-all"
-              disabled={loading}
-            />
+            <div className="relative">
+              <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-violet-300/80 w-4 h-4" />
+              <input
+                id="birth_date"
+                type="date"
+                name="birth_date"
+                value={formData.birth_date}
+                onChange={handleChange}
+                className="w-full pl-11 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:outline-none focus:border-violet-300"
+                disabled={loading}
+              />
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Token Cost */}
-      <motion.div
-        variants={itemVariants}
-        className="bg-gradient-to-br from-purple/5 via-transparent to-secondary/5 border border-purple-500/20 rounded-2xl p-4 md:p-6 backdrop-blur-sm"
-      >
-        <div className="flex items-center justify-between">
-          <span className="text-gray-300">Kabala Maliyeti:</span>
-          <span className="font-semibold text-purple-400">{KABALA_COST} Token</span>
+      <div className="grid md:grid-cols-3 gap-4">
+        <div className="glass rounded-2xl border border-white/10 p-5">
+          <p className="text-xs uppercase tracking-[0.24em] text-gray-400 mb-3">Maliyet</p>
+          <p className="text-2xl font-bold text-violet-300">{KABALA_COST} Token</p>
         </div>
-        <div className="mt-3 text-sm text-gray-400">
-          Mevcut Token:{" "}
-          <span className={tokenBalance >= KABALA_COST ? "text-green-400 font-semibold" : "text-red-400 font-semibold"}>
-            {tokenBalance}
-          </span>
+        <div className="glass rounded-2xl border border-white/10 p-5">
+          <p className="text-xs uppercase tracking-[0.24em] text-gray-400 mb-3">Mevcut Bakiye</p>
+          <p className={`text-2xl font-bold ${tokenBalance >= KABALA_COST ? "text-green-400" : "text-red-400"}`}>{tokenBalance}</p>
         </div>
-      </motion.div>
+        <div className="glass rounded-2xl border border-white/10 p-5">
+          <p className="text-xs uppercase tracking-[0.24em] text-gray-400 mb-3">Yorum Türü</p>
+          <p className="text-lg font-bold text-violet-200">İsim • Sayı • Sefirot</p>
+        </div>
+      </div>
 
-      {/* Submit Button */}
+      <div className="glass rounded-[2rem] border border-white/10 p-5 md:p-6">
+        <p className="text-sm text-gray-300 leading-7">
+          Kabala yorumunda isminin taşıdığı titreşim, indirgenmiş sayı ve seçilen sefirotların ruhsal etkisi birlikte ele alınır.
+          Bu yüzden isim ve doğum tarihi alanları burada yorumun omurgasını oluşturur.
+        </p>
+      </div>
+
       <motion.button
-        variants={itemVariants}
-        type="submit"
+        type="button"
         onClick={handleSubmit}
         disabled={loading || tokenBalance < KABALA_COST || !formData.name.trim() || !formData.birth_date}
-        whileHover={!loading && tokenBalance >= KABALA_COST ? { scale: 1.02 } : {}}
-        whileTap={!loading && tokenBalance >= KABALA_COST ? { scale: 0.98 } : {}}
-        className="w-full py-4 rounded-xl font-semibold text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+        whileHover={!loading && tokenBalance >= KABALA_COST && formData.name.trim() && formData.birth_date ? { scale: 1.01 } : {}}
+        whileTap={!loading && tokenBalance >= KABALA_COST && formData.name.trim() && formData.birth_date ? { scale: 0.99 } : {}}
+        className="w-full rounded-[1.75rem] py-5 text-lg font-bold text-white transition disabled:opacity-50 disabled:cursor-not-allowed"
         style={{
-          background: loading || tokenBalance < KABALA_COST || !formData.name.trim() || !formData.birth_date
-            ? "linear-gradient(135deg, #6b21a8, #7c3aed)"
-            : "linear-gradient(135deg, #a855f7, #ec4899)",
+          background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)",
           boxShadow: loading || tokenBalance < KABALA_COST || !formData.name.trim() || !formData.birth_date
             ? "none"
-            : "0 0 20px rgba(168, 85, 247, 0.5)",
+            : "0 0 24px rgba(168, 85, 247, 0.28)",
         }}
       >
-        <div className="flex items-center justify-center gap-2">
-          {loading ? (
-            <>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              >
-                <Sparkles size={20} />
-              </motion.div>
-              <span>Kabala Analizi Yapılıyor...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles size={20} />
-              <span>Kabala Analizi Yap</span>
-            </>
-          )}
-        </div>
+        {loading ? "Kabala Analizi Hazırlanıyor..." : "Kabala Analizini Başlat"}
       </motion.button>
-
-      {/* Info */}
-      <motion.div
-        variants={itemVariants}
-        className="bg-gradient-to-br from-blue-500/10 via-transparent to-cyan-500/10 border border-blue-500/20 rounded-xl p-4 md:p-6 backdrop-blur-sm"
-      >
-        <div className="flex gap-3">
-          <MessageCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
-          <p className="text-sm text-blue-300">
-            <strong>Bilgi:</strong> Kabala, İbrani mistik geleneğinin köklü bilgeliğidir. İsminizin sayısal değeri ve Sefirot enerjileri ile ruhsal yolunuz analiz edilecektir.
-          </p>
-        </div>
-      </motion.div>
     </motion.div>
   );
 }

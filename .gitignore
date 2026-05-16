@@ -43,6 +43,8 @@ pnpm-debug.log*
 .codex_tmp/
 .mongodb-data/
 frontend/.git.frontend-backup-*/
+backend/backend.out
+backend/*.out
 
 # Native / generated folders
 frontend/ios/

@@ -28,6 +28,13 @@ import Dashboard from "./pages/Dashboard";
 import EditProfile from "./pages/EditProfile";
 import AddBalance from "./pages/AddBalance";
 import Payment from "./pages/Payment";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import ChangePassword from "./pages/ChangePassword";
+import Onboarding from "./pages/Onboarding";
+import ReadingHistory from "./pages/ReadingHistory";
+import ReadingDetail from "./pages/ReadingDetail";
+import TokenHistory from "./pages/TokenHistory";
 import Tarot from "./pages/Tarot";
 import TarotResult from "./pages/TarotResult";
 import YildizNameResult from "./pages/YildizNameResult";
@@ -40,6 +47,12 @@ import Rune from "./pages/Rune";
 import Chinese from "./pages/Chinese";
 import Kabala from "./pages/Kabala";
 import Daily from "./pages/Daily";
+import Numerology from "./pages/Numerology";
+import NumerologyResult from "./pages/NumerologyResult";
+import Compatibility from "./pages/Compatibility";
+import CompatibilityResult from "./pages/CompatibilityResult";
+import AngelNumbers from "./pages/AngelNumbers";
+import AngelNumbersResult from "./pages/AngelNumbersResult";
 import NotFound from "./pages/NotFound";
 
 // Protected Route
@@ -89,15 +102,23 @@ function AppContent() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/readings" element={<Readings />} />
           <Route path="/readings/:type" element={<Readings />} />
           <Route path="/tarot" element={<Tarot />} />
+          <Route path="/numerology" element={<Numerology />} />
+          <Route path="/compatibility" element={<Compatibility />} />
+          <Route path="/angel-numbers" element={<AngelNumbers />} />
           <Route path="/reading/tarot" element={<TarotResult />} />
           <Route path="/reading/yildizname" element={<YildizNameResult />} />
           <Route path="/reading/chinese" element={<ChineseResult />} />
           <Route path="/reading/rune" element={<RuneResult />} />
           <Route path="/reading/kabala" element={<KabalaResult />} />
           <Route path="/reading/daily-zodiac" element={<DailyZodiacResult />} />
+          <Route path="/reading/numerology" element={<NumerologyResult />} />
+          <Route path="/reading/compatibility" element={<CompatibilityResult />} />
+          <Route path="/reading/angel-numbers" element={<AngelNumbersResult />} />
           <Route path="/yildizname" element={<Yildizname />} />
           <Route path="/rune" element={<Rune />} />
           <Route path="/chinese" element={<Chinese />} />
@@ -121,6 +142,14 @@ function AppContent() {
             }
           />
           <Route
+            path="/onboarding"
+            element={
+              <ProtectedRoute allowIncompleteOnboarding>
+                <Onboarding />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
@@ -133,6 +162,38 @@ function AppContent() {
             element={
               <ProtectedRoute>
                 <EditProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/change-password"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reading-history"
+            element={
+              <ProtectedRoute>
+                <ReadingHistory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/reading-history/:id"
+            element={
+              <ProtectedRoute>
+                <ReadingDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/token-history"
+            element={
+              <ProtectedRoute>
+                <TokenHistory />
               </ProtectedRoute>
             }
           />

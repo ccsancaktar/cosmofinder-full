@@ -10,6 +10,17 @@ from config import load_environment
 
 load_environment()
 
+
+def get_admin_emails():
+    raw_value = os.getenv("ADMIN_EMAILS", "")
+    return {email.strip().lower() for email in raw_value.split(",") if email.strip()}
+
+
+def is_admin_email(email):
+    if not email:
+        return False
+    return email.strip().lower() in get_admin_emails()
+
 # MongoDB bağlantısı
 mongo_uri = os.getenv('MONGO_URI', 'mongodb://localhost:27017/FAL_APP')
 client = MongoClient(
@@ -128,6 +139,9 @@ class User:
         
         subscription = PremiumSubscription.find_active_by_user_id(str(self._id))
         return subscription is not None
+
+    def is_admin(self):
+        return is_admin_email(self.email)
     
     def save(self):
         # MongoDB için datetime.date ve datetime.time'i datetime.datetime'e çevir
@@ -215,6 +229,7 @@ class User:
             'email_verified': self.email_verified,
             'token_balance': self.token_balance,  # Yeni alan
             'has_premium': self.has_active_premium(),  # Premium durumu
+            'is_admin': self.is_admin(),
             'google_id': self.google_id,
             'onboarding_completed': self.onboarding_completed,
             'push_token': self.push_token,  # Push token

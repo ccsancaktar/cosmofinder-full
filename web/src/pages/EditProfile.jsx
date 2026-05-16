@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { motion } from "framer-motion";
 import { User, Phone, MapPin, AlertCircle, Check, Loader } from "lucide-react";
@@ -336,6 +336,13 @@ function EditProfileContent() {
               >
                 İptal
               </Button>
+            </div>
+            <div className="pt-4">
+              <Link to="/change-password">
+                <Button type="button" variant="ghost" className="w-full">
+                  Şifreyi Değiştir
+                </Button>
+              </Link>
             </div>
           </form>
         </motion.div>
