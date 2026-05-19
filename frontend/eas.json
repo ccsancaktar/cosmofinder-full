@@ -36,7 +36,6 @@
         "PRODUCTION_API_URL": "https://cosmofinder-full-production.up.railway.app",
         "STRIPE_PUBLISHABLE_KEY": "pk_live_51Rt5Lw2dyqpprQOZLrKqDFILQB7e9YsYbn2yOABkwd3jDtoqTcaHfneRmCCsvPNHct7LV5uHZnGwIDLN75GsEko700uZu09729",
         "REVENUECAT_IOS_API_KEY": "appl_hrShiRpkZOeCgNFvLcISgvDRoto",
-        "REVENUECAT_ANDROID_API_KEY": "",
         "ADMOB_IOS_APP_ID": "ca-app-pub-1621199907307145~4415254045",
         "ADMOB_IOS_BANNER_ID": "ca-app-pub-1621199907307145/3609422923",
         "ADMOB_IOS_INTERSTITIAL_ID": "ca-app-pub-1621199907307145/3010688949",
