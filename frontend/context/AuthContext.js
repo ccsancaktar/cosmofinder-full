@@ -1,8 +1,10 @@
 import React, { createContext, useState, useContext, useEffect, useRef, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authAPI, notificationAPI } from '../services/api';
+import PaymentAPI from '../services/paymentAPI';
 import notificationService from '../services/notificationService';
 import { normalizeErrorMessage } from '../utils/errorMessages';
+import purchasesService from '../services/purchasesService';
 
 const AuthContext = createContext();
 
@@ -40,6 +42,13 @@ export const AuthProvider = ({ children }) => {
         // Önce state'i güncelle (synchronous)
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        purchasesService.logIn(parsedUser?.id).catch((error) => {
+          console.error('RevenueCat oturum eşleme hatası:', error);
+        });
+        PaymentAPI.syncMobilePremiumPurchase().catch((error) => {
+          console.error('Başlangıç premium senkronizasyon hatası:', error);
+        });
 
         // Sunucu tarafında yönetilen reminder'ların eski local kopyalarını her açılışta temizle.
         notificationService.clearServerManagedReminderNotifications().catch((error) => {
@@ -120,6 +129,10 @@ export const AuthProvider = ({ children }) => {
 
     setToken(sessionToken);
     setUser(sessionUser);
+    await purchasesService.logIn(sessionUser?.id);
+    await PaymentAPI.syncMobilePremiumPurchase().catch((error) => {
+      console.error('Oturum sonrası premium senkronizasyon hatası:', error);
+    });
 
     await refreshProfile({ force: true });
 
@@ -200,6 +213,7 @@ export const AuthProvider = ({ children }) => {
         total_readings: 0,
         days_registered: 0
       });
+      await purchasesService.logOut();
     } catch (error) {
       console.error('Logout storage hatası:', error);
     }

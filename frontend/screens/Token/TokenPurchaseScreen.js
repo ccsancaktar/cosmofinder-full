@@ -16,10 +16,10 @@ import { usePremium } from '../../context/PremiumContext';
 import { useNotification } from '../../context/NotificationContext';
 import TokenIcon from '../../components/TokenIcon';
 import { useTranslation } from 'react-i18next';
-import PaymentModal from '../../components/PaymentModal';
 import PaymentAPI from '../../services/paymentAPI';
+import purchasesService from '../../services/purchasesService';
 
-const formatTryPrice = (price) => `${Number(price || 0).toFixed(2)} TL`;
+const PRODUCT_ORDER = ['token_pack_small', 'token_pack_medium', 'token_pack_large'];
 
 export default function TokenPurchaseScreen({ navigation }) {
   const { t } = useTranslation();
@@ -29,28 +29,24 @@ export default function TokenPurchaseScreen({ navigation }) {
   const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [purchaseLoading, setPurchaseLoading] = useState(false);
-  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
 
   useEffect(() => {
     loadPackages();
   }, []);
 
   const visiblePackages = Array.isArray(packages)
-    ? [...packages].sort((a, b) => (a.price || 0) - (b.price || 0))
+    ? [...packages].sort((a, b) => (a.token_amount || 0) - (b.token_amount || 0))
     : [];
 
   const getPackageMeta = (pkg, index) => {
     const tokenAmount = Number(pkg.token_amount || 0);
-    const price = Number(pkg.price || 0);
-    const pricePerToken = tokenAmount > 0 ? (price / tokenAmount) : 0;
     const estimatedReadings = tokenAmount > 0 ? Math.max(1, Math.floor(tokenAmount / 12)) : 0;
     const isPopular = tokenAmount === 90 || index === 1;
-    const isBestValue = tokenAmount === 300 || (index === visiblePackages.length - 1 && visiblePackages.length > 2);
+    const isBestValue = tokenAmount === 160 || (index === visiblePackages.length - 1 && visiblePackages.length > 2);
     const isStarter = tokenAmount === 40;
 
     return {
       tokenAmount,
-      pricePerToken,
       estimatedReadings,
       badge: isBestValue ? 'En İyi Değer' : isPopular ? 'En Popüler' : isStarter ? 'Başlangıç' : 'Daha Avantajlı',
       eyebrow: isBestValue
@@ -66,22 +62,70 @@ export default function TokenPurchaseScreen({ navigation }) {
   const loadPackages = async () => {
     try {
       console.log(t('common.packagesLoading'));
-      const response = await PaymentAPI.getTokenPackages();
-              console.log(t('common.packagesLoaded'), response);
-      setPackages(response.packages || []);
+      const [response, storeProducts] = await Promise.all([
+        PaymentAPI.getTokenPackages(),
+        purchasesService.getTokenProducts(),
+      ]);
+
+      const backendPackages = response.packages || [];
+      const sortedPackages = [...backendPackages].sort((a, b) => (a.token_amount || 0) - (b.token_amount || 0));
+      const productMap = Object.fromEntries(
+        (storeProducts || []).map((product) => [product.identifier, product])
+      );
+
+      const normalizedPackages = sortedPackages.map((pkg, index) => {
+        const productId = PRODUCT_ORDER[index];
+        const storeProduct = productMap[productId];
+        return {
+          ...pkg,
+          productId,
+          storeProduct,
+          localizedPrice: storeProduct?.priceString || null,
+          storePrice: Number(storeProduct?.price ?? 0),
+        };
+      });
+
+      console.log(t('common.packagesLoaded'), normalizedPackages);
+      setPackages(normalizedPackages);
     } catch (error) {
-              console.error(t('common.packagesLoadError'), error);
+      console.error(t('common.packagesLoadError'), error);
       showError(t('common.packagesLoadError'));
     }
   };
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (!selectedPackage) {
       showError(t('common.selectPackage'));
       return;
     }
-    
-    setPaymentModalVisible(true);
+
+    if (!selectedPackage.storeProduct) {
+      showError('Store ürünü yüklenemedi. RevenueCat anahtarlarını kontrol et.');
+      return;
+    }
+
+    try {
+      setPurchaseLoading(true);
+      const purchaseResult = await purchasesService.purchaseProduct(selectedPackage.storeProduct);
+      const transactionId =
+        purchaseResult?.transaction?.transactionIdentifier ||
+        purchaseResult?.transaction?.id ||
+        purchaseResult?.purchaseToken ||
+        `rc_${selectedPackage.productId}_${Date.now()}`;
+      await PaymentAPI.syncMobileTokenPurchase(
+        selectedPackage.id,
+        selectedPackage.token_amount,
+        transactionId
+      );
+      await fetchBalance();
+      navigation.goBack();
+    } catch (error) {
+      if (!error?.userCancelled) {
+        showError(error?.message || 'Satın alma tamamlanamadı');
+      }
+    } finally {
+      setPurchaseLoading(false);
+    }
   };
 
   if (loading) {
@@ -148,16 +192,19 @@ export default function TokenPurchaseScreen({ navigation }) {
             {visiblePackages.map((pkg, index) => {
               const meta = getPackageMeta(pkg, index);
               const isSelected = selectedPackage?.id === pkg.id;
+              const isAvailable = Boolean(pkg.storeProduct && pkg.localizedPrice);
 
               return (
               <TouchableOpacity
                 key={pkg.id}
                 style={[
                   styles.packageCard,
-                  isSelected && styles.selectedPackage
+                  isSelected && styles.selectedPackage,
+                  !isAvailable && styles.packageCardDisabled,
                 ]}
-                onPress={() => setSelectedPackage(pkg)}
-                activeOpacity={0.9}
+                onPress={() => isAvailable && setSelectedPackage(pkg)}
+                activeOpacity={isAvailable ? 0.9 : 1}
+                disabled={!isAvailable}
               >
                 <LinearGradient
                   colors={isSelected ? ['#F5D06A', '#D89E1C'] : ['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.02)']}
@@ -187,20 +234,30 @@ export default function TokenPurchaseScreen({ navigation }) {
                       <Text style={[styles.statValue, isSelected && styles.statValueSelected]}>~{meta.estimatedReadings}</Text>
                       <Text style={[styles.statLabel, isSelected && styles.statLabelSelected]}>fal</Text>
                     </View>
-                    <View style={styles.statPill}>
-                      <Text style={[styles.statValue, isSelected && styles.statValueSelected]}>{meta.pricePerToken.toFixed(2)}</Text>
-                      <Text style={[styles.statLabel, isSelected && styles.statLabelSelected]}>TL/token</Text>
-                    </View>
                   </View>
 
                   <View style={styles.packageBottomRow}>
                     <View>
-                      <Text style={[styles.packagePriceCaption, isSelected && styles.packagePriceCaptionSelected]}>Toplam fiyat</Text>
-                      <Text style={[styles.packagePrice, isSelected && styles.packagePriceSelected]}>{formatTryPrice(pkg.price)}</Text>
+                      <Text style={[styles.packagePriceCaption, isSelected && styles.packagePriceCaptionSelected]}>App Store fiyatı</Text>
+                      {pkg.localizedPrice ? (
+                        <Text style={[styles.packagePrice, isSelected && styles.packagePriceSelected]}>
+                          {pkg.localizedPrice}
+                        </Text>
+                      ) : (
+                        <View style={styles.priceLoadingWrap}>
+                          <View style={styles.priceLoadingBarPrimary} />
+                          <View style={styles.priceLoadingBarSecondary} />
+                          <Text style={styles.packagePriceLoading}>App Store fiyatı hazırlanıyor</Text>
+                        </View>
+                      )}
                     </View>
-                    <View style={[styles.selectPill, isSelected && styles.selectPillSelected]}>
+                    <View style={[
+                      styles.selectPill,
+                      isSelected && styles.selectPillSelected,
+                      !isAvailable && styles.selectPillDisabled,
+                    ]}>
                       <Text style={[styles.selectPillText, isSelected && styles.selectPillTextSelected]}>
-                        {isSelected ? 'Seçildi' : 'Paketi Seç'}
+                        {!isAvailable ? 'Hazırlanıyor' : isSelected ? 'Seçildi' : 'Paketi Seç'}
                       </Text>
                     </View>
                   </View>
@@ -227,7 +284,7 @@ export default function TokenPurchaseScreen({ navigation }) {
                 <>
                   <Ionicons name="card" size={20} color="#FFFFFF" />
                   <Text style={styles.purchaseButtonText}>
-                    {t('common.buyWithPrice', { price: formatTryPrice(selectedPackage.price) })}
+                    {t('common.buyWithPrice', { price: selectedPackage.localizedPrice })}
                   </Text>
                 </>
               )}
@@ -255,19 +312,6 @@ export default function TokenPurchaseScreen({ navigation }) {
           </View>
         )}
       </ScrollView>
-      
-      {/* Payment Modal */}
-      <PaymentModal
-        visible={paymentModalVisible}
-        onClose={() => setPaymentModalVisible(false)}
-        paymentType="token"
-        selectedPackage={selectedPackage}
-        onSuccess={() => {
-          setPaymentModalVisible(false);
-          fetchBalance(); // Token bakiyesini güncelle
-          navigation.goBack();
-        }}
-      />
     </LinearGradient>
   </SafeAreaView>
   );
@@ -385,6 +429,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(245, 208, 106, 0.16)',
     overflow: 'hidden',
   },
+  packageCardDisabled: {
+    opacity: 0.58,
+  },
   selectedPackage: {
     borderColor: '#F5D06A',
   },
@@ -474,6 +521,30 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: 'CinzelDecorative-Bold',
   },
+  priceLoadingWrap: {
+    paddingTop: 2,
+    minHeight: 58,
+    justifyContent: 'center',
+  },
+  priceLoadingBarPrimary: {
+    width: 126,
+    height: 26,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255,255,255,0.12)',
+    marginBottom: 8,
+  },
+  priceLoadingBarSecondary: {
+    width: 72,
+    height: 12,
+    borderRadius: 999,
+    backgroundColor: 'rgba(245, 208, 106, 0.12)',
+    marginBottom: 6,
+  },
+  packagePriceLoading: {
+    fontSize: 11,
+    color: 'rgba(255,255,255,0.50)',
+    letterSpacing: 0.2,
+  },
   packagePriceSelected: {
     color: '#0D0B1F',
   },
@@ -502,6 +573,10 @@ const styles = StyleSheet.create({
   selectPillSelected: {
     backgroundColor: '#FFFFFF',
     borderColor: '#FFFFFF',
+  },
+  selectPillDisabled: {
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderColor: 'rgba(255,255,255,0.10)',
   },
   selectPillText: {
     color: '#F5D06A',

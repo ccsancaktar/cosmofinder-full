@@ -66,17 +66,17 @@ def get_premium_plans():
             },
             {
                 'id': 'premium_yearly',
-                'name': 'Premium Yıllık',
+                'name': 'Premium 6 Aylık',
                 'price': PREMIUM_PRICES['premium_yearly'],
-                'period': 'yıl',
-                'discount': '31%',
-                'description': 'Yıl boyu premium kullan, aylık plana göre çok daha avantajlı kal.',
+                'period': '6 ay',
+                'discount': 'Uzun dönem',
+                'description': '6 ay boyunca premium kullan, aylık plana göre daha avantajlı kal.',
                 'features': [
                     'Sınırsız fal çekme',
                     'Reklamsız deneyim',
                     'Tüm fal türleri',
                     'Detaylı yorumlar',
-                    'Yıllık %31 indirim',
+                    '6 aylık avantajlı plan',
                     'Öncelikli destek'
                 ]
             }
@@ -202,7 +202,7 @@ def get_plan_info(plan_id):
         },
         'premium_yearly': {
             'plan_type': 'premium',
-            'days': 365,
+            'days': 180,
             'price': PREMIUM_PRICES['premium_yearly']
         }
     }

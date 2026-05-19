@@ -16,20 +16,19 @@ import { usePremium } from '../../context/PremiumContext';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../context/NotificationContext';
 import PaymentAPI from '../../services/paymentAPI';
-import { showStripeDisabledAlert, shouldDisableStripe, useOptionalStripe } from '../../utils/stripeSupport';
+import purchasesService from '../../services/purchasesService';
 
 const { width } = Dimensions.get('window');
 const PLAN_CARD_WIDTH = width - 40;
-const formatTryPrice = (price) => Number(price || 0).toFixed(2);
 
 export default function PremiumScreen({ navigation }) {
   const { t } = useTranslation();
   const { showError, showSuccess } = useNotification();
-  const { hasPremium, daysRemaining, loading, fetchStatus, getPlans, updateStatus } = usePremium();
-  const { initPaymentSheet, presentPaymentSheet } = useOptionalStripe();
+  const { hasPremium, daysRemaining, loading, fetchStatus, updateStatus } = usePremium();
   const [plans, setPlans] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [loadingPlanId, setLoadingPlanId] = useState(null);
+  const [storeReady, setStoreReady] = useState(true);
 
   useEffect(() => {
     fetchStatus();
@@ -38,10 +37,55 @@ export default function PremiumScreen({ navigation }) {
 
   const loadPlans = async () => {
     try {
-      const plansData = await getPlans();
-      setPlans(plansData);
+      const offering = await purchasesService.getCurrentOffering();
+      const packages = offering?.availablePackages || [];
+      const normalized = packages
+        .map((pkg) => {
+          const product = pkg.product;
+          const productId = product?.identifier || '';
+          const isMonthly = productId === 'premium_monthly';
+          const isSixMonths = productId === 'premium_yearly';
+
+          if (!isMonthly && !isSixMonths) {
+            return null;
+          }
+
+          return {
+            id: productId,
+            name: isMonthly ? 'Premium Aylık' : 'Premium 6 Aylık',
+            rcPackage: pkg,
+            price: Number(product?.price ?? 0),
+            localizedPrice: product?.priceString || '',
+            period: isMonthly ? 'ay' : '6 ay',
+            features: isMonthly
+              ? [
+                  'Sınırsız fal çekme',
+                  'Reklamsız deneyim',
+                  'Tüm fal türleri',
+                  'Detaylı yorumlar',
+                ]
+              : [
+                  'Sınırsız fal çekme',
+                  'Reklamsız deneyim',
+                  'Tüm fal türleri',
+                  'Uzun dönem avantajlı kullanım',
+                ],
+          };
+        })
+        .filter(Boolean)
+        .sort((a, b) => (a.id === 'premium_monthly' ? -1 : 1));
+
+      setStoreReady(normalized.length > 0);
+      setPlans(normalized);
+      setSelectedPlan((current) => {
+        if (current) {
+          return normalized.find((plan) => plan.id === current.id) || normalized[0] || null;
+        }
+        return normalized[0] || null;
+      });
     } catch (error) {
-      showError(t('premium.plansLoadError'));
+      setStoreReady(false);
+      console.warn('Premium offerings could not be loaded:', error?.message || error);
     }
   };
 
@@ -51,58 +95,23 @@ export default function PremiumScreen({ navigation }) {
       return;
     }
 
-    if (shouldDisableStripe) {
-      showStripeDisabledAlert();
-      return;
-    }
-
     try {
       setLoadingPlanId(plan.id);
-      
-      // Stripe ödeme intent'i oluştur
-      const paymentData = await PaymentAPI.createPremiumSubscription(plan.id);
-      
-      if (paymentData.client_secret) {
-        // Stripe Payment Sheet'i başlat
-        const { error } = await initPaymentSheet({
-          paymentIntentClientSecret: paymentData.client_secret,
-          merchantDisplayName: 'FAL APP',
-          returnURL: 'falapp://payment-success',
-        });
-
-        if (error) {
-          showError(error.message);
-          return;
-        }
-
-        // Payment Sheet'i göster
-        const { error: presentError } = await presentPaymentSheet();
-
-        if (presentError) {
-          if (presentError.code !== 'Canceled') {
-            showError(presentError.message);
-          }
-          return;
-        }
-
-        // Ödeme başarılı, premium durumunu güncelle
-        await fetchStatus();
-        
-        // Premium durumunu hemen güncelle
-        updateStatus({
-          has_premium: true,
-          plan_type: plan.id,
-          days_remaining: plan.id === 'premium_monthly' ? 30 : 365
-        });
-        
-        showSuccess(t('premium.purchaseSuccessful'));
-        // Premium kullanıcı olduğu için sayfada kal, geri gitme
-      } else {
-        showError(t('premium.purchaseFailed'));
-      }
+      await purchasesService.purchasePackage(plan.rcPackage);
+      const syncResult = await PaymentAPI.syncMobilePremiumPurchase();
+      await fetchStatus();
+      updateStatus({
+        has_premium: Boolean(syncResult?.has_premium),
+        plan_type: syncResult?.plan_type || plan.id,
+        days_remaining: syncResult?.days_remaining ?? (plan.id === 'premium_monthly' ? 30 : 182),
+      });
+      showSuccess(t('premium.purchaseSuccessful'));
     } catch (error) {
       console.error('Premium subscription error:', error);
-      showError(error.message || t('premium.purchaseFailed'));
+      if (error?.userCancelled) {
+        return;
+      }
+      showError(error?.message || t('premium.purchaseFailed'));
     } finally {
       setLoadingPlanId(null);
     }
@@ -124,10 +133,10 @@ export default function PremiumScreen({ navigation }) {
     return {
       isYearly,
       accentColors: isYearly ? ['#F5D06A', '#C59A17'] : ['#E9C15F', '#A77B12'],
-      badgeText: isYearly ? (plan.discount ? `%${plan.discount.replace('%', '')} Daha Avantajlı` : 'En Avantajlı') : 'En Popüler',
+      badgeText: isYearly ? 'Daha Avantajlı' : 'En Popüler',
       eyebrow: isYearly ? 'Uzun dönem kullanım için daha düşük maliyet' : 'Hızlı başlamak için en sade seçenek',
       description: isYearly
-        ? 'Yıl boyu sınırsız fal kullan, aylık plana göre ciddi avantaj kazan.'
+        ? '6 ay boyunca sınırsız fal kullan, aylık plana göre daha avantajlı kal.'
         : 'Sınırsız fal, reklamsız deneyim ve tüm premium özelliklere hemen eriş.',
     };
   };
@@ -187,7 +196,7 @@ export default function PremiumScreen({ navigation }) {
               <Text style={styles.heroEyebrow}>PREMIUM DENEYİM</Text>
               <Text style={styles.heroTitle}>{t('premium.choosePlan')}</Text>
               <Text style={styles.heroDescription}>
-                Tek bir premium üyelikle reklamsız deneyime geç, tüm fal türlerine sınırsız eriş ve yorumları daha akıcı şekilde oku.
+            Premium üyelikte fiyatı doğrudan App Store belirler. Reklamsız deneyime geç, tüm fal türlerine sınırsız eriş ve yorumları daha akıcı şekilde oku.
               </Text>
             </View>
 
@@ -229,9 +238,9 @@ export default function PremiumScreen({ navigation }) {
                     </View>
 
                     <View style={styles.priceRow}>
-                      <Text style={styles.priceAmount}>{formatTryPrice(plan.price)}</Text>
+                      <Text style={styles.priceAmount}>{plan.localizedPrice}</Text>
                       <View style={styles.priceMeta}>
-                        <Text style={styles.priceCurrency}>TL</Text>
+                        <Text style={styles.priceCurrency}></Text>
                         <Text style={styles.pricePeriod}>/{plan.period}</Text>
                       </View>
                     </View>
@@ -275,7 +284,21 @@ export default function PremiumScreen({ navigation }) {
                 </TouchableOpacity>
               )}) : (
                 <View style={styles.emptyPlansContainer}>
-                  <Text style={styles.emptyPlansText}>{t('premium.plansLoadError')}</Text>
+                  <View style={styles.storePendingCard}>
+                    <View style={styles.storePendingIconWrap}>
+                      <Ionicons name="time-outline" size={24} color="#F5D06A" />
+                    </View>
+                    <Text style={styles.storePendingTitle}>App Store ürünleri hazırlanıyor</Text>
+                    <Text style={styles.storePendingText}>
+                      Premium paketleri App Store’dan doğrulanınca burada otomatik görünecek.
+                    </Text>
+                    {!storeReady && (
+                      <TouchableOpacity style={styles.retryButton} onPress={loadPlans}>
+                        <Ionicons name="refresh" size={15} color="#F5D06A" />
+                        <Text style={styles.retryButtonText}>Tekrar dene</Text>
+                      </TouchableOpacity>
+                    )}
+                  </View>
                 </View>
               )}
             </View>
@@ -552,6 +575,59 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
     opacity: 0.7,
+  },
+  storePendingCard: {
+    width: '100%',
+    backgroundColor: 'rgba(255,255,255,0.04)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 208, 106, 0.18)',
+    borderRadius: 24,
+    paddingVertical: 28,
+    paddingHorizontal: 22,
+    alignItems: 'center',
+  },
+  storePendingIconWrap: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: 'rgba(245, 208, 106, 0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 208, 106, 0.22)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 14,
+  },
+  storePendingTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+    color: '#FFFFFF',
+    fontWeight: '700',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  storePendingText: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: 'rgba(255,255,255,0.68)',
+    textAlign: 'center',
+    maxWidth: 280,
+  },
+  retryButton: {
+    marginTop: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 999,
+    backgroundColor: 'rgba(245, 208, 106, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 208, 106, 0.20)',
+  },
+  retryButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#F5D06A',
   },
   premiumStatusInfo: {
     marginBottom: 20,

@@ -589,13 +589,27 @@ def calculate_chinese_element(birth_date_str, birth_time_str=None):
         return None
 
 class TokenTransaction:
-    def __init__(self, user_id, transaction_type, amount, description=None, package_id=None, stripe_payment_intent_id=None):
+    def __init__(
+        self,
+        user_id,
+        transaction_type,
+        amount,
+        description=None,
+        package_id=None,
+        stripe_payment_intent_id=None,
+        purchase_source=None,
+        revenuecat_transaction_id=None,
+        external_product_id=None,
+    ):
         self.user_id = user_id
         self.transaction_type = transaction_type  # 'purchase', 'spend', 'bonus', 'video_reward', 'refund'
         self.amount = amount  # Pozitif: alım/bonus, Negatif: harcama
         self.description = description
         self.package_id = package_id
         self.stripe_payment_intent_id = stripe_payment_intent_id
+        self.purchase_source = purchase_source
+        self.revenuecat_transaction_id = revenuecat_transaction_id
+        self.external_product_id = external_product_id
         self.created_at = datetime.now()
     
     def save(self):
@@ -606,6 +620,9 @@ class TokenTransaction:
             'description': self.description,
             'package_id': self.package_id,
             'stripe_payment_intent_id': self.stripe_payment_intent_id,
+            'purchase_source': self.purchase_source,
+            'revenuecat_transaction_id': self.revenuecat_transaction_id,
+            'external_product_id': self.external_product_id,
             'created_at': self.created_at
         }
         
@@ -624,6 +641,8 @@ class TokenTransaction:
             'amount': self.amount,
             'description': self.description,
             'package_id': self.package_id,
+            'purchase_source': self.purchase_source,
+            'external_product_id': self.external_product_id,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
     
@@ -640,6 +659,10 @@ class TokenTransaction:
                 transaction.amount = transaction_data['amount']
                 transaction.description = transaction_data.get('description')
                 transaction.package_id = transaction_data.get('package_id')
+                transaction.stripe_payment_intent_id = transaction_data.get('stripe_payment_intent_id')
+                transaction.purchase_source = transaction_data.get('purchase_source')
+                transaction.revenuecat_transaction_id = transaction_data.get('revenuecat_transaction_id')
+                transaction.external_product_id = transaction_data.get('external_product_id')
                 transaction.created_at = transaction_data.get('created_at')
                 transactions.append(transaction)
             return transactions
@@ -647,7 +670,34 @@ class TokenTransaction:
             print(f"Token transaction bulma hatası: {str(e)}")
             return []
 
+    @staticmethod
+    def find_by_revenuecat_transaction_id(transaction_id):
+        if not transaction_id:
+            return None
+
+        transaction_data = db.token_transactions.find_one({
+            'revenuecat_transaction_id': transaction_id
+        })
+        if not transaction_data:
+            return None
+
+        transaction = TokenTransaction.__new__(TokenTransaction)
+        transaction._id = transaction_data['_id']
+        transaction.user_id = transaction_data['user_id']
+        transaction.transaction_type = transaction_data['transaction_type']
+        transaction.amount = transaction_data['amount']
+        transaction.description = transaction_data.get('description')
+        transaction.package_id = transaction_data.get('package_id')
+        transaction.stripe_payment_intent_id = transaction_data.get('stripe_payment_intent_id')
+        transaction.purchase_source = transaction_data.get('purchase_source')
+        transaction.revenuecat_transaction_id = transaction_data.get('revenuecat_transaction_id')
+        transaction.external_product_id = transaction_data.get('external_product_id')
+        transaction.created_at = transaction_data.get('created_at')
+        return transaction
+
 class TokenPackage:
+    ALLOWED_TOKEN_AMOUNTS = [40, 90, 160]
+
     def __init__(self, name, token_amount, price, description, is_active=True):
         self.name = name
         self.token_amount = token_amount
@@ -686,7 +736,10 @@ class TokenPackage:
     
     @staticmethod
     def find_all_active():
-        packages_data = db.token_packages.find({'is_active': True})
+        packages_data = db.token_packages.find({
+            'is_active': True,
+            'token_amount': {'$in': TokenPackage.ALLOWED_TOKEN_AMOUNTS},
+        }).sort('token_amount', 1)
         packages = []
         for package_data in packages_data:
             package = TokenPackage.__new__(TokenPackage)
@@ -700,8 +753,19 @@ class TokenPackage:
         return packages
 
 class PremiumSubscription:
-    def __init__(self, user_id, plan_type, start_date=None, end_date=None, 
-                 is_active=True, auto_renew=True, stripe_payment_intent_id=None):
+    def __init__(
+        self,
+        user_id,
+        plan_type,
+        start_date=None,
+        end_date=None,
+        is_active=True,
+        auto_renew=True,
+        stripe_payment_intent_id=None,
+        purchase_source=None,
+        external_product_id=None,
+        revenuecat_transaction_id=None,
+    ):
         self.user_id = user_id
         self.plan_type = plan_type  # 'premium'
         self.start_date = start_date or datetime.now()
@@ -709,6 +773,9 @@ class PremiumSubscription:
         self.is_active = is_active
         self.auto_renew = auto_renew
         self.stripe_payment_intent_id = stripe_payment_intent_id
+        self.purchase_source = purchase_source
+        self.external_product_id = external_product_id
+        self.revenuecat_transaction_id = revenuecat_transaction_id
         self.created_at = datetime.now()
     
     def save(self):
@@ -720,6 +787,9 @@ class PremiumSubscription:
             'is_active': self.is_active,
             'auto_renew': self.auto_renew,
             'stripe_payment_intent_id': self.stripe_payment_intent_id,
+            'purchase_source': self.purchase_source,
+            'external_product_id': self.external_product_id,
+            'revenuecat_transaction_id': self.revenuecat_transaction_id,
             'created_at': self.created_at
         }
         
@@ -751,6 +821,8 @@ class PremiumSubscription:
             'is_active': self.is_active,
             'auto_renew': self.auto_renew,
             'days_remaining': self.days_remaining(),
+            'purchase_source': self.purchase_source,
+            'external_product_id': self.external_product_id,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
     
@@ -772,6 +844,10 @@ class PremiumSubscription:
                 subscription.end_date = subscription_data['end_date']
                 subscription.is_active = subscription_data['is_active']
                 subscription.auto_renew = subscription_data['auto_renew']
+                subscription.stripe_payment_intent_id = subscription_data.get('stripe_payment_intent_id')
+                subscription.purchase_source = subscription_data.get('purchase_source')
+                subscription.external_product_id = subscription_data.get('external_product_id')
+                subscription.revenuecat_transaction_id = subscription_data.get('revenuecat_transaction_id')
                 subscription.created_at = subscription_data.get('created_at')
                 return subscription
         except:

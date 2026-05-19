@@ -13,9 +13,8 @@ import * as Notifications from 'expo-notifications';
 import * as Font from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import SplashScreen from './components/SplashScreen';
-import { STRIPE_PUBLIC_KEY } from './config/env';
-import { StripeProviderWrapper } from './utils/stripeSupport';
 import { navigateFromNotification } from './navigation/navigationService';
+import purchasesService from './services/purchasesService';
 
 function removeNotificationListener(subscription) {
   if (!subscription) {
@@ -72,6 +71,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    purchasesService.initialize().catch((error) => {
+      console.error('RevenueCat initialize hatası:', error);
+    });
+
     // Sentry'yi başlat
     initSentry();
     
@@ -103,10 +106,9 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <StripeProviderWrapper publishableKey={STRIPE_PUBLIC_KEY}>
-        <ErrorBoundary>
-          <LanguageProvider>
-            <QueryProvider>
+      <ErrorBoundary>
+        <LanguageProvider>
+          <QueryProvider>
               <AuthProvider>
                 <TokenProvider>
                   <PremiumProvider>
@@ -116,10 +118,9 @@ export default function App() {
                   </PremiumProvider>
                 </TokenProvider>
               </AuthProvider>
-            </QueryProvider>
-          </LanguageProvider>
-        </ErrorBoundary>
-      </StripeProviderWrapper>
+          </QueryProvider>
+        </LanguageProvider>
+      </ErrorBoundary>
     </SafeAreaProvider>
   );
 } 

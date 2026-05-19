@@ -121,6 +121,18 @@ class PaymentAPI {
     }
   }
 
+  static async syncMobileTokenPurchase(packageId) {
+    try {
+      const response = await api.post('/revenuecat/claim-token-purchase', {
+        product_id: packageId
+      });
+      return response.data;
+    } catch (error) {
+      console.error('RevenueCat token claim hatası:', error);
+      throw error;
+    }
+  }
+
   /**
    * Manuel premium activation (development için)
    */
@@ -133,6 +145,16 @@ class PaymentAPI {
       return response.data;
     } catch (error) {
       console.error('Manuel premium activation hatası:', error);
+      throw error;
+    }
+  }
+
+  static async syncMobilePremiumPurchase() {
+    try {
+      const response = await api.post('/revenuecat/sync-premium');
+      return response.data;
+    } catch (error) {
+      console.error('RevenueCat premium sync hatası:', error);
       throw error;
     }
   }

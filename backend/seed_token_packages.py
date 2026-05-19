@@ -29,12 +29,6 @@ def seed_token_packages():
             'token_amount': 160,
             'price': 249.99,
             'description': 'Daha fazla fal ve daha iyi token oranı'
-        },
-        {
-            'name': 'Efsane Paket',
-            'token_amount': 300,
-            'price': 449.99,
-            'description': 'En güçlü değer paketi, uzun kullanım için'
         }
     ]
 

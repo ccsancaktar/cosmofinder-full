@@ -19,6 +19,7 @@ from payment_system import payment_bp
 from premium import premium_bp
 from rate_limiting import create_limiter
 from readings import readings_bp
+from revenuecat_sync import revenuecat_bp
 from routes import register_route_blueprints
 from scheduler import setup_scheduler, stop_scheduler
 from tokens import tokens_bp
@@ -76,6 +77,7 @@ def create_app():
     app.register_blueprint(tokens_bp, url_prefix="/api/tokens")
     app.register_blueprint(premium_bp, url_prefix="/api/premium")
     app.register_blueprint(payment_bp, url_prefix="/api/payment")
+    app.register_blueprint(revenuecat_bp, url_prefix="/api/revenuecat")
     register_route_blueprints(app)
 
     should_start_scheduler = True

@@ -803,12 +803,27 @@ def manual_token_load():
         data = request.get_json()
         package_id = data.get('package_id')
         token_amount = data.get('token_amount')
-        payment_intent_id = data.get('payment_intent_id')
+        payment_intent_id = data.get('payment_intent_id') or data.get('transaction_id')
         
         if not all([package_id, token_amount]):
             return jsonify({'error': 'package_id ve token_amount gereklidir'}), 400
         
         logger.info(f"Manuel token yükleme: User {user_id}, Package {package_id}, Amount {token_amount}")
+
+        if payment_intent_id:
+            existing_transaction = db.token_transactions.find_one({
+                'user_id': str(user_id),
+                'stripe_payment_intent_id': payment_intent_id
+            })
+            if existing_transaction:
+                existing_user = User.find_by_id(user_id)
+                return jsonify({
+                    'status': 'success',
+                    'message': 'Token yükleme daha önce işlendi',
+                    'new_balance': existing_user.get_token_balance() if existing_user else 0,
+                    'token_amount': int(token_amount),
+                    'already_processed': True,
+                }), 200
         
         # Aynı payment_intent_id'li transaction var mı kontrol et (duplikat önleme)
         existing_transaction = db.token_transactions.find_one({
@@ -871,12 +886,26 @@ def manual_premium_activate():
         user_id = get_jwt_identity()
         data = request.get_json()
         plan_type = data.get('plan_type')
-        payment_intent_id = data.get('payment_intent_id')
+        payment_intent_id = data.get('payment_intent_id') or data.get('transaction_id')
         
         if not plan_type:
             return jsonify({'error': 'plan_type gereklidir'}), 400
         
         logger.info(f"Manuel premium activation: User {user_id}, Plan {plan_type}")
+
+        if payment_intent_id:
+            existing_subscription = db.premium_subscriptions.find_one({
+                'user_id': str(user_id),
+                'stripe_payment_intent_id': payment_intent_id
+            })
+            if existing_subscription:
+                return jsonify({
+                    'status': 'success',
+                    'message': f'Premium üyelik daha önce işlendi: {plan_type}',
+                    'plan_type': existing_subscription.get('plan_type'),
+                    'end_date': existing_subscription.get('end_date').isoformat() if existing_subscription.get('end_date') else None,
+                    'already_processed': True,
+                }), 200
         
         # Önce mevcut aktif subscription'ları pasif yap
         existing_subscriptions = db.premium_subscriptions.find({
@@ -900,7 +929,7 @@ def manual_premium_activate():
         if 'monthly' in plan_type:
             duration = timedelta(days=30)
         elif 'yearly' in plan_type:
-            duration = timedelta(days=365)
+            duration = timedelta(days=180)
         else:
             duration = timedelta(days=30)
         
