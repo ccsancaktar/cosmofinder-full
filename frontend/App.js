@@ -11,7 +11,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import AppNavigator from './navigation/AppNavigator';
 import * as Notifications from 'expo-notifications';
 import * as Font from 'expo-font';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, initialWindowMetrics } from 'react-native-safe-area-context';
 import SplashScreen from './components/SplashScreen';
 import { navigateFromNotification } from './navigation/navigationService';
 import purchasesService from './services/purchasesService';
@@ -105,7 +105,7 @@ export default function App() {
   }
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
       <ErrorBoundary>
         <LanguageProvider>
           <QueryProvider>
