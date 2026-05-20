@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 20,
     fontFamily: 'CinzelDecorative-Bold',
-    color: '#FFFFFF',
+    color: '#C5A100',
   },
   placeholder: {
     width: 40,
