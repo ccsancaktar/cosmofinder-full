@@ -27,6 +27,7 @@ import TokenWarningModal from '../../components/TokenWarningModal';
 import LazyImage from '../../components/LazyImage';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
@@ -365,27 +366,13 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
               <Text style={styles.charCount}>{question.length} / 180</Text>
             </View>
 
-            <TouchableOpacity
-              style={[
-                styles.submitButton,
-                (!images.every(img => img.base64) || loading || fortuneLoading) &&
-                  styles.submitButtonDisabled,
-              ]}
-              onPress={handleSubmit}
+            <FortunePrimaryButton
+              label={t('coffee.sendMyFortune')}
+              loadingLabel={t('coffee.fortuneBeingInterpreted')}
+              loading={loading || fortuneLoading}
               disabled={!images.every(img => img.base64) || loading || fortuneLoading}
-            >
-              {loading || fortuneLoading ? (
-                <>
-                  <Ionicons name="hourglass" size={24} color="#FFFFFF" />
-                  <Text style={styles.submitButtonText}>{t('coffee.fortuneBeingInterpreted')}</Text>
-                </>
-              ) : (
-                <>
-                  <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-                  <Text style={styles.submitButtonText}>{t('coffee.sendMyFortune')}</Text>
-                </>
-              )}
-            </TouchableOpacity>
+              onPress={handleSubmit}
+            />
           </ScrollView>
         </LinearGradient>
 

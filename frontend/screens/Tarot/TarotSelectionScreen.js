@@ -14,6 +14,7 @@ import { showInterstitialAd, preloadInterstitialAd } from '../../utils/interstit
 import TokenWarningModal from '../../components/TokenWarningModal';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import AdMobBanner from '../../components/AdMobBanner';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
 
@@ -581,19 +582,13 @@ const TarotSelectionScreen = React.memo(() => {
           ) : null}
 
           <View style={styles.footerCtaWrap}>
-            <TouchableOpacity
-              style={[
-                styles.submitButton,
-                (loading || fortuneLoading || selectedCards.length !== REQUIRED_CARDS) && styles.submitButtonDisabled,
-              ]}
-              onPress={handleSubmit}
+            <FortunePrimaryButton
+              label={t('tarot.sendMyFortune')}
+              loadingLabel={t('tarot.fortuneBeingInterpreted')}
+              loading={loading || fortuneLoading}
               disabled={loading || fortuneLoading || selectedCards.length !== REQUIRED_CARDS}
-            >
-              <Ionicons name="sparkles" size={22} color="#FFFFFF" />
-              <Text style={styles.submitButtonText}>
-                {loading || fortuneLoading ? t('tarot.fortuneBeingInterpreted') : t('tarot.sendMyFortune')}
-              </Text>
-            </TouchableOpacity>
+              onPress={handleSubmit}
+            />
           </View>
         </LinearGradient>
 

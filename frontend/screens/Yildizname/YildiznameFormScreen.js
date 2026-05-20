@@ -19,6 +19,7 @@ import TimePickerField from '../../components/TimePickerField';
 import FortuneLoadingOverlay from '../../components/FortuneLoadingOverlay';
 import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import ReadingModeCard from '../../components/ReadingModeCard';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
@@ -369,24 +370,13 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
                 </>
               ) : null}
 
-              {/* Submit Button */}
-              <TouchableOpacity
-                style={[styles.submitButton, (loading || fortuneLoading) && styles.submitButtonDisabled]}
-                onPress={handleSubmit}
+              <FortunePrimaryButton
+                label={t('yildizname.sendMyFortune')}
+                loadingLabel={t('yildizname.fortuneBeingInterpreted')}
+                loading={loading || fortuneLoading}
                 disabled={loading || fortuneLoading}
-              >
-                {(loading || fortuneLoading) ? (
-                  <>
-                    <Ionicons name="hourglass" size={24} color="#FFFFFF" />
-                                      <Text style={styles.submitButtonText}>{t('yildizname.fortuneBeingInterpreted')}</Text>
-                </>
-              ) : (
-                <>
-                  <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-                  <Text style={styles.submitButtonText}>{t('yildizname.sendMyFortune')}</Text>
-                </>
-              )}
-              </TouchableOpacity>
+                onPress={handleSubmit}
+              />
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
