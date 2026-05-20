@@ -106,17 +106,15 @@ export default function TokenPurchaseScreen({ navigation }) {
 
     try {
       setPurchaseLoading(true);
-      const purchaseResult = await purchasesService.purchaseProduct(selectedPackage.storeProduct);
-      const transactionId =
-        purchaseResult?.transaction?.transactionIdentifier ||
-        purchaseResult?.transaction?.id ||
-        purchaseResult?.purchaseToken ||
-        `rc_${selectedPackage.productId}_${Date.now()}`;
-      await PaymentAPI.syncMobileTokenPurchase(
-        selectedPackage.id,
-        selectedPackage.token_amount,
-        transactionId
+      await purchasesService.purchaseProduct(selectedPackage.storeProduct);
+      const claimResult = await PaymentAPI.syncMobileTokenPurchase(
+        selectedPackage.productId
       );
+
+      if ((claimResult?.claimed_count || 0) === 0) {
+        throw new Error('Satın alma doğrulandı ancak tokenlar henüz hesaba işlenmedi. Lütfen birkaç saniye sonra tekrar deneyin.');
+      }
+
       await fetchBalance();
       navigation.goBack();
     } catch (error) {

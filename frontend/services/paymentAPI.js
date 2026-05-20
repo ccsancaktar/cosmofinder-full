@@ -121,16 +121,42 @@ class PaymentAPI {
     }
   }
 
-  static async syncMobileTokenPurchase(packageId) {
-    try {
-      const response = await api.post('/revenuecat/claim-token-purchase', {
-        product_id: packageId
-      });
-      return response.data;
-    } catch (error) {
-      console.error('RevenueCat token claim hatası:', error);
-      throw error;
+  static async syncMobileTokenPurchase(productId, options = {}) {
+    const {
+      maxAttempts = 5,
+      retryDelayMs = 1500,
+    } = options;
+
+    let lastResponse = null;
+    let lastError = null;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+      try {
+        const response = await api.post('/revenuecat/claim-token-purchase', {
+          product_id: productId,
+        });
+
+        lastResponse = response.data;
+
+        if ((response.data?.claimed_count || 0) > 0) {
+          return response.data;
+        }
+
+        if (attempt < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
+        }
+      } catch (error) {
+        lastError = error;
+        console.error('RevenueCat token claim hatası:', error);
+        throw error;
+      }
     }
+
+    if (lastResponse) {
+      return lastResponse;
+    }
+
+    throw lastError || new Error('Token satın alma senkronize edilemedi');
   }
 
   /**
