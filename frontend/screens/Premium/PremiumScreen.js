@@ -51,21 +51,21 @@ export default function PremiumScreen({ navigation }) {
 
           return {
             id: productId,
-            name: isMonthly ? 'Premium Aylık' : 'Premium 6 Aylık',
+            name: isMonthly ? t('premium.monthlyCardTitle') : t('premium.sixMonthCardTitle'),
             rcPackage: pkg,
             price: Number(product?.price ?? 0),
             localizedPrice: product?.priceString || '',
-            period: isMonthly ? 'ay' : '6 ay',
+            period: isMonthly ? t('premium.monthUnit') : t('premium.sixMonthUnit'),
             features: isMonthly
               ? [
-                  'Sınırsız fal çekme',
-                  'Reklamsız deneyim',
-                  'Tüm premium özellikler',
+                  t('premium.monthlyFeature1'),
+                  t('premium.monthlyFeature2'),
+                  t('premium.monthlyFeature3'),
                 ]
               : [
-                  '6 ay kesintisiz kullanım',
-                  'Reklamsız deneyim',
-                  'Toplamda daha avantajlı fiyat',
+                  t('premium.sixMonthFeature1'),
+                  t('premium.sixMonthFeature2'),
+                  t('premium.sixMonthFeature3'),
                 ],
           };
         })
@@ -123,13 +123,13 @@ export default function PremiumScreen({ navigation }) {
 
     return {
       isYearly,
-      badgeText: isYearly ? 'Daha Avantajlı' : 'Aylık Plan',
-      eyebrow: isYearly ? 'Uzun dönem kullanım için daha düşük maliyet' : 'En hızlı başlangıç',
+      badgeText: isYearly ? t('premium.sixMonthBadge') : t('premium.monthlyBadge'),
+      eyebrow: isYearly ? t('premium.sixMonthEyebrow') : t('premium.monthlyEyebrow'),
       description: isYearly
-        ? 'Tek seferde 6 ayı sabitle, daha az düşün ve daha avantajlı kal.'
-        : 'Premium özelliklere hemen geç, aylık olarak esnek şekilde devam et.',
+        ? t('premium.sixMonthDescription')
+        : t('premium.monthlyDescription'),
       accentBorder: isYearly ? 'rgba(245, 208, 106, 0.34)' : 'rgba(197, 161, 0, 0.16)',
-      ctaLabel: isYearly ? '6 Aylık Planı Al' : 'Aylık Planı Al',
+      ctaLabel: isYearly ? t('premium.sixMonthCta') : t('premium.monthlyCta'),
     };
   };
 
@@ -185,10 +185,10 @@ export default function PremiumScreen({ navigation }) {
         {!hasPremium && (
           <View style={styles.plansContainer}>
             <View style={styles.heroCard}>
-              <Text style={styles.heroEyebrow}>PREMIUM DENEYİM</Text>
+              <Text style={styles.heroEyebrow}>{t('premium.heroEyebrow')}</Text>
               <Text style={styles.heroTitle}>{t('premium.choosePlan')}</Text>
               <Text style={styles.heroDescription}>
-            App Store fiyatı ile premiuma geç, reklamsız kullan ve tüm fal türlerini limitsiz aç.
+                {t('premium.heroDescription')}
               </Text>
             </View>
 
@@ -268,17 +268,17 @@ export default function PremiumScreen({ navigation }) {
               )}) : (
                 <View style={styles.emptyPlansContainer}>
                   <View style={styles.storePendingCard}>
-                    <View style={styles.storePendingIconWrap}>
+                  <View style={styles.storePendingIconWrap}>
                       <Ionicons name="time-outline" size={24} color="#F5D06A" />
                     </View>
-                    <Text style={styles.storePendingTitle}>App Store ürünleri hazırlanıyor</Text>
+                    <Text style={styles.storePendingTitle}>{t('premium.storePendingTitle')}</Text>
                     <Text style={styles.storePendingText}>
-                      Premium paketleri App Store’dan doğrulanınca burada otomatik görünecek.
+                      {t('premium.storePendingDescription')}
                     </Text>
                     {!storeReady && (
                       <TouchableOpacity style={styles.retryButton} onPress={loadPlans}>
                         <Ionicons name="refresh" size={15} color="#F5D06A" />
-                        <Text style={styles.retryButtonText}>Tekrar dene</Text>
+                        <Text style={styles.retryButtonText}>{t('common.retry')}</Text>
                       </TouchableOpacity>
                     )}
                   </View>
