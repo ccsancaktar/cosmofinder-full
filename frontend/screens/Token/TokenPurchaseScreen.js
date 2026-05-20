@@ -47,14 +47,20 @@ export default function TokenPurchaseScreen({ navigation }) {
     return {
       tokenAmount,
       estimatedReadings,
-      badge: isBestValue ? 'En İyi Değer' : isPopular ? 'En Popüler' : isStarter ? 'Başlangıç' : 'Daha Avantajlı',
-      eyebrow: isBestValue
-        ? 'Uzun kullanım için en güçlü paket'
+      badge: isBestValue
+        ? t('tokens.bestValueBadge')
         : isPopular
-          ? 'Fiyat ve miktar dengesi en iyi seçim'
+          ? t('tokens.mostPopularBadge')
           : isStarter
-            ? 'İlk denemeler için en kolay giriş'
-            : 'Düzenli kullananlar için daha avantajlı',
+            ? t('tokens.starterBadge')
+            : t('tokens.betterValueBadge'),
+      eyebrow: isBestValue
+        ? t('tokens.bestValueEyebrow')
+        : isPopular
+          ? t('tokens.popularEyebrow')
+          : isStarter
+            ? t('tokens.starterEyebrow')
+            : t('tokens.regularUseEyebrow'),
     };
   };
 
@@ -94,7 +100,7 @@ export default function TokenPurchaseScreen({ navigation }) {
 
   const handlePurchase = async (pkg) => {
     if (!pkg?.storeProduct) {
-      showError('Store ürünü yüklenemedi. RevenueCat anahtarlarını kontrol et.');
+      showError(t('tokens.storeProductUnavailable'));
       return;
     }
 
@@ -106,14 +112,14 @@ export default function TokenPurchaseScreen({ navigation }) {
       );
 
       if ((claimResult?.claimed_count || 0) === 0) {
-        throw new Error('Satın alma doğrulandı ancak tokenlar henüz hesaba işlenmedi. Lütfen birkaç saniye sonra tekrar deneyin.');
+        throw new Error(t('tokens.purchaseClaimPending'));
       }
 
       await fetchBalance();
       navigation.goBack();
     } catch (error) {
       if (!error?.userCancelled) {
-        showError(error?.message || 'Satın alma tamamlanamadı');
+        showError(error?.message || t('tokens.purchaseIncomplete'));
       }
     } finally {
       setLoadingProductId(null);
@@ -160,7 +166,7 @@ export default function TokenPurchaseScreen({ navigation }) {
           <View style={styles.packagesContainer}>
             <Text style={styles.sectionTitle}>{t('common.tokenPackages')}</Text>
             <Text style={styles.sectionSubtitle}>
-              İhtiyacın kadar token al, ödeme sonrası hesabına anında tanımlansın.
+              {t('tokens.purchaseSubtitle')}
             </Text>
             
             {visiblePackages.map((pkg, index) => {
@@ -198,17 +204,17 @@ export default function TokenPurchaseScreen({ navigation }) {
                   <View style={styles.packageStatsRow}>
                     <View style={styles.statPill}>
                       <Text style={styles.statValue}>{meta.tokenAmount}</Text>
-                      <Text style={styles.statLabel}>token</Text>
+                      <Text style={styles.statLabel}>{t('tokens.tokenUnit')}</Text>
                     </View>
                     <View style={styles.statPill}>
                       <Text style={styles.statValue}>~{meta.estimatedReadings}</Text>
-                      <Text style={styles.statLabel}>fal</Text>
+                      <Text style={styles.statLabel}>{t('tokens.readingUnit')}</Text>
                     </View>
                   </View>
 
                   <View style={styles.packageBottomRow}>
                     <View>
-                      <Text style={styles.packagePriceCaption}>App Store fiyatı</Text>
+                      <Text style={styles.packagePriceCaption}>{t('tokens.appStorePrice')}</Text>
                       {pkg.localizedPrice ? (
                         <Text style={styles.packagePrice}>
                           {pkg.localizedPrice}
@@ -217,7 +223,7 @@ export default function TokenPurchaseScreen({ navigation }) {
                         <View style={styles.priceLoadingWrap}>
                           <View style={styles.priceLoadingBarPrimary} />
                           <View style={styles.priceLoadingBarSecondary} />
-                          <Text style={styles.packagePriceLoading}>App Store fiyatı hazırlanıyor</Text>
+                          <Text style={styles.packagePriceLoading}>{t('tokens.appStorePriceLoading')}</Text>
                         </View>
                       )}
                     </View>
@@ -234,7 +240,7 @@ export default function TokenPurchaseScreen({ navigation }) {
                         <ActivityIndicator size="small" color="#0D0B1F" />
                       ) : (
                         <Text style={styles.selectPillText}>
-                          {!isAvailable ? 'Hazırlanıyor' : 'Satın Al'}
+                          {!isAvailable ? t('tokens.preparing') : t('common.buy')}
                         </Text>
                       )}
                     </TouchableOpacity>
@@ -252,7 +258,7 @@ export default function TokenPurchaseScreen({ navigation }) {
               <View style={styles.premiumCopy}>
                 <Text style={styles.premiumTitle}>{t('common.goPremium1')}</Text>
                 <Text style={styles.premiumSubtitle}>
-                  Sık sık fal çekiyorsan token almak yerine premium üyelikle sınırsız kullanıma geçebilirsin.
+                  {t('tokens.goPremiumSubtitle')}
                 </Text>
               </View>
               <TouchableOpacity
