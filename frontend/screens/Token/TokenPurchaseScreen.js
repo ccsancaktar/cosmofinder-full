@@ -155,31 +155,13 @@ export default function TokenPurchaseScreen({ navigation }) {
           </View>
         )}
 
-        {/* Info Card */}
-        {!hasPremium && (
-          <View style={styles.heroCard}>
-            <Text style={styles.heroEyebrow}>TOKEN PAKETLERİ</Text>
-            <Text style={styles.heroTitle}>{t('tokens.tokenPurchase')}</Text>
-            <Text style={styles.heroDescription}>
-              İhtiyacın kadar token al, fal çekmeye hemen devam et. Ödeme sonrası tokenlar hesabına anında tanımlanır.
-            </Text>
-            <View style={styles.heroMetaRow}>
-              <View style={styles.heroMetaChip}>
-                <Ionicons name="shield-checkmark" size={14} color="#F5D06A" />
-                <Text style={styles.heroMetaText}>Güvenli ödeme</Text>
-              </View>
-              <View style={styles.heroMetaChip}>
-                <Ionicons name="flash" size={14} color="#F5D06A" />
-                <Text style={styles.heroMetaText}>Anında teslim</Text>
-              </View>
-            </View>
-          </View>
-        )}
-
         {/* Packages */}
         {!hasPremium && (
           <View style={styles.packagesContainer}>
             <Text style={styles.sectionTitle}>{t('common.tokenPackages')}</Text>
+            <Text style={styles.sectionSubtitle}>
+              İhtiyacın kadar token al, ödeme sonrası hesabına anında tanımlansın.
+            </Text>
             
             {visiblePackages.map((pkg, index) => {
               const meta = getPackageMeta(pkg, index);
@@ -299,56 +281,6 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  heroCard: {
-    marginHorizontal: 20,
-    marginBottom: 20,
-    padding: 20,
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.18)',
-    borderRadius: 24,
-  },
-  heroEyebrow: {
-    fontSize: 11,
-    letterSpacing: 1.4,
-    color: '#F5D06A',
-    marginBottom: 8,
-    fontWeight: '700',
-  },
-  heroTitle: {
-    fontSize: 28,
-    lineHeight: 34,
-    color: '#FFFFFF',
-    fontFamily: 'CinzelDecorative-Bold',
-    marginBottom: 10,
-  },
-  heroDescription: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: 'rgba(255,255,255,0.78)',
-    marginBottom: 14,
-  },
-  heroMetaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  heroMetaChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 999,
-    backgroundColor: 'rgba(245, 208, 106, 0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.14)',
-  },
-  heroMetaText: {
-    color: '#F5D06A',
-    marginLeft: 6,
-    fontSize: 13,
-    fontWeight: '600',
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -391,6 +323,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#C5A100',
+    marginBottom: 6,
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: 'rgba(255,255,255,0.66)',
     marginBottom: 14,
   },
   packageCard: {
