@@ -34,10 +34,10 @@ const TOKEN_COSTS = {
 
 // Bonus token miktarları - Environment variables'dan (fallback ile)
 const BONUS_AMOUNTS = {
-  REGISTRATION: parseInt(REGISTRATION_BONUS_TOKENS) || 20,
-  DAILY: parseInt(FREE_DAILY_BONUS_TOKENS) || 3,
-  VIDEO: parseInt(VIDEO_REWARD_TOKENS) || 4,
-  DAILY_VIDEO_LIMIT: parseInt(FREE_DAILY_VIDEO_LIMIT) || 3
+  REGISTRATION: parseInt(REGISTRATION_BONUS_TOKENS) || 15,
+  DAILY: parseInt(FREE_DAILY_BONUS_TOKENS) || 2,
+  VIDEO: parseInt(VIDEO_REWARD_TOKENS) || 2,
+  DAILY_VIDEO_LIMIT: parseInt(FREE_DAILY_VIDEO_LIMIT) || 2
 };
 
 // Debug için environment variables'ları logla

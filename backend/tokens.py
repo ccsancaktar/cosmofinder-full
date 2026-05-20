@@ -140,7 +140,7 @@ def video_reward():
         
         # AdMob'dan gelen reward miktarını al
         data = request.get_json()
-        reward_amount = data.get('reward_amount', int(os.getenv('VIDEO_REWARD_TOKENS', 4)))
+        reward_amount = data.get('reward_amount', int(os.getenv('VIDEO_REWARD_TOKENS', 2)))
         
         # 24 saat içindeki video sayısını kontrol et
         last_24_hours = datetime.now() - timedelta(hours=24)
@@ -150,7 +150,7 @@ def video_reward():
             'created_at': {'$gte': last_24_hours}
         })
         
-        daily_limit = int(os.getenv('FREE_DAILY_VIDEO_LIMIT', 3))
+        daily_limit = int(os.getenv('FREE_DAILY_VIDEO_LIMIT', 2))
         if videos_last_24h >= daily_limit:
             return jsonify({'error': 'Günlük video limiti doldu'}), 400
         
@@ -199,7 +199,7 @@ def video_limit_status():
             'created_at': {'$gte': last_24_hours}
         })
         
-        daily_limit = int(os.getenv('FREE_DAILY_VIDEO_LIMIT', 3))
+        daily_limit = int(os.getenv('FREE_DAILY_VIDEO_LIMIT', 2))
         limit_reached = videos_last_24h >= daily_limit
         
         # En eski video'nun tarihini bul (reset zamanı hesaplaması için)
@@ -257,7 +257,7 @@ def daily_bonus():
             }), 400
         
         # Bonus token ver
-        bonus_amount = int(os.getenv('FREE_DAILY_BONUS_TOKENS', 3))
+        bonus_amount = int(os.getenv('FREE_DAILY_BONUS_TOKENS', 2))
         transaction = TokenTransaction(
             user_id=str(user._id),
             transaction_type='daily_bonus',
@@ -372,7 +372,7 @@ def spend_tokens_for_reading(user_id, reading_type):
 def add_registration_bonus(user_id):
     """Yeni kullanıcıya kayıt bonusu ver"""
     try:
-        bonus_amount = int(os.getenv('REGISTRATION_BONUS_TOKENS', 20))
+        bonus_amount = int(os.getenv('REGISTRATION_BONUS_TOKENS', 15))
         transaction = TokenTransaction(
             user_id=user_id,
             transaction_type='registration_bonus',

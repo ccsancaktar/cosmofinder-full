@@ -1,6 +1,7 @@
 {
   "cli": {
-    "version": ">= 5.0.0"
+    "version": ">= 5.0.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -55,10 +56,10 @@
         "NUMEROLOGY_TOKEN_COST": "8",
         "COMPATIBILITY_TOKEN_COST": "16",
         "ANGEL_TOKEN_COST": "3",
-        "REGISTRATION_BONUS_TOKENS": "20",
-        "FREE_DAILY_BONUS_TOKENS": "3",
-        "VIDEO_REWARD_TOKENS": "4",
-        "FREE_DAILY_VIDEO_LIMIT": "3"
+        "REGISTRATION_BONUS_TOKENS": "15",
+        "FREE_DAILY_BONUS_TOKENS": "2",
+        "VIDEO_REWARD_TOKENS": "2",
+        "FREE_DAILY_VIDEO_LIMIT": "2"
       }
     }
   },
