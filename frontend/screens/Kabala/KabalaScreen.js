@@ -26,6 +26,7 @@ import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -347,23 +348,14 @@ const KabalaScreen = React.memo(({ navigation }) => {
             ) : null}
 
             {/* Submit Button */}
-            <TouchableOpacity
-              style={[styles.submitButton, (loading || fortuneLoading) && styles.submitButtonDisabled]}
-              onPress={handleSubmit}
+            <FortunePrimaryButton
+              label={t('kabala.getKabalaFortune')}
+              loadingLabel={t('kabala.fortuneBeingPrepared')}
+              loading={loading || fortuneLoading}
               disabled={loading || fortuneLoading}
-            >
-              {(loading || fortuneLoading) ? (
-                <>
-                  <Ionicons name="hourglass" size={24} color="#FFFFFF" />
-                  <Text style={styles.submitButtonText}>{t('kabala.fortuneBeingPrepared')}</Text>
-                </>
-              ) : (
-                <>
-                  <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-                  <Text style={styles.submitButtonText}>{t('kabala.getKabalaFortune')}</Text>
-                </>
-              )}
-            </TouchableOpacity>
+              onPress={handleSubmit}
+              style={styles.submitButton}
+            />
           </ScrollView>
         </TouchableWithoutFeedback>
       </LinearGradient>
@@ -604,17 +596,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   formCard: {
-    backgroundColor: '#1B1B2F',
-    padding: 24,
-    borderRadius: 0,
-    marginHorizontal: 0,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
+    marginHorizontal: 18,
     marginBottom: 24,
-    elevation: Platform.OS === 'android' ? 4 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   formTitle: {
     fontSize: 20,
@@ -632,24 +620,26 @@ const styles = StyleSheet.create({
     ...fontStyles.bodyBold,
   },
   textInput: {
-    backgroundColor: '#2A2A3F',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 18,
+    minHeight: 56,
+    paddingHorizontal: 18,
     fontSize: 16,
     color: '#FFFFFF',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255,255,255,0.08)',
     ...fontStyles.body,
   },
   dateButton: {
-    backgroundColor: '#2A2A3F',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 18,
+    minHeight: 56,
+    paddingHorizontal: 18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   dateButtonText: {
     fontSize: 16,
@@ -701,27 +691,7 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   submitButton: {
-    backgroundColor: '#8A4FFF',
-    borderRadius: 16,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 24,
-    elevation: Platform.OS === 'android' ? 6 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#8A4FFF' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-  },
-  submitButtonDisabled: {
-    opacity: 0.7,
-  },
-  submitButtonText: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    marginLeft: 8,
-    ...fontStyles.bodyBold,
+    marginHorizontal: 18,
   },
   // Modal styles - EditProfileScreen'den alındı
   modalOverlay: {

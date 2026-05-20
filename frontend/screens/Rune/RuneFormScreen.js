@@ -24,6 +24,7 @@ import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const { width, height } = Dimensions.get('window');
 
@@ -198,23 +199,14 @@ const RuneFormScreen = React.memo(({ navigation }) => {
                 <Text style={styles.charCount}>{soru.length} / 500</Text>
               </View>
               
-              <TouchableOpacity
-                style={[styles.submitButton, (loading || fortuneLoading) && styles.submitButtonDisabled]}
-                onPress={handleSubmit}
+              <FortunePrimaryButton
+                label={t('rune.sendMyFortune')}
+                loadingLabel={t('rune.fortuneBeingInterpreted')}
+                loading={loading || fortuneLoading}
                 disabled={loading || fortuneLoading}
-              >
-                {(loading || fortuneLoading) ? (
-                  <>
-                    <Ionicons name="hourglass" size={24} color="#FFFFFF" />
-                    <Text style={styles.submitButtonText}>{t('rune.fortuneBeingInterpreted')}</Text>
-                  </>
-                ) : (
-                  <>
-                    <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-                    <Text style={styles.submitButtonText}>{t('rune.sendMyFortune')}</Text>
-                  </>
-                )}
-              </TouchableOpacity>
+                onPress={handleSubmit}
+                style={styles.submitButton}
+              />
             </View>
 
           </ScrollView>
@@ -423,20 +415,15 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   textInput: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 18,
+    padding: 18,
     fontSize: 16,
     color: '#fff',
     minHeight: 120,
     textAlignVertical: 'top',
     borderWidth: 1,
-    borderColor: 'rgba(197, 161, 0, 0.2)',
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 2 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.1 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    elevation: Platform.OS === 'android' ? 3 : 0,
+    borderColor: 'rgba(255,255,255,0.08)',
     ...fontStyles.body,
   },
   charCount: {
@@ -445,29 +432,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginTop: 4,
     ...fontStyles.body,
-  },
-  submitButton: {
-    backgroundColor: '#8A4FFF',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    elevation: Platform.OS === 'android' ? 8 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#8A4FFF' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.4 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 12 : 0,
-  },
-  submitButtonDisabled: {
-    opacity: 0.6,
-    backgroundColor: '#666',
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 20,
-    marginLeft: 12,
-    ...fontStyles.bodyBold,
   },
   tipsCard: {
     backgroundColor: '#1B1B2F',
@@ -508,6 +472,9 @@ const styles = StyleSheet.create({
   tokenInfoContainer: {
     marginTop: 16,
     marginBottom: 12,
+  },
+  submitButton: {
+    marginHorizontal: -6,
   },
   premiumBadge: {
     flexDirection: 'row',

@@ -21,6 +21,7 @@ import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const DailyScreen = () => {
   const { t } = useTranslation();
@@ -298,23 +299,14 @@ const DailyScreen = () => {
           ) : null}
 
           {/* Submit Button */}
-          <TouchableOpacity
-            style={[styles.submitButton, (loading || fortuneLoading) && styles.submitButtonDisabled]}
-            onPress={handleDailyFortune}
+          <FortunePrimaryButton
+            label={t('daily.getDailyZodiac')}
+            loadingLabel={t('daily.fortuneBeingPrepared')}
+            loading={loading || fortuneLoading}
             disabled={loading || fortuneLoading}
-          >
-            {(loading || fortuneLoading) ? (
-              <>
-                <Ionicons name="hourglass" size={24} color="#FFFFFF" />
-                                <Text style={styles.submitButtonText}>{t('daily.fortuneBeingPrepared')}</Text>
-                </>
-              ) : (
-                <>
-                  <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-                  <Text style={styles.submitButtonText}>{t('daily.getDailyZodiac')}</Text>
-                </>
-              )}
-          </TouchableOpacity>
+            onPress={handleDailyFortune}
+            style={styles.submitButton}
+          />
         </ScrollView>
       </LinearGradient>
       
@@ -528,17 +520,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   dateCard: {
-    backgroundColor: '#1B1B2F',
-    padding: 24,
-    borderRadius: 0,
-    marginHorizontal: 0,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
+    marginHorizontal: 18,
     marginBottom: 24,
-    elevation: Platform.OS === 'android' ? 4 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   cardTitle: {
     fontSize: 20,
@@ -547,19 +535,15 @@ const styles = StyleSheet.create({
     ...fontStyles.headingBold,
   },
   dateButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 16,
-    padding: 20,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 18,
+    minHeight: 56,
+    paddingHorizontal: 18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     borderWidth: 1,
-    borderColor: 'rgba(197, 161, 0, 0.2)',
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 2 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.1 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    elevation: Platform.OS === 'android' ? 3 : 0,
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   dateButtonText: {
     fontSize: 18,
@@ -611,31 +595,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     ...fontStyles.body,
-  },
-  submitButton: {
-    backgroundColor: '#C5A100',
-    borderRadius: 20,
-    paddingVertical: 20,
-    paddingHorizontal: 32,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 16,
-    marginHorizontal: 0,
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 12 : 0,
-    elevation: Platform.OS === 'android' ? 8 : 0,
-    width: '100%',
-  },
-  submitButtonDisabled: {
-    backgroundColor: '#666666',
-  },
-  submitButtonText: {
-    fontSize: 20,
-    color: '#FFFFFF',
-    ...fontStyles.bodyBold,
   },
   tokenInfoContainer: {
     marginTop: 16,
@@ -711,6 +670,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#C5A100',
     ...fontStyles.bodyBold,
+  },
+  submitButton: {
+    marginHorizontal: 18,
+    marginBottom: 32,
   },
   pickerContainer: {
     backgroundColor: '#0D0B1F',

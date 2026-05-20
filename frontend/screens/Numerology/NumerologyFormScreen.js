@@ -32,6 +32,7 @@ import { useAuth } from '../../context/AuthContext';
 import { preloadInterstitialAd, showInterstitialAd } from '../../utils/interstitialAd';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 export default function NumerologyFormScreen({ navigation }) {
   const { t } = useTranslation();
@@ -301,12 +302,12 @@ export default function NumerologyFormScreen({ navigation }) {
                   </View>
                 )}
 
-                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} disabled={loading || fortuneLoading}>
-                  <LinearGradient colors={['#C5A100', '#E9C15F']} style={styles.submitGradient}>
-                    <Ionicons name="sparkles" size={18} color="#0D0B1F" />
-                    <Text style={styles.submitText}>{t('numerology.getReading')}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+                <FortunePrimaryButton
+                  label={t('numerology.getReading')}
+                  onPress={handleSubmit}
+                  disabled={loading || fortuneLoading}
+                  loading={loading || fortuneLoading}
+                />
               </View>
             </ScrollView>
           </TouchableWithoutFeedback>
@@ -462,18 +463,18 @@ const styles = StyleSheet.create({
   },
   formCard: {
     backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 22,
-    padding: 18,
+    borderRadius: 24,
+    padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.06)',
+    borderColor: 'rgba(197,161,0,0.10)',
     marginBottom: 18,
   },
   profileCard: {
-    backgroundColor: 'rgba(197,161,0,0.10)',
-    borderRadius: 22,
-    padding: 18,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 24,
+    padding: 20,
     borderWidth: 1,
-    borderColor: 'rgba(197,161,0,0.14)',
+    borderColor: 'rgba(197,161,0,0.10)',
     marginBottom: 18,
   },
   cardTitle: {
@@ -489,24 +490,24 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    height: 52,
-    borderRadius: 16,
+    height: 56,
+    borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.05)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     color: '#FFFFFF',
     marginBottom: 16,
   },
   dateButton: {
-    height: 52,
-    borderRadius: 16,
+    height: 56,
+    borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.05)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.08)',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
   },
   dateText: {
     color: '#FFFFFF',
@@ -525,23 +526,6 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.74)',
     fontSize: 14,
     lineHeight: 22,
-  },
-  submitButton: {
-    borderRadius: 18,
-    overflow: 'hidden',
-  },
-  submitGradient: {
-    height: 58,
-    borderRadius: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  submitText: {
-    color: '#0D0B1F',
-    fontSize: 16,
-    fontWeight: '800',
-    marginLeft: 10,
   },
   modalOverlay: {
     flex: 1,

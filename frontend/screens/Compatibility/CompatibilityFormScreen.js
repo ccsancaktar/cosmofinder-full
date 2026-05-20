@@ -30,6 +30,7 @@ import { usePremium } from '../../context/PremiumContext';
 import { TOKEN_COSTS, useToken } from '../../context/TokenContext';
 import { preloadInterstitialAd, showInterstitialAd } from '../../utils/interstitialAd';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const RELATIONSHIP_OPTIONS = ['ask', 'arkadaslik', 'genel'];
 
@@ -262,12 +263,13 @@ export default function CompatibilityFormScreen({ navigation }) {
                   </View>
                 </View>
 
-                <TouchableOpacity style={styles.submitButton} onPress={handleSubmit} disabled={loading || fortuneLoading}>
-                  <LinearGradient colors={['#C5A100', '#E9C15F']} style={styles.submitGradient}>
-                    <Ionicons name="heart-half" size={18} color="#0D0B1F" />
-                    <Text style={styles.submitText}>{t('compatibility.getReading')}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+                <FortunePrimaryButton
+                  label={t('compatibility.getReading')}
+                  icon="heart-half"
+                  onPress={handleSubmit}
+                  disabled={loading || fortuneLoading}
+                  loading={loading || fortuneLoading}
+                />
               </View>
             </ScrollView>
           </TouchableWithoutFeedback>
@@ -349,25 +351,22 @@ const styles = StyleSheet.create({
   title: { fontSize: 34, fontWeight: '700', color: '#FFFFFF', textAlign: 'center', marginBottom: 10 },
   subtitle: { color: 'rgba(255,255,255,0.82)', fontSize: 16, lineHeight: 24, textAlign: 'center', maxWidth: 300 },
   content: { paddingHorizontal: 18, paddingTop: 18 },
-  formCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 22, padding: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', marginBottom: 16 },
+  formCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 20, borderWidth: 1, borderColor: 'rgba(197,161,0,0.10)', marginBottom: 16 },
   cardHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
   cardTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '700', marginBottom: 12 },
   profileUseButton: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 999, backgroundColor: 'rgba(197,161,0,0.10)' },
   profileUseText: { color: '#C5A100', fontSize: 12, fontWeight: '700', marginLeft: 6 },
   label: { color: '#FFFFFF', fontSize: 14, fontWeight: '600', marginBottom: 8 },
-  input: { height: 52, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', paddingHorizontal: 16, color: '#FFFFFF', marginBottom: 16 },
-  dateButton: { height: 52, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16 },
+  input: { height: 56, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', paddingHorizontal: 18, color: '#FFFFFF', marginBottom: 16 },
+  dateButton: { height: 56, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 18 },
   dateText: { color: '#FFFFFF', marginLeft: 10, fontSize: 15 },
   datePlaceholder: { color: 'rgba(255,255,255,0.34)' },
-  segmentCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 22, padding: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)', marginBottom: 18 },
-  segmentWrap: { flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 16, padding: 4 },
-  segmentButton: { flex: 1, minHeight: 44, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
+  segmentCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 20, borderWidth: 1, borderColor: 'rgba(197,161,0,0.10)', marginBottom: 18 },
+  segmentWrap: { flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.035)', borderRadius: 18, padding: 5 },
+  segmentButton: { flex: 1, minHeight: 52, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
   segmentButtonActive: { backgroundColor: '#C5A100' },
   segmentText: { color: '#FFFFFF', fontSize: 13, fontWeight: '700' },
   segmentTextActive: { color: '#0D0B1F' },
-  submitButton: { borderRadius: 18, overflow: 'hidden' },
-  submitGradient: { height: 58, borderRadius: 18, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' },
-  submitText: { color: '#0D0B1F', fontSize: 16, fontWeight: '800', marginLeft: 10 },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.45)', justifyContent: 'center', paddingHorizontal: 18 },
   modalBackdrop: { ...StyleSheet.absoluteFillObject },
   modalContent: { backgroundColor: '#1B1B2F', borderRadius: 20, paddingTop: 12, paddingBottom: Platform.OS === 'ios' ? 10 : 0, borderWidth: 1, borderColor: 'rgba(197,161,0,0.14)' },

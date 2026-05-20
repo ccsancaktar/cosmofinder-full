@@ -22,6 +22,7 @@ import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const ChineseFormScreen = React.memo(({ navigation }) => {
   const { t } = useTranslation();
@@ -312,23 +313,14 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
               ) : null}
 
               {/* Submit Button */}
-              <TouchableOpacity
-                style={[styles.submitButton, (loading || fortuneLoading) && styles.submitButtonDisabled]}
-                onPress={handleSubmit}
+              <FortunePrimaryButton
+                label={t('chinese.sendMyFortune')}
+                loadingLabel={t('chinese.fortuneBeingInterpreted')}
+                loading={loading || fortuneLoading}
                 disabled={loading || fortuneLoading}
-              >
-                {(loading || fortuneLoading) ? (
-                  <>
-                    <Ionicons name="hourglass" size={24} color="#FFFFFF" />
-                    <Text style={styles.submitButtonText}>{t('chinese.fortuneBeingInterpreted')}</Text>
-                  </>
-                ) : (
-                  <>
-                    <Ionicons name="sparkles" size={24} color="#FFFFFF" />
-                    <Text style={styles.submitButtonText}>{t('chinese.sendMyFortune')}</Text>
-                  </>
-                )}
-              </TouchableOpacity>
+                onPress={handleSubmit}
+                style={styles.submitButton}
+              />
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -560,17 +552,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   dateCard: {
-    backgroundColor: '#1B1B2F',
-    padding: 24,
-    borderRadius: 0,
-    marginHorizontal: 0,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
+    marginHorizontal: 18,
     marginBottom: 24,
-    elevation: Platform.OS === 'android' ? 4 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   cardTitle: {
     fontSize: 20,
@@ -593,27 +581,24 @@ const styles = StyleSheet.create({
     ...fontStyles.bodyBold,
   },
   dateInput: {
-    backgroundColor: '#2A2A3F',
-    borderRadius: 16,
-    padding: 16,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 18,
+    minHeight: 56,
+    paddingHorizontal: 18,
     fontSize: 16,
     color: '#fff',
     textAlign: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    borderColor: 'rgba(255,255,255,0.08)',
   },
   timeCard: {
-    backgroundColor: '#1B1B2F',
-    padding: 24,
-    borderRadius: 0,
-    marginHorizontal: 0,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
+    marginHorizontal: 18,
     marginBottom: 24,
-    elevation: Platform.OS === 'android' ? 4 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   tipsCard: {
     backgroundColor: '#1B1B2F',
@@ -651,32 +636,6 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     lineHeight: 24,
     ...fontStyles.body,
-  },
-  submitButton: {
-    backgroundColor: '#8A4FFF',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginHorizontal: 0,
-    marginBottom: 32,
-    elevation: Platform.OS === 'android' ? 8 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#8A4FFF' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.4 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 12 : 0,
-    width: '100%',
-  },
-  submitButtonDisabled: {
-    opacity: 0.6,
-    backgroundColor: '#666',
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 20,
-    marginLeft: 12,
-    ...fontStyles.bodyBold,
   },
   tokenInfoContainer: {
     marginTop: 16,
@@ -752,6 +711,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#C5A100',
     ...fontStyles.bodyBold,
+  },
+  submitButton: {
+    marginHorizontal: 18,
+    marginBottom: 32,
   },
   pickerContainer: {
     backgroundColor: '#0D0B1F',

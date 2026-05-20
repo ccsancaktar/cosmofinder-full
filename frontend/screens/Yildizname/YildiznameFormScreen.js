@@ -376,6 +376,7 @@ const YildiznameFormScreen = React.memo(({ navigation }) => {
                 loading={loading || fortuneLoading}
                 disabled={loading || fortuneLoading}
                 onPress={handleSubmit}
+                style={styles.submitButton}
               />
             </ScrollView>
           </TouchableWithoutFeedback>
@@ -745,7 +746,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginHorizontal: 0,
+    marginHorizontal: 18,
     marginBottom: 32,
     elevation: Platform.OS === 'android' ? 8 : 0,
     shadowColor: Platform.OS === 'ios' ? '#8A4FFF' : 'transparent',

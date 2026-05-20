@@ -15,6 +15,7 @@ import { useNotification } from '../../context/NotificationContext';
 import { usePremium } from '../../context/PremiumContext';
 import { TOKEN_COSTS, useToken } from '../../context/TokenContext';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const DAILY_NUMBER_SEQUENCE = ['111', '222', '333', '444', '555', '777', '888', '999', '1111'];
 
@@ -151,12 +152,12 @@ export default function AngelNumbersFormScreen({ navigation }) {
                   />
                 </View>
 
-                <TouchableOpacity style={styles.submitButton} onPress={() => handleSubmit()} disabled={loading || fortuneLoading}>
-                  <LinearGradient colors={['#C5A100', '#E9C15F']} style={styles.submitGradient}>
-                    <Ionicons name="sparkles" size={18} color="#0D0B1F" />
-                    <Text style={styles.submitText}>{t('angelNumbers.getReading')}</Text>
-                  </LinearGradient>
-                </TouchableOpacity>
+                <FortunePrimaryButton
+                  label={t('angelNumbers.getReading')}
+                  onPress={() => handleSubmit()}
+                  disabled={loading || fortuneLoading}
+                  loading={loading || fortuneLoading}
+                />
               </View>
             </ScrollView>
           </TouchableWithoutFeedback>
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
   title: { fontSize: 34, fontWeight: '700', color: '#FFFFFF', textAlign: 'center', marginBottom: 10 },
   subtitle: { color: 'rgba(255,255,255,0.82)', fontSize: 16, lineHeight: 24, textAlign: 'center', maxWidth: 300 },
   content: { paddingHorizontal: 18, paddingTop: 12 },
-  dailySignalCard: { backgroundColor: 'rgba(245,215,123,0.10)', borderRadius: 22, paddingHorizontal: 18, paddingVertical: 16, borderWidth: 1, borderColor: 'rgba(245,215,123,0.14)', marginBottom: 14, alignItems: 'center' },
+  dailySignalCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, paddingHorizontal: 20, paddingVertical: 18, borderWidth: 1, borderColor: 'rgba(197,161,0,0.10)', marginBottom: 16, alignItems: 'center' },
   dailySignalBadge: { alignSelf: 'center', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999, backgroundColor: 'rgba(255,255,255,0.08)', marginBottom: 12 },
   dailySignalBadgeText: { color: '#F5D77B', fontSize: 11, fontWeight: '700', letterSpacing: 0.5 },
   dailySignalNumber: { color: '#FFFFFF', fontSize: 30, fontWeight: '800', letterSpacing: 4, marginBottom: 4 },
@@ -220,12 +221,9 @@ const styles = StyleSheet.create({
   dailySignalBody: { color: 'rgba(255,255,255,0.70)', lineHeight: 20, textAlign: 'center', marginBottom: 14 },
   dailySignalAction: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F5D77B', borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8 },
   dailySignalActionText: { color: '#0D0B1F', fontSize: 13, fontWeight: '800', marginRight: 6 },
-  formCard: { backgroundColor: 'rgba(255,255,255,0.04)', borderRadius: 22, padding: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)', marginBottom: 16 },
+  formCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 20, borderWidth: 1, borderColor: 'rgba(197,161,0,0.10)', marginBottom: 16 },
   cardTitle: { color: '#FFFFFF', fontSize: 17, fontWeight: '700', marginBottom: 8 },
   helperText: { color: 'rgba(255,255,255,0.62)', lineHeight: 20, marginBottom: 12 },
-  input: { height: 54, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.04)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)', paddingHorizontal: 16, color: '#FFFFFF', fontSize: 20, fontWeight: '700', letterSpacing: 2, textAlign: 'center' },
-  submitButton: { borderRadius: 18, overflow: 'hidden' },
-  submitGradient: { height: 56, borderRadius: 18, alignItems: 'center', justifyContent: 'center', flexDirection: 'row' },
-  submitText: { color: '#0D0B1F', fontSize: 16, fontWeight: '800', marginLeft: 10 },
+  input: { height: 56, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', paddingHorizontal: 18, color: '#FFFFFF', fontSize: 20, fontWeight: '700', letterSpacing: 2, textAlign: 'center' },
   bannerAdContainer: { position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#0D0B1F' },
 });

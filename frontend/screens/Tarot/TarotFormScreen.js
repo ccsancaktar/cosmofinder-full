@@ -11,6 +11,7 @@ import FortuneInfoSheet from '../../components/FortuneInfoSheet';
 import AdMobBanner from '../../components/AdMobBanner';
 import useKeyboardVisibility from '../../hooks/useKeyboardVisibility';
 import { fontStyles } from '../../utils/fontStyles';
+import FortunePrimaryButton from '../../components/FortunePrimaryButton';
 
 const TarotFormScreen = React.memo(() => {
   const { t } = useTranslation();
@@ -115,13 +116,11 @@ const TarotFormScreen = React.memo(() => {
                 </View>
               </View>
 
-              <TouchableOpacity
-                style={styles.primaryButton}
+              <FortunePrimaryButton
+                label={t('tarot.continueToCardSelection')}
                 onPress={() => navigation.navigate('TarotSelection', { niyet: hasPremium ? niyet.trim() : '' })}
-              >
-                <Ionicons name="sparkles" size={22} color="#FFFFFF" />
-                <Text style={styles.primaryButtonText}>{t('tarot.continueToCardSelection')}</Text>
-              </TouchableOpacity>
+                style={styles.submitButton}
+              />
 
               {hasPremium ? (
                 <TouchableOpacity
@@ -373,14 +372,14 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   textInput: {
-    backgroundColor: 'rgba(255,255,255,0.08)',
+    backgroundColor: 'rgba(255,255,255,0.05)',
     borderRadius: 18,
     padding: 18,
     fontSize: 16,
     color: '#FFFFFF',
     minHeight: 110,
     borderWidth: 1,
-    borderColor: 'rgba(197, 161, 0, 0.18)',
+    borderColor: 'rgba(255,255,255,0.08)',
     ...fontStyles.body,
   },
   charCount: {
@@ -424,24 +423,9 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     ...fontStyles.body,
   },
-  primaryButton: {
-    backgroundColor: '#8A4FFF',
-    borderRadius: 18,
-    paddingVertical: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    shadowColor: '#8A4FFF',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.28,
-    shadowRadius: 18,
-    elevation: 6,
-  },
-  primaryButtonText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    marginLeft: 10,
-    ...fontStyles.bodyBold,
+  submitButton: {
+    marginHorizontal: 18,
+    marginBottom: 32,
   },
   secondaryButton: {
     alignItems: 'center',

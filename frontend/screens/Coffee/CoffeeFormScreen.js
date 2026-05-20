@@ -372,6 +372,7 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
               loading={loading || fortuneLoading}
               disabled={!images.every(img => img.base64) || loading || fortuneLoading}
               onPress={handleSubmit}
+              style={styles.submitButton}
             />
           </ScrollView>
         </LinearGradient>
@@ -663,14 +664,8 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   submitButton: {
-    backgroundColor: '#8A4FFF',
-    padding: 20,
-    borderRadius: 20,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    marginHorizontal: 18,
     marginBottom: 32,
-    width: '100%',
   },
   submitButtonDisabled: {
     opacity: 0.6,
