@@ -121,7 +121,7 @@
     "selectPackage": "Please select a package",
     "tokenPackages": "Token Packages",
     "tokenInfo": "You can use your tokens to get fortunes. Go premium for unlimited fortunes.",
-    "buyWithPrice": "Buy for {price}",
+    "buyWithPrice": "Buy for {{price}}",
     "goPremium": "Go Premium",
     "unlimitedFortunes": "Get unlimited fortunes, ad-free experience",
     "discoverPremium": "Discover Premium",

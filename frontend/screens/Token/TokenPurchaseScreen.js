@@ -27,8 +27,7 @@ export default function TokenPurchaseScreen({ navigation }) {
   const { loading, fetchBalance } = useToken();
   const { hasPremium } = usePremium();
   const [packages, setPackages] = useState([]);
-  const [selectedPackage, setSelectedPackage] = useState(null);
-  const [purchaseLoading, setPurchaseLoading] = useState(false);
+  const [loadingProductId, setLoadingProductId] = useState(null);
 
   useEffect(() => {
     loadPackages();
@@ -93,22 +92,17 @@ export default function TokenPurchaseScreen({ navigation }) {
     }
   };
 
-  const handlePurchase = async () => {
-    if (!selectedPackage) {
-      showError(t('common.selectPackage'));
-      return;
-    }
-
-    if (!selectedPackage.storeProduct) {
+  const handlePurchase = async (pkg) => {
+    if (!pkg?.storeProduct) {
       showError('Store ürünü yüklenemedi. RevenueCat anahtarlarını kontrol et.');
       return;
     }
 
     try {
-      setPurchaseLoading(true);
-      await purchasesService.purchaseProduct(selectedPackage.storeProduct);
+      setLoadingProductId(pkg.productId);
+      await purchasesService.purchaseProduct(pkg.storeProduct);
       const claimResult = await PaymentAPI.syncMobileTokenPurchase(
-        selectedPackage.productId
+        pkg.productId
       );
 
       if ((claimResult?.claimed_count || 0) === 0) {
@@ -122,7 +116,7 @@ export default function TokenPurchaseScreen({ navigation }) {
         showError(error?.message || 'Satın alma tamamlanamadı');
       }
     } finally {
-      setPurchaseLoading(false);
+      setLoadingProductId(null);
     }
   };
 
@@ -189,23 +183,19 @@ export default function TokenPurchaseScreen({ navigation }) {
             
             {visiblePackages.map((pkg, index) => {
               const meta = getPackageMeta(pkg, index);
-              const isSelected = selectedPackage?.id === pkg.id;
               const isAvailable = Boolean(pkg.storeProduct && pkg.localizedPrice);
+              const isLoading = loadingProductId === pkg.productId;
 
               return (
-              <TouchableOpacity
+              <View
                 key={pkg.id}
                 style={[
                   styles.packageCard,
-                  isSelected && styles.selectedPackage,
                   !isAvailable && styles.packageCardDisabled,
                 ]}
-                onPress={() => isAvailable && setSelectedPackage(pkg)}
-                activeOpacity={isAvailable ? 0.9 : 1}
-                disabled={!isAvailable}
               >
                 <LinearGradient
-                  colors={isSelected ? ['#F5D06A', '#D89E1C'] : ['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.02)']}
+                  colors={['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.02)']}
                   style={styles.packageCardInner}
                 >
                   <View style={styles.packageTopRow}>
@@ -217,7 +207,7 @@ export default function TokenPurchaseScreen({ navigation }) {
                       </View>
                     </View>
                     {meta.badge && (
-                      <View style={[styles.packageBadge, isSelected && styles.packageBadgeSelected]}>
+                      <View style={styles.packageBadge}>
                         <Text style={styles.packageBadgeText}>{meta.badge}</Text>
                       </View>
                     )}
@@ -225,20 +215,20 @@ export default function TokenPurchaseScreen({ navigation }) {
 
                   <View style={styles.packageStatsRow}>
                     <View style={styles.statPill}>
-                      <Text style={[styles.statValue, isSelected && styles.statValueSelected]}>{meta.tokenAmount}</Text>
-                      <Text style={[styles.statLabel, isSelected && styles.statLabelSelected]}>token</Text>
+                      <Text style={styles.statValue}>{meta.tokenAmount}</Text>
+                      <Text style={styles.statLabel}>token</Text>
                     </View>
                     <View style={styles.statPill}>
-                      <Text style={[styles.statValue, isSelected && styles.statValueSelected]}>~{meta.estimatedReadings}</Text>
-                      <Text style={[styles.statLabel, isSelected && styles.statLabelSelected]}>fal</Text>
+                      <Text style={styles.statValue}>~{meta.estimatedReadings}</Text>
+                      <Text style={styles.statLabel}>fal</Text>
                     </View>
                   </View>
 
                   <View style={styles.packageBottomRow}>
                     <View>
-                      <Text style={[styles.packagePriceCaption, isSelected && styles.packagePriceCaptionSelected]}>App Store fiyatı</Text>
+                      <Text style={styles.packagePriceCaption}>App Store fiyatı</Text>
                       {pkg.localizedPrice ? (
-                        <Text style={[styles.packagePrice, isSelected && styles.packagePriceSelected]}>
+                        <Text style={styles.packagePrice}>
                           {pkg.localizedPrice}
                         </Text>
                       ) : (
@@ -249,45 +239,28 @@ export default function TokenPurchaseScreen({ navigation }) {
                         </View>
                       )}
                     </View>
-                    <View style={[
-                      styles.selectPill,
-                      isSelected && styles.selectPillSelected,
-                      !isAvailable && styles.selectPillDisabled,
-                    ]}>
-                      <Text style={[styles.selectPillText, isSelected && styles.selectPillTextSelected]}>
-                        {!isAvailable ? 'Hazırlanıyor' : isSelected ? 'Seçildi' : 'Paketi Seç'}
-                      </Text>
-                    </View>
+                    <TouchableOpacity
+                      style={[
+                        styles.selectPill,
+                        !isAvailable && styles.selectPillDisabled,
+                        isLoading && styles.selectPillLoading,
+                      ]}
+                      onPress={() => handlePurchase(pkg)}
+                      disabled={!isAvailable || Boolean(loadingProductId)}
+                    >
+                      {isLoading ? (
+                        <ActivityIndicator size="small" color="#0D0B1F" />
+                      ) : (
+                        <Text style={styles.selectPillText}>
+                          {!isAvailable ? 'Hazırlanıyor' : 'Satın Al'}
+                        </Text>
+                      )}
+                    </TouchableOpacity>
                   </View>
                 </LinearGradient>
-              </TouchableOpacity>
+              </View>
             )})}
           </View>
-        )}
-
-        {/* Purchase Button */}
-        {!hasPremium && selectedPackage && (
-          <TouchableOpacity
-            style={styles.purchaseButton}
-            onPress={handlePurchase}
-            disabled={purchaseLoading}
-          >
-            <LinearGradient
-              colors={['#4CAF50', '#45a049']}
-              style={styles.purchaseButtonGradient}
-            >
-              {purchaseLoading ? (
-                <ActivityIndicator size="small" color="#FFFFFF" />
-              ) : (
-                <>
-                  <Ionicons name="card" size={20} color="#FFFFFF" />
-                  <Text style={styles.purchaseButtonText}>
-                    {t('common.buyWithPrice', { price: selectedPackage.localizedPrice })}
-                  </Text>
-                </>
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
         )}
 
         {/* Premium Promotion */}
@@ -430,9 +403,6 @@ const styles = StyleSheet.create({
   packageCardDisabled: {
     opacity: 0.58,
   },
-  selectedPackage: {
-    borderColor: '#F5D06A',
-  },
   packageCardInner: {
     padding: 18,
   },
@@ -471,10 +441,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(121, 209, 99, 0.35)',
   },
-  packageBadgeSelected: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderColor: 'rgba(255,255,255,0.24)',
-  },
   packageBadgeText: {
     fontSize: 12,
     fontWeight: '700',
@@ -501,17 +467,11 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textAlign: 'center',
   },
-  statValueSelected: {
-    color: '#0D0B1F',
-  },
   statLabel: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.72)',
     textAlign: 'center',
     marginTop: 4,
-  },
-  statLabelSelected: {
-    color: 'rgba(13,11,31,0.72)',
   },
   packagePrice: {
     fontSize: 30,
@@ -543,16 +503,10 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.50)',
     letterSpacing: 0.2,
   },
-  packagePriceSelected: {
-    color: '#0D0B1F',
-  },
   packagePriceCaption: {
     fontSize: 12,
     color: 'rgba(255,255,255,0.65)',
     marginBottom: 4,
-  },
-  packagePriceCaptionSelected: {
-    color: 'rgba(13,11,31,0.68)',
   },
   packageBottomRow: {
     flexDirection: 'row',
@@ -564,40 +518,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 16,
-    backgroundColor: 'rgba(245, 208, 106, 0.10)',
+    backgroundColor: '#F5D06A',
     borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.24)',
-  },
-  selectPillSelected: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#FFFFFF',
+    borderColor: '#F5D06A',
+    minWidth: 116,
+    alignItems: 'center',
   },
   selectPillDisabled: {
     backgroundColor: 'rgba(255,255,255,0.04)',
     borderColor: 'rgba(255,255,255,0.10)',
   },
+  selectPillLoading: {
+    backgroundColor: '#E7C04F',
+    borderColor: '#E7C04F',
+  },
   selectPillText: {
-    color: '#F5D06A',
+    color: '#0D0B1F',
     fontWeight: '700',
     fontSize: 14,
-  },
-  selectPillTextSelected: {
-    color: '#0D0B1F',
-  },
-  purchaseButton: {
-    marginHorizontal: 20,
-    marginBottom: 20,
-    borderRadius: 12,
-    overflow: 'hidden',
-  },
-  purchaseButtonDisabled: {
-    opacity: 0.6,
-  },
-  purchaseButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 8,
   },
   premiumCard: {
     marginHorizontal: 20,
@@ -658,12 +596,4 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     flex: 1,
   },
-  purchaseButtonGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 0,
-    padding: 14,
-    elevation: Platform.OS === 'android' ? 4 : 0,
-  },
-}); 
+});

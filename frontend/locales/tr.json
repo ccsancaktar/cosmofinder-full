@@ -121,7 +121,7 @@
   "selectPackage": "Lütfen bir paket seçin",
   "tokenPackages": "Token Paketleri",
   "tokenInfo": "Token'larınızı fal çekmek için kullanabilirsiniz. Premium üyeliğe geçerek sınırsız fal çekebilirsiniz.",
-  "buyWithPrice": "{price} ile Satın Al",
+  "buyWithPrice": "{{price}} ile Satın Al",
   "goPremium": "Premium'a Geç",
   "unlimitedFortunes": "Sınırsız fal çekin, reklamsız deneyim yaşayın",
   "discoverPremium": "Premium'ı Keşfet",

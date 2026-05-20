@@ -26,7 +26,6 @@ export default function PremiumScreen({ navigation }) {
   const { showError, showSuccess } = useNotification();
   const { hasPremium, daysRemaining, loading, fetchStatus, updateStatus } = usePremium();
   const [plans, setPlans] = useState([]);
-  const [selectedPlan, setSelectedPlan] = useState(null);
   const [loadingPlanId, setLoadingPlanId] = useState(null);
   const [storeReady, setStoreReady] = useState(true);
 
@@ -61,14 +60,12 @@ export default function PremiumScreen({ navigation }) {
               ? [
                   'Sınırsız fal çekme',
                   'Reklamsız deneyim',
-                  'Tüm fal türleri',
-                  'Detaylı yorumlar',
+                  'Tüm premium özellikler',
                 ]
               : [
-                  'Sınırsız fal çekme',
+                  '6 ay kesintisiz kullanım',
                   'Reklamsız deneyim',
-                  'Tüm fal türleri',
-                  'Uzun dönem avantajlı kullanım',
+                  'Toplamda daha avantajlı fiyat',
                 ],
           };
         })
@@ -77,12 +74,6 @@ export default function PremiumScreen({ navigation }) {
 
       setStoreReady(normalized.length > 0);
       setPlans(normalized);
-      setSelectedPlan((current) => {
-        if (current) {
-          return normalized.find((plan) => plan.id === current.id) || normalized[0] || null;
-        }
-        return normalized[0] || null;
-      });
     } catch (error) {
       setStoreReady(false);
       console.warn('Premium offerings could not be loaded:', error?.message || error);
@@ -132,12 +123,13 @@ export default function PremiumScreen({ navigation }) {
 
     return {
       isYearly,
-      accentColors: isYearly ? ['#F5D06A', '#C59A17'] : ['#E9C15F', '#A77B12'],
-      badgeText: isYearly ? 'Daha Avantajlı' : 'En Popüler',
-      eyebrow: isYearly ? 'Uzun dönem kullanım için daha düşük maliyet' : 'Hızlı başlamak için en sade seçenek',
+      badgeText: isYearly ? 'Daha Avantajlı' : 'Aylık Plan',
+      eyebrow: isYearly ? 'Uzun dönem kullanım için daha düşük maliyet' : 'En hızlı başlangıç',
       description: isYearly
-        ? '6 ay boyunca sınırsız fal kullan, aylık plana göre daha avantajlı kal.'
-        : 'Sınırsız fal, reklamsız deneyim ve tüm premium özelliklere hemen eriş.',
+        ? 'Tek seferde 6 ayı sabitle, daha az düşün ve daha avantajlı kal.'
+        : 'Premium özelliklere hemen geç, aylık olarak esnek şekilde devam et.',
+      accentBorder: isYearly ? 'rgba(245, 208, 106, 0.34)' : 'rgba(197, 161, 0, 0.16)',
+      ctaLabel: isYearly ? '6 Aylık Planı Al' : 'Aylık Planı Al',
     };
   };
 
@@ -196,27 +188,24 @@ export default function PremiumScreen({ navigation }) {
               <Text style={styles.heroEyebrow}>PREMIUM DENEYİM</Text>
               <Text style={styles.heroTitle}>{t('premium.choosePlan')}</Text>
               <Text style={styles.heroDescription}>
-            Premium üyelikte fiyatı doğrudan App Store belirler. Reklamsız deneyime geç, tüm fal türlerine sınırsız eriş ve yorumları daha akıcı şekilde oku.
+            App Store fiyatı ile premiuma geç, reklamsız kullan ve tüm fal türlerini limitsiz aç.
               </Text>
             </View>
 
             <View style={styles.planList}>
               {visiblePlans.length > 0 ? visiblePlans.map((plan) => {
                 const meta = getPlanMeta(plan);
-                const isSelected = selectedPlan?.id === plan.id;
 
                 return (
-                <TouchableOpacity
+                <View
                   key={plan.id}
                   style={[
                     styles.planCard,
-                    isSelected && styles.selectedPlan
+                    { borderColor: meta.accentBorder }
                   ]}
-                  onPress={() => setSelectedPlan(plan)}
-                  activeOpacity={0.9}
                 >
                   <LinearGradient
-                    colors={isSelected ? meta.accentColors : ['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.02)']}
+                    colors={['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.02)']}
                     style={styles.planCardGlow}
                   >
                     <View style={styles.planTopRow}>
@@ -226,13 +215,13 @@ export default function PremiumScreen({ navigation }) {
                           <Ionicons
                             name={meta.isYearly ? 'sparkles' : 'star'}
                             size={18}
-                            color={isSelected ? '#FFFFFF' : '#F5D06A'}
+                            color="#F5D06A"
                           />
                           <Text style={styles.planName}>{plan.name}</Text>
                         </View>
                         <Text style={styles.planDescription}>{meta.description}</Text>
                       </View>
-                      <View style={[styles.discountBadge, isSelected && styles.discountBadgeSelected]}>
+                      <View style={styles.discountBadge}>
                         <Text style={styles.discountText}>{meta.badgeText}</Text>
                       </View>
                     </View>
@@ -246,13 +235,13 @@ export default function PremiumScreen({ navigation }) {
                     </View>
 
                     <View style={styles.planFeatures}>
-                      {plan.features.slice(0, 4).map((feature, idx) => (
+                      {plan.features.slice(0, 3).map((feature, idx) => (
                         <View key={idx} style={styles.featureItem}>
                           <View style={styles.featureIconWrap}>
                             <Ionicons
                               name="checkmark"
                               size={14}
-                              color={isSelected ? '#0D0B1F' : '#F5D06A'}
+                              color="#F5D06A"
                             />
                           </View>
                           <Text style={styles.featureText}>{feature}</Text>
@@ -261,27 +250,21 @@ export default function PremiumScreen({ navigation }) {
                     </View>
 
                     <TouchableOpacity
-                      style={[
-                        styles.planSubscribeButton,
-                        isSelected && styles.planSubscribeButtonSelected
-                      ]}
+                      style={styles.planSubscribeButton}
                       onPress={() => handleSubscribe(plan)}
                       disabled={loadingPlanId !== null}
                     >
-                      <Text style={[
-                        styles.planSubscribeButtonText,
-                        isSelected && styles.planSubscribeButtonTextSelected
-                      ]}>
-                        {loadingPlanId === plan.id ? t('premium.processing') : t('premium.select')}
+                      <Text style={styles.planSubscribeButtonText}>
+                        {loadingPlanId === plan.id ? t('premium.processing') : meta.ctaLabel}
                       </Text>
                       <Ionicons
                         name="arrow-forward"
                         size={16}
-                        color={isSelected ? '#0D0B1F' : '#F5D06A'}
+                        color="#0D0B1F"
                       />
                     </TouchableOpacity>
                   </LinearGradient>
-                </TouchableOpacity>
+                </View>
               )}) : (
                 <View style={styles.emptyPlansContainer}>
                   <View style={styles.storePendingCard}>
@@ -436,11 +419,6 @@ const styles = StyleSheet.create({
   planCardGlow: {
     padding: 20,
   },
-  selectedPlan: {
-    borderColor: '#F5D06A',
-    shadowColor: Platform.OS === 'ios' ? '#C5A100' : 'transparent',
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-  },
   planTopRow: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -480,10 +458,6 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     borderWidth: 1,
     borderColor: 'rgba(121, 209, 99, 0.35)',
-  },
-  discountBadgeSelected: {
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderColor: 'rgba(255,255,255,0.25)',
   },
   discountText: {
     fontSize: 12,
@@ -543,26 +517,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(245, 208, 106, 0.10)',
+    backgroundColor: '#F5D06A',
     borderRadius: 16,
     paddingHorizontal: 16,
     paddingVertical: 14,
     borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.28)',
+    borderColor: '#F5D06A',
     elevation: Platform.OS === 'android' ? 2 : 0,
   },
   planSubscribeButtonText: {
     fontSize: 15,
     fontWeight: 'bold',
-    color: '#F5D06A',
-    fontFamily: 'CinzelDecorative-Bold',
-  },
-  planSubscribeButtonSelected: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#FFFFFF',
-  },
-  planSubscribeButtonTextSelected: {
     color: '#0D0B1F',
+    fontFamily: 'CinzelDecorative-Bold',
   },
   emptyPlansContainer: {
     flex: 1,

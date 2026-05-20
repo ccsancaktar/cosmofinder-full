@@ -121,7 +121,7 @@
     "selectPackage": "Bitte wählen Sie ein Paket",
     "tokenPackages": "Token-Pakete",
     "tokenInfo": "Sie können Ihre Token für Wahrsagungen verwenden. Werden Sie Premium für unbegrenzte Wahrsagungen.",
-    "buyWithPrice": "Für {price} kaufen",
+    "buyWithPrice": "Für {{price}} kaufen",
     "goPremium": "Premium werden",
     "unlimitedFortunes": "Unbegrenzte Wahrsagungen, werbefreie Erfahrung",
     "discoverPremium": "Premium entdecken",
