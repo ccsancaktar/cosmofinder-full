@@ -115,6 +115,7 @@
   "dailyBonusInfo": "Günlük bonus: Her gün 3 token",
   "dailyBonusError": "Günlük bonus alınamadı",
   "claiming": "Alınıyor...",
+  "ready": "Hazır",
   "packagesLoading": "Paketler yükleniyor...",
   "packagesLoaded": "Paketler yüklendi",
   "packagesLoadError": "Paketler yüklenemedi",

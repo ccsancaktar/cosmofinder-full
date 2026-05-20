@@ -115,6 +115,7 @@
     "dailyBonusInfo": "Täglicher Bonus: 3 Token jeden Tag",
     "dailyBonusError": "Täglicher Bonus konnte nicht beansprucht werden",
     "claiming": "Wird beansprucht...",
+    "ready": "Bereit",
     "packagesLoading": "Pakete werden geladen...",
     "packagesLoaded": "Pakete geladen",
     "packagesLoadError": "Pakete konnten nicht geladen werden",

@@ -157,13 +157,13 @@ export default function TokenBalanceScreen({ navigation }) {
       ? `${t('common.waitTime')}: ${videoCooldown}s`
       : videoLimitReached
         ? `${t('common.dailyLimitReached')} (${BONUS_AMOUNTS.DAILY_VIDEO_LIMIT}/${BONUS_AMOUNTS.DAILY_VIDEO_LIMIT})`
-        : `${t('common.watchVideo')} (+${BONUS_AMOUNTS.VIDEO} ${t('common.tokens')})`;
+        : t('common.ready');
 
   const bonusButtonLabel = bonusLoading
     ? t('common.claiming')
     : !dailyBonusStatus.canClaim
       ? `${t('common.nextBonus')}: ${formatCountdown(countdown)}`
-      : `${t('common.dailyBonus')} (+${BONUS_AMOUNTS.DAILY} ${t('common.tokens')})`;
+      : t('common.ready');
 
   if (loading) {
     return (
@@ -189,6 +189,46 @@ export default function TokenBalanceScreen({ navigation }) {
             <Text style={styles.headerTitle}>{t('common.tokenBalance')}</Text>
             <View style={styles.headerSpacer} />
           </View>
+
+          {!hasPremium ? (
+            <View style={styles.sectionCard}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>{t('common.earnTokens')}</Text>
+              </View>
+
+              <View style={styles.earnGrid}>
+                <TouchableOpacity
+                  style={[
+                    styles.earnCard,
+                    (videoLoading || videoCooldown > 0 || videoLimitReached) && styles.earnCardDisabled,
+                  ]}
+                  onPress={handleWatchVideo}
+                  disabled={videoLoading || videoCooldown > 0 || videoLimitReached}
+                >
+                  <View style={[styles.actionIconWrap, styles.videoIconWrap]}>
+                    <Ionicons name="play-circle" size={22} color="#6DDC8B" />
+                  </View>
+                  <Text style={styles.earnCardTitle}>{t('common.watchVideo')} +{BONUS_AMOUNTS.VIDEO}</Text>
+                  <Text style={styles.earnCardMeta}>{videoButtonLabel}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.earnCard,
+                    (bonusLoading || !dailyBonusStatus.canClaim) && styles.earnCardDisabled,
+                  ]}
+                  onPress={handleDailyBonus}
+                  disabled={bonusLoading || !dailyBonusStatus.canClaim}
+                >
+                  <View style={[styles.actionIconWrap, styles.bonusIconWrap]}>
+                    <Ionicons name="gift" size={22} color="#F5C04F" />
+                  </View>
+                  <Text style={styles.earnCardTitle}>{t('common.dailyBonus')} +{BONUS_AMOUNTS.DAILY}</Text>
+                  <Text style={styles.earnCardMeta}>{bonusButtonLabel}</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ) : null}
 
           <LinearGradient
             colors={hasPremium ? ['rgba(197,161,0,0.22)', 'rgba(74,74,138,0.24)'] : ['rgba(255,255,255,0.08)', 'rgba(255,255,255,0.04)']}
@@ -225,23 +265,6 @@ export default function TokenBalanceScreen({ navigation }) {
               </View>
             ) : null}
 
-            {!hasPremium ? (
-              <View style={styles.freeEarnStrip}>
-                <View style={styles.freeEarnStripItem}>
-                  <Text style={styles.freeEarnStripValue}>+{BONUS_AMOUNTS.DAILY}</Text>
-                  <Text style={styles.freeEarnStripLabel}>{t('tokens.dailyGift')}</Text>
-                </View>
-                <View style={styles.freeEarnStripItem}>
-                  <Text style={styles.freeEarnStripValue}>+{BONUS_AMOUNTS.VIDEO}</Text>
-                  <Text style={styles.freeEarnStripLabel}>{t('tokens.videoReward')}</Text>
-                </View>
-                <View style={styles.freeEarnStripItem}>
-                  <Text style={styles.freeEarnStripValue}>+{BONUS_AMOUNTS.DAILY + (BONUS_AMOUNTS.VIDEO * BONUS_AMOUNTS.DAILY_VIDEO_LIMIT)}</Text>
-                  <Text style={styles.freeEarnStripLabel}>{t('tokens.dailyMax')}</Text>
-                </View>
-              </View>
-            ) : null}
-
             <View style={styles.heroActions}>
               {!hasPremium ? (
                 <>
@@ -272,51 +295,6 @@ export default function TokenBalanceScreen({ navigation }) {
               )}
             </View>
           </LinearGradient>
-
-          {!hasPremium ? (
-            <View style={styles.sectionCard}>
-              <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>{t('common.earnTokens')}</Text>
-                <Text style={styles.sectionHint}>{t('common.dailyBonusInfo')}</Text>
-              </View>
-
-              <TouchableOpacity
-                style={[
-                  styles.actionRow,
-                  (videoLoading || videoCooldown > 0 || videoLimitReached) && styles.actionRowDisabled,
-                ]}
-                onPress={handleWatchVideo}
-                disabled={videoLoading || videoCooldown > 0 || videoLimitReached}
-              >
-                <View style={[styles.actionIconWrap, styles.videoIconWrap]}>
-                  <Ionicons name="play-circle" size={22} color="#6DDC8B" />
-                </View>
-                <View style={styles.actionCopy}>
-                  <Text style={styles.actionTitle}>{t('common.watchVideo')}</Text>
-                  <Text style={styles.actionDescription}>{videoButtonLabel}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.45)" />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.actionRow,
-                  (bonusLoading || !dailyBonusStatus.canClaim) && styles.actionRowDisabled,
-                ]}
-                onPress={handleDailyBonus}
-                disabled={bonusLoading || !dailyBonusStatus.canClaim}
-              >
-                <View style={[styles.actionIconWrap, styles.bonusIconWrap]}>
-                  <Ionicons name="gift" size={22} color="#F5C04F" />
-                </View>
-                <View style={styles.actionCopy}>
-                  <Text style={styles.actionTitle}>{t('common.dailyBonus')}</Text>
-                  <Text style={styles.actionDescription}>{bonusButtonLabel}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={18} color="rgba(255,255,255,0.45)" />
-              </TouchableOpacity>
-            </View>
-          ) : null}
 
           <View style={styles.sectionCard}>
             <Text style={styles.sectionTitle}>{t('common.tokenInfo1')}</Text>
@@ -435,30 +413,34 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 22,
   },
-  freeEarnStrip: {
+  earnGrid: {
     flexDirection: 'row',
     gap: 10,
-    marginTop: 16,
-    marginBottom: 2,
   },
-  freeEarnStripItem: {
+  earnCard: {
     flex: 1,
     backgroundColor: 'rgba(255,255,255,0.07)',
-    borderRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    alignItems: 'center',
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
   },
-  freeEarnStripValue: {
-    color: '#FFD76B',
-    fontSize: 18,
-    fontWeight: '800',
-    marginBottom: 4,
+  earnCardDisabled: {
+    opacity: 0.58,
   },
-  freeEarnStripLabel: {
-    color: 'rgba(255,255,255,0.65)',
-    fontSize: 11,
-    textAlign: 'center',
+  earnCardTitle: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontWeight: '700',
+    lineHeight: 20,
+    marginTop: 12,
+    marginBottom: 6,
+  },
+  earnCardMeta: {
+    color: 'rgba(255,255,255,0.60)',
+    fontSize: 12,
+    lineHeight: 18,
   },
   estimateRow: {
     flexDirection: 'row',
@@ -537,19 +519,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 6,
-  },
-  sectionHint: {
-    color: 'rgba(255,255,255,0.58)',
-    fontSize: 13,
-    lineHeight: 20,
-  },
-  actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 14,
-  },
-  actionRowDisabled: {
-    opacity: 0.58,
   },
   actionIconWrap: {
     width: 44,
