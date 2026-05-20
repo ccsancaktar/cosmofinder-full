@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { useToken, TOKEN_COSTS } from '../../context/TokenContext';
+import { BONUS_AMOUNTS, useToken, TOKEN_COSTS } from '../../context/TokenContext';
 import { usePremium } from '../../context/PremiumContext';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../context/NotificationContext';
@@ -156,14 +156,14 @@ export default function TokenBalanceScreen({ navigation }) {
     : videoCooldown > 0
       ? `${t('common.waitTime')}: ${videoCooldown}s`
       : videoLimitReached
-        ? `${t('common.dailyLimitReached')} (3/3)`
-        : `${t('common.watchVideo')} (5 ${t('common.tokens')})`;
+        ? `${t('common.dailyLimitReached')} (${BONUS_AMOUNTS.DAILY_VIDEO_LIMIT}/${BONUS_AMOUNTS.DAILY_VIDEO_LIMIT})`
+        : `${t('common.watchVideo')} (+${BONUS_AMOUNTS.VIDEO} ${t('common.tokens')})`;
 
   const bonusButtonLabel = bonusLoading
     ? t('common.claiming')
     : !dailyBonusStatus.canClaim
       ? `${t('common.nextBonus')}: ${formatCountdown(countdown)}`
-      : `${t('common.dailyBonus')} (3 ${t('common.tokens')})`;
+      : `${t('common.dailyBonus')} (+${BONUS_AMOUNTS.DAILY} ${t('common.tokens')})`;
 
   if (loading) {
     return (
@@ -222,6 +222,23 @@ export default function TokenBalanceScreen({ navigation }) {
                     <Text style={styles.estimateText}>{t(`fortune.${item.label}`)}</Text>
                   </View>
                 ))}
+              </View>
+            ) : null}
+
+            {!hasPremium ? (
+              <View style={styles.freeEarnStrip}>
+                <View style={styles.freeEarnStripItem}>
+                  <Text style={styles.freeEarnStripValue}>+{BONUS_AMOUNTS.DAILY}</Text>
+                  <Text style={styles.freeEarnStripLabel}>{t('tokens.dailyGift')}</Text>
+                </View>
+                <View style={styles.freeEarnStripItem}>
+                  <Text style={styles.freeEarnStripValue}>+{BONUS_AMOUNTS.VIDEO}</Text>
+                  <Text style={styles.freeEarnStripLabel}>{t('tokens.videoReward')}</Text>
+                </View>
+                <View style={styles.freeEarnStripItem}>
+                  <Text style={styles.freeEarnStripValue}>+{BONUS_AMOUNTS.DAILY + (BONUS_AMOUNTS.VIDEO * BONUS_AMOUNTS.DAILY_VIDEO_LIMIT)}</Text>
+                  <Text style={styles.freeEarnStripLabel}>{t('tokens.dailyMax')}</Text>
+                </View>
               </View>
             ) : null}
 
@@ -417,6 +434,31 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.74)',
     fontSize: 14,
     lineHeight: 22,
+  },
+  freeEarnStrip: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 16,
+    marginBottom: 2,
+  },
+  freeEarnStripItem: {
+    flex: 1,
+    backgroundColor: 'rgba(255,255,255,0.07)',
+    borderRadius: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    alignItems: 'center',
+  },
+  freeEarnStripValue: {
+    color: '#FFD76B',
+    fontSize: 18,
+    fontWeight: '800',
+    marginBottom: 4,
+  },
+  freeEarnStripLabel: {
+    color: 'rgba(255,255,255,0.65)',
+    fontSize: 11,
+    textAlign: 'center',
   },
   estimateRow: {
     flexDirection: 'row',

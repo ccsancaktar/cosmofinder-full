@@ -11,7 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { BONUS_AMOUNTS, useToken } from '../../context/TokenContext';
+import { useToken } from '../../context/TokenContext';
 import { usePremium } from '../../context/PremiumContext';
 import { useNotification } from '../../context/NotificationContext';
 import TokenIcon from '../../components/TokenIcon';
@@ -173,32 +173,6 @@ export default function TokenPurchaseScreen({ navigation }) {
                 <Text style={styles.heroMetaText}>Anında teslim</Text>
               </View>
             </View>
-          </View>
-        )}
-
-        {!hasPremium && (
-          <View style={styles.freeEarnCard}>
-            <View style={styles.freeEarnHeader}>
-              <Ionicons name="gift-outline" size={18} color="#F5D06A" />
-              <Text style={styles.freeEarnTitle}>{t('tokens.freeTokenWaysTitle')}</Text>
-            </View>
-            <View style={styles.freeEarnRow}>
-              <View style={styles.freeEarnPill}>
-                <Text style={styles.freeEarnValue}>+{BONUS_AMOUNTS.DAILY}</Text>
-                <Text style={styles.freeEarnLabel}>{t('tokens.dailyGift')}</Text>
-              </View>
-              <View style={styles.freeEarnPill}>
-                <Text style={styles.freeEarnValue}>+{BONUS_AMOUNTS.VIDEO}</Text>
-                <Text style={styles.freeEarnLabel}>{t('tokens.videoReward')}</Text>
-              </View>
-              <View style={styles.freeEarnPill}>
-                <Text style={styles.freeEarnValue}>+{BONUS_AMOUNTS.DAILY + (BONUS_AMOUNTS.VIDEO * BONUS_AMOUNTS.DAILY_VIDEO_LIMIT)}</Text>
-                <Text style={styles.freeEarnLabel}>{t('tokens.dailyMax')}</Text>
-              </View>
-            </View>
-            <Text style={styles.freeEarnHint}>
-              {t('tokens.videoLimitHint', { count: BONUS_AMOUNTS.DAILY_VIDEO_LIMIT })}
-            </Text>
           </View>
         )}
 
@@ -374,57 +348,6 @@ const styles = StyleSheet.create({
     marginLeft: 6,
     fontSize: 13,
     fontWeight: '600',
-  },
-  freeEarnCard: {
-    marginHorizontal: 20,
-    marginBottom: 18,
-    padding: 16,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.03)',
-    borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.12)',
-  },
-  freeEarnHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  freeEarnTitle: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '700',
-    marginLeft: 8,
-  },
-  freeEarnRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  freeEarnPill: {
-    flex: 1,
-    borderRadius: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    backgroundColor: 'rgba(245, 208, 106, 0.08)',
-    borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.10)',
-  },
-  freeEarnValue: {
-    color: '#F5D06A',
-    fontSize: 18,
-    fontWeight: '800',
-    textAlign: 'center',
-    marginBottom: 4,
-  },
-  freeEarnLabel: {
-    color: 'rgba(255,255,255,0.74)',
-    fontSize: 11,
-    textAlign: 'center',
-    lineHeight: 14,
-  },
-  freeEarnHint: {
-    marginTop: 10,
-    color: 'rgba(255,255,255,0.56)',
-    fontSize: 12,
   },
   loadingContainer: {
     flex: 1,
