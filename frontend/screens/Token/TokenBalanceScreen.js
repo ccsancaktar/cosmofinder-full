@@ -205,11 +205,14 @@ export default function TokenBalanceScreen({ navigation }) {
                   onPress={handleWatchVideo}
                   disabled={videoLoading || videoCooldown > 0 || videoLimitReached}
                 >
-                  <View style={[styles.actionIconWrap, styles.videoIconWrap]}>
-                    <Ionicons name="play-circle" size={22} color="#6DDC8B" />
+                  <View style={styles.earnCardTopRow}>
+                    <View style={[styles.earnIconWrap, styles.videoIconWrap]}>
+                      <Ionicons name="play-circle" size={18} color="#6DDC8B" />
+                    </View>
+                    <Text style={styles.earnCardTitle}>{t('common.watchVideo')}</Text>
+                    <Text style={styles.earnCardReward}>+{BONUS_AMOUNTS.VIDEO}</Text>
                   </View>
-                  <Text style={styles.earnCardTitle}>{t('common.watchVideo')} +{BONUS_AMOUNTS.VIDEO}</Text>
-                  <Text style={styles.earnCardMeta}>{videoButtonLabel}</Text>
+                  <Text style={styles.earnCardMeta} numberOfLines={1}>{videoButtonLabel}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -220,11 +223,14 @@ export default function TokenBalanceScreen({ navigation }) {
                   onPress={handleDailyBonus}
                   disabled={bonusLoading || !dailyBonusStatus.canClaim}
                 >
-                  <View style={[styles.actionIconWrap, styles.bonusIconWrap]}>
-                    <Ionicons name="gift" size={22} color="#F5C04F" />
+                  <View style={styles.earnCardTopRow}>
+                    <View style={[styles.earnIconWrap, styles.bonusIconWrap]}>
+                      <Ionicons name="gift" size={18} color="#F5C04F" />
+                    </View>
+                    <Text style={styles.earnCardTitle}>{t('common.dailyBonus')}</Text>
+                    <Text style={styles.earnCardReward}>+{BONUS_AMOUNTS.DAILY}</Text>
                   </View>
-                  <Text style={styles.earnCardTitle}>{t('common.dailyBonus')} +{BONUS_AMOUNTS.DAILY}</Text>
-                  <Text style={styles.earnCardMeta}>{bonusButtonLabel}</Text>
+                  <Text style={styles.earnCardMeta} numberOfLines={1}>{bonusButtonLabel}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -419,9 +425,9 @@ const styles = StyleSheet.create({
   },
   earnCard: {
     flex: 1,
-    backgroundColor: 'rgba(255,255,255,0.07)',
-    borderRadius: 18,
-    paddingVertical: 14,
+    backgroundColor: 'rgba(255,255,255,0.045)',
+    borderRadius: 16,
+    paddingVertical: 12,
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
@@ -429,18 +435,34 @@ const styles = StyleSheet.create({
   earnCardDisabled: {
     opacity: 0.58,
   },
+  earnCardTopRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  earnIconWrap: {
+    width: 34,
+    height: 34,
+    borderRadius: 17,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+  },
   earnCardTitle: {
     color: '#FFFFFF',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
-    lineHeight: 20,
-    marginTop: 12,
-    marginBottom: 6,
+    flex: 1,
+  },
+  earnCardReward: {
+    color: '#FFD76B',
+    fontSize: 16,
+    fontWeight: '800',
   },
   earnCardMeta: {
     color: 'rgba(255,255,255,0.60)',
-    fontSize: 12,
-    lineHeight: 18,
+    fontSize: 11,
+    lineHeight: 16,
   },
   estimateRow: {
     flexDirection: 'row',
@@ -506,7 +528,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 16,
     borderRadius: 24,
-    padding: 18,
+    padding: 16,
     backgroundColor: 'rgba(255,255,255,0.05)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.06)',
