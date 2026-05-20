@@ -184,13 +184,8 @@ export default function PremiumScreen({ navigation }) {
         {/* Premium Plans */}
         {!hasPremium && (
           <View style={styles.plansContainer}>
-            <View style={styles.heroCard}>
-              <Text style={styles.heroEyebrow}>{t('premium.heroEyebrow')}</Text>
-              <Text style={styles.heroTitle}>{t('premium.choosePlan')}</Text>
-              <Text style={styles.heroDescription}>
-                {t('premium.heroDescription')}
-              </Text>
-            </View>
+            <Text style={styles.sectionTitle}>{t('premium.premiumPlans')}</Text>
+            <Text style={styles.sectionSubtitle}>{t('premium.heroDescription')}</Text>
 
             <View style={styles.planList}>
               {visiblePlans.length > 0 ? visiblePlans.map((plan) => {
@@ -373,32 +368,17 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 20,
   },
-  heroCard: {
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.18)',
-    borderRadius: 24,
-    padding: 20,
-    marginBottom: 18,
-  },
-  heroEyebrow: {
-    fontSize: 11,
-    letterSpacing: 1.4,
-    color: '#F5D06A',
-    marginBottom: 8,
+  sectionTitle: {
+    fontSize: 16,
     fontWeight: '700',
+    color: '#C5A100',
+    marginBottom: 6,
   },
-  heroTitle: {
-    fontSize: 28,
-    lineHeight: 34,
-    color: '#FFFFFF',
-    fontFamily: 'CinzelDecorative-Bold',
-    marginBottom: 10,
-  },
-  heroDescription: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: 'rgba(255,255,255,0.78)',
+  sectionSubtitle: {
+    fontSize: 14,
+    lineHeight: 21,
+    color: 'rgba(255,255,255,0.66)',
+    marginBottom: 18,
   },
   planList: {
     gap: 14,
