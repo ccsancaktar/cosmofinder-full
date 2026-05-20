@@ -474,7 +474,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   submitButton: {
-    marginHorizontal: -6,
+    marginBottom: 32,
   },
   premiumBadge: {
     flexDirection: 'row',

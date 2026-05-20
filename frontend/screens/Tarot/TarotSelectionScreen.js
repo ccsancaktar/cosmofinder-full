@@ -870,7 +870,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: Platform.OS === 'ios' ? 58 : 52,
     paddingHorizontal: 18,
-    paddingTop: 16,
+    paddingTop: 14,
     paddingBottom: Platform.OS === 'ios' ? 22 : 18,
     backgroundColor: 'rgba(13, 11, 31, 0.92)',
     borderTopWidth: 1,

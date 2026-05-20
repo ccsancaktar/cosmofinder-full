@@ -691,7 +691,7 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   submitButton: {
-    marginHorizontal: 18,
+    marginBottom: 32,
   },
   // Modal styles - EditProfileScreen'den alındı
   modalOverlay: {

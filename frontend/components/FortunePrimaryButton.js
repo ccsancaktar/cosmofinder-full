@@ -42,7 +42,7 @@ const FortunePrimaryButton = ({
 
 const styles = StyleSheet.create({
   touchable: {
-    width: '100%',
+    alignSelf: 'stretch',
     borderRadius: 18,
     overflow: 'hidden',
   },

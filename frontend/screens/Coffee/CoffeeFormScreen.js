@@ -664,7 +664,6 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   submitButton: {
-    marginHorizontal: 18,
     marginBottom: 32,
   },
   submitButtonDisabled: {

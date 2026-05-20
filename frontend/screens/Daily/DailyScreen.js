@@ -672,7 +672,6 @@ const styles = StyleSheet.create({
     ...fontStyles.bodyBold,
   },
   submitButton: {
-    marginHorizontal: 18,
     marginBottom: 32,
   },
   pickerContainer: {
