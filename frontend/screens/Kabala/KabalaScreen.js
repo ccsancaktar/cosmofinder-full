@@ -348,14 +348,16 @@ const KabalaScreen = React.memo(({ navigation }) => {
                 </View>
               ) : null}
 
-              <FortunePrimaryButton
-                label={t('kabala.getKabalaFortune')}
-                loadingLabel={t('kabala.fortuneBeingPrepared')}
-                loading={loading || fortuneLoading}
-                disabled={loading || fortuneLoading}
-                onPress={handleSubmit}
-                style={styles.submitButton}
-              />
+              <View style={styles.ctaWrap}>
+                <FortunePrimaryButton
+                  label={t('kabala.getKabalaFortune')}
+                  loadingLabel={t('kabala.fortuneBeingPrepared')}
+                  loading={loading || fortuneLoading}
+                  disabled={loading || fortuneLoading}
+                  onPress={handleSubmit}
+                  style={styles.submitButton}
+                />
+              </View>
             </View>
           </ScrollView>
         </TouchableWithoutFeedback>
@@ -694,6 +696,9 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   submitButton: {
+    marginBottom: 0,
+  },
+  ctaWrap: {
     marginBottom: 32,
   },
   // Modal styles - EditProfileScreen'den alındı
