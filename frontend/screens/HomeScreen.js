@@ -46,7 +46,7 @@ export default function HomeScreen({ navigation }) {
         key: 'yildizname',
         screen: 'Yıldızname',
         bilgiScreen: 'Yıldızname Bilgi',
-        backgroundImage: require('../assets/backgrounds/yildizname.jpg')
+        backgroundImage: require('../assets/backgrounds/uyum.jpg')
       },
       {
         title: t('fortune.coffee'),
@@ -126,7 +126,7 @@ export default function HomeScreen({ navigation }) {
         key: 'compatibility',
         screen: 'Compatibility',
         bilgiScreen: 'Compatibility Bilgi',
-        backgroundImage: require('../assets/backgrounds/yildizname.jpg')
+        backgroundImage: require('../assets/backgrounds/uyum.jpg')
       },
       {
         title: t('fortune.angelNumbers'),

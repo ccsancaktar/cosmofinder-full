@@ -169,9 +169,41 @@ const buildDisplayRunes = (runesArray, runeData) => {
     .filter((r) => r.name);
 };
 
-const summarizeMeaning = (rune) => {
+const RUNE_MEANING_KEYS = {
+  'Adaletsizlik': 'injustice',
+  'At': 'horse',
+  'Bereket': 'abundance',
+  'Bereket tanrısı': 'fertilityGod',
+  'Buz': 'ice',
+  'Dolu': 'hail',
+  'Geyik boynuzu': 'elkAntlers',
+  'Gün': 'day',
+  'Güneş': 'sun',
+  'Hasat': 'harvest',
+  'Hediye': 'gift',
+  'Huş ağacı': 'birch',
+  'İhtiyaç': 'need',
+  'İnsan': 'human',
+  'Meşale': 'torch',
+  'Mülk': 'inheritance',
+  'Porsuk ağacı': 'yew',
+  'Savaş tanrısı': 'warGod',
+  'Sevinç': 'joy',
+  'Su': 'water',
+  'Sığır': 'cattle',
+  'Tanrı': 'god',
+  'Yaban öküzü': 'wildOx',
+  'Yolculuk': 'journey',
+  'Zar': 'diceCup',
+  'Zenginlik kaybı': 'lossOfWealth',
+};
+
+const summarizeMeaning = (rune, locale, t) => {
   const base = rune?.meaning || '';
-  return String(base).split(',')[0]?.trim() || base;
+  const shortMeaning = String(base).split(',')[0]?.trim() || base;
+  if (locale === 'tr') return shortMeaning;
+  const key = RUNE_MEANING_KEYS[shortMeaning];
+  return key ? t(`rune.resultMeanings.${key}`, { defaultValue: shortMeaning }) : shortMeaning;
 };
 
 export default function RuneResultScreen({ route, navigation }) {
@@ -286,7 +318,7 @@ export default function RuneResultScreen({ route, navigation }) {
                     </View>
                     <Text style={styles.runeSymbol}>{rune.symbol || RUNE_SYMBOLS[rune.name] || '?'}</Text>
                     <Text style={styles.runeName}>{rune.name}</Text>
-                    <Text style={styles.runeMeaning}>{summarizeMeaning(rune)}</Text>
+                    <Text style={styles.runeMeaning}>{summarizeMeaning(rune, locale, t)}</Text>
                   </View>
                 ))}
               </View>
@@ -364,12 +396,12 @@ export default function RuneResultScreen({ route, navigation }) {
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('Rune')} style={styles.newFortuneButton}>
               <Ionicons name="refresh" size={22} color="#FFFFFF" />
-              <Text style={styles.newFortuneButtonText}>{t('rune.newFortune')}</Text>
+              <Text style={styles.newFortuneButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Ana Sayfa')} style={styles.homeButton}>
               <Ionicons name="home" size={22} color="#FFFFFF" />
-              <Text style={styles.homeButtonText}>{t('rune.homePage')}</Text>
+              <Text style={styles.homeButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 

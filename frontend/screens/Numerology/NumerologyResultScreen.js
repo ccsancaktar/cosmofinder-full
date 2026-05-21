@@ -100,6 +100,7 @@ export default function NumerologyResultScreen({ route, navigation }) {
       premiumDescription:
         'Premium sürümde sayıların tekrar eden temaları, içsel döngülerin ve ilişki enerjinin daha derin katmanları çok daha net açılır.',
       premiumButton: 'Detaylı Numeroloji Yorumunu Aç',
+      disclaimer: 'Bu yorum eğlence amaçlıdır ve gerçek hayat kararlarınızı etkilememelidir.',
     },
     en: {
       freeBadge: 'Short Number Layer',
@@ -116,6 +117,7 @@ export default function NumerologyResultScreen({ route, navigation }) {
       premiumDescription:
         'In the premium version, recurring number themes, inner cycles, and relationship energy open up in much more detail.',
       premiumButton: 'Unlock Detailed Numerology Reading',
+      disclaimer: 'This reading is for entertainment purposes and should not direct major life decisions.',
     },
     de: {
       freeBadge: 'Kurze Zahlenebene',
@@ -132,6 +134,7 @@ export default function NumerologyResultScreen({ route, navigation }) {
       premiumDescription:
         'In der Premium-Version werden wiederkehrende Zahlenthemen, innere Zyklen und Beziehungsenergie deutlich tiefer sichtbar.',
       premiumButton: 'Detaillierte Numerologie-Deutung Öffnen',
+      disclaimer: 'Diese Deutung dient nur der Unterhaltung und sollte keine wichtigen Lebensentscheidungen bestimmen.',
     },
   }[locale];
 
@@ -231,6 +234,23 @@ export default function NumerologyResultScreen({ route, navigation }) {
               </TouchableOpacity>
             </LinearGradient>
           ) : null}
+
+          <View style={styles.actionButtons}>
+            <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('Numerology')}>
+              <Ionicons name="refresh" size={18} color="#FFFFFF" />
+              <Text style={styles.primaryButtonText}>{t('common.newFortuneAction')}</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Ana Sayfa')}>
+              <Ionicons name="home" size={18} color="#FFFFFF" />
+              <Text style={styles.secondaryButtonText}>{t('common.homeAction')}</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.disclaimerCard}>
+            <Ionicons name="information-circle" size={18} color="#C5A100" />
+            <Text style={styles.disclaimerText}>{ui.disclaimer}</Text>
+          </View>
         </ScrollView>
       </LinearGradient>
     </SafeAreaView>
@@ -262,7 +282,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 22,
+    paddingHorizontal: 24,
     paddingTop: 18,
   },
   title: {
@@ -293,7 +313,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   identityCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginBottom: 16,
     backgroundColor: 'rgba(255,255,255,0.05)',
     borderRadius: 24,
@@ -326,7 +346,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   numberTile: {
-    width: '48%',
+    width: '47.5%',
     backgroundColor: 'rgba(197,161,0,0.10)',
     borderRadius: 18,
     paddingVertical: 18,
@@ -347,7 +367,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   sectionCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginBottom: 14,
     backgroundColor: 'rgba(255,255,255,0.05)',
     borderRadius: 22,
@@ -400,7 +420,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
   },
   ctaCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 2,
     marginBottom: 14,
     borderRadius: 18,
@@ -415,7 +435,7 @@ const styles = StyleSheet.create({
     lineHeight: 21,
   },
   premiumCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     borderRadius: 22,
     padding: 18,
   },
@@ -432,14 +452,72 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   premiumButton: {
-    alignSelf: 'flex-start',
+    alignSelf: 'stretch',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
     borderRadius: 14,
     backgroundColor: '#C5A100',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   premiumButtonText: {
     color: '#0D0B1F',
     fontWeight: '800',
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    gap: 12,
+    marginHorizontal: 20,
+    marginTop: 22,
+  },
+  primaryButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 18,
+    backgroundColor: '#8A4FFF',
+  },
+  primaryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
+    marginLeft: 8,
+  },
+  secondaryButton: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.16)',
+  },
+  secondaryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
+    marginLeft: 8,
+  },
+  disclaimerCard: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginHorizontal: 20,
+    marginTop: 18,
+    padding: 16,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.06)',
+  },
+  disclaimerText: {
+    flex: 1,
+    marginLeft: 10,
+    color: 'rgba(255,255,255,0.64)',
+    fontSize: 13,
+    lineHeight: 20,
   },
 });

@@ -421,7 +421,7 @@ export default function YildiznameResultScreen({ route, navigation }) {
               style={styles.newFortuneButton}
             >
               <Ionicons name="refresh" size={22} color="#FFFFFF" />
-              <Text style={styles.newFortuneButtonText}>{t('yildizname.newFortune')}</Text>
+              <Text style={styles.newFortuneButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -429,7 +429,7 @@ export default function YildiznameResultScreen({ route, navigation }) {
               style={styles.homeButton}
             >
               <Ionicons name="home" size={22} color="#FFFFFF" />
-              <Text style={styles.homeButtonText}>{t('yildizname.homePage')}</Text>
+              <Text style={styles.homeButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 

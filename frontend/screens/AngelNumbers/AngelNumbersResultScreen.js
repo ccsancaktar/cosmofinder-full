@@ -65,8 +65,6 @@ export default function AngelNumbersResultScreen({ route, navigation }) {
   const ui = {
     tr: {
       subtitle: 'Tekrarlayan sayıların bugünkü mesajı',
-      share: 'Paylaş',
-      newReading: 'Yeni Sayı',
       todaysSignal: 'Bugünün İşareti',
       digitSum: 'Rakamların Toplamı',
       reducedNumber: 'İndirgenmiş Sayı',
@@ -75,8 +73,6 @@ export default function AngelNumbersResultScreen({ route, navigation }) {
     },
     en: {
       subtitle: 'Today’s message from repeating numbers',
-      share: 'Share',
-      newReading: 'New Number',
       todaysSignal: 'Today’s Sign',
       digitSum: 'Sum of the Digits',
       reducedNumber: 'Reduced Number',
@@ -85,8 +81,6 @@ export default function AngelNumbersResultScreen({ route, navigation }) {
     },
     de: {
       subtitle: 'Die heutige Botschaft wiederkehrender Zahlen',
-      share: 'Teilen',
-      newReading: 'Neue Zahl',
       todaysSignal: 'Zeichen des Tages',
       digitSum: 'Summe der Ziffern',
       reducedNumber: 'Reduzierte Zahl',
@@ -154,13 +148,13 @@ export default function AngelNumbersResultScreen({ route, navigation }) {
           })}
 
           <View style={styles.actionRow}>
-            <TouchableOpacity style={styles.secondaryButton} onPress={handleShare}>
-              <Ionicons name="share-social" size={18} color="#FFFFFF" />
-              <Text style={styles.secondaryButtonText}>{ui.share}</Text>
+            <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Ana Sayfa')}>
+              <Ionicons name="home" size={18} color="#FFFFFF" />
+              <Text style={styles.secondaryButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('Angel Numbers')}>
               <Ionicons name="refresh" size={18} color="#0D0B1F" />
-              <Text style={styles.primaryButtonText}>{ui.newReading}</Text>
+              <Text style={styles.primaryButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
@@ -175,17 +169,17 @@ const styles = StyleSheet.create({
   scrollContent: { paddingBottom: 32 },
   headerSection: { height: 210, position: 'relative', marginBottom: 18 },
   headerBackgroundImage: { position: 'absolute', width: '100%', height: '100%' },
-  headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 22 },
+  headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24 },
   bigNumber: { fontSize: 64, lineHeight: 70, color: '#FFD76B', fontWeight: '800', letterSpacing: 4 },
   subtitle: { fontSize: 16, lineHeight: 24, color: 'rgba(255,255,255,0.82)', textAlign: 'center', maxWidth: 280, marginTop: 8 },
-  summaryCard: { marginHorizontal: 18, marginBottom: 16, backgroundColor: 'rgba(197,161,0,0.10)', borderRadius: 24, padding: 18, borderWidth: 1, borderColor: 'rgba(197,161,0,0.14)', alignItems: 'center' },
+  summaryCard: { marginHorizontal: 20, marginBottom: 16, backgroundColor: 'rgba(197,161,0,0.10)', borderRadius: 24, padding: 18, borderWidth: 1, borderColor: 'rgba(197,161,0,0.14)', alignItems: 'center' },
   summaryPair: { width: '100%', alignItems: 'center', marginBottom: 10 },
   summaryLabel: { color: 'rgba(255,255,255,0.68)', fontSize: 13, textTransform: 'uppercase', letterSpacing: 1 },
   summaryValue: { color: '#FFFFFF', fontSize: 30, fontWeight: '800', marginTop: 6 },
   summaryValueSmall: { color: '#FFFFFF', fontSize: 24, fontWeight: '800', marginTop: 6 },
   secondarySummaryLabel: { color: 'rgba(255,255,255,0.52)', fontSize: 12, letterSpacing: 0.8, textTransform: 'uppercase', marginBottom: 8 },
   summaryLine: { color: '#FFD76B', textAlign: 'center', lineHeight: 22 },
-  sectionCard: { marginHorizontal: 18, marginBottom: 14, backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 22, padding: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' },
+  sectionCard: { marginHorizontal: 20, marginBottom: 14, backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 22, padding: 18, borderWidth: 1, borderColor: 'rgba(255,255,255,0.06)' },
   sectionHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
   sectionIconWrap: { width: 34, height: 34, borderRadius: 17, alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(197,161,0,0.12)' },
   sectionTitleWrap: { flexDirection: 'row', alignItems: 'center', marginLeft: 10, flex: 1 },
@@ -193,7 +187,7 @@ const styles = StyleSheet.create({
   pointRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 10 },
   pointDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: '#C5A100', marginTop: 8, marginRight: 10 },
   pointText: { flex: 1, color: 'rgba(255,255,255,0.78)', fontSize: 14, lineHeight: 23 },
-  actionRow: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 18, marginTop: 4 },
+  actionRow: { flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, marginTop: 4 },
   secondaryButton: { width: '48%', height: 54, borderRadius: 16, borderWidth: 1, borderColor: 'rgba(255,255,255,0.14)', alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: 'rgba(255,255,255,0.05)' },
   secondaryButtonText: { color: '#FFFFFF', fontWeight: '700', marginLeft: 8 },
   primaryButton: { width: '48%', height: 54, borderRadius: 16, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', backgroundColor: '#C5A100' },

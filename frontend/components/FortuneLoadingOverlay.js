@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Modal, StyleSheet, Text, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 
 const RUNE_SYMBOLS = ['ᚠ', 'ᚢ', 'ᚱ'];
 const KABALA_NODES = [
@@ -23,108 +24,68 @@ const CHINESE_ELEMENTS = [
 
 const THEMES = {
   tarot: {
-    badge: 'Tarot açılımı hazırlanıyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#F5D06A',
     accentSoft: 'rgba(245, 208, 106, 0.18)',
   },
   yildizname: {
-    badge: 'Yıldızname okunuyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#C5A100',
     accentSoft: 'rgba(197, 161, 0, 0.18)',
   },
   coffee: {
-    badge: 'Kahve izleri yorumlanıyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#D8B07A',
     accentSoft: 'rgba(216, 176, 122, 0.16)',
   },
   rune: {
-    badge: 'Rune enerjisi çözülüyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#B494FF',
     accentSoft: 'rgba(180, 148, 255, 0.16)',
   },
   chinese: {
-    badge: 'Ba Zi dengesi kuruluyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#E9C15F',
     accentSoft: 'rgba(233, 193, 95, 0.18)',
   },
   kabala: {
-    badge: 'Kabala haritası çiziliyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#8A4FFF',
     accentSoft: 'rgba(138, 79, 255, 0.18)',
   },
   daily: {
-    badge: 'Günlük enerji toplanıyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#C5A100',
     accentSoft: 'rgba(197, 161, 0, 0.18)',
   },
   numerology: {
-    badge: 'Sayıların dili çözülüyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#C5A100',
     accentSoft: 'rgba(138, 79, 255, 0.16)',
   },
   compatibility: {
-    badge: 'İki enerji alanı okunuyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#E4BE56',
     accentSoft: 'rgba(228, 190, 86, 0.16)',
   },
   angelNumbers: {
-    badge: 'Sayı mesajı açılıyor',
     colors: ['#0D0B1F', '#1B1B2F', '#2A2A3F'],
     accent: '#F5D06A',
     accentSoft: 'rgba(245, 208, 106, 0.16)',
   },
 };
 
-const LOADING_COPY = {
-  tarot: {
-    title: 'Kartların dili açılıyor',
-    lines: ['Deste karıştırılıyor', 'Seçtiğin kartlar hizalanıyor', 'Tarot yorumu şekilleniyor'],
-  },
-  yildizname: {
-    title: 'Yıldız haritan okunuyor',
-    lines: ['Takımyıldızlar beliriyor', 'Doğum anındaki enerji çözülüyor', 'Yıldızname yorumun hazırlanıyor'],
-  },
-  coffee: {
-    title: 'Fincandaki izler çözümleniyor',
-    lines: ['Semboller seçiliyor', 'Enerji akışı okunuyor', 'Kahve falın demleniyor'],
-  },
-  rune: {
-    title: 'Rünlerin sesi duyuluyor',
-    lines: ['Semboller tek tek beliriyor', 'Kadim anlamlar birleşiyor', 'Rune yorumun geliyor'],
-  },
-  chinese: {
-    title: 'Element dengesi hesaplanıyor',
-    lines: ['Ba Zi sütunları okunuyor', 'Element döngüsü çözülüyor', 'Çin falı yorumun oluşuyor'],
-  },
-  kabala: {
-    title: 'Sefirot enerjisi bağlanıyor',
-    lines: ['İsim değeri çözümleniyor', 'Ruhsal yol haritası beliriyor', 'Kabala yorumun tamamlanıyor'],
-  },
-  daily: {
-    title: 'Günün enerjisi toplanıyor',
-    lines: ['Burç etkileri hizalanıyor', 'Bugünün mesajı seçiliyor', 'Günlük yorumun geliyor'],
-  },
-  numerology: {
-    title: 'Sayı haritan açılıyor',
-    lines: ['İsminin titreşimi hesaplanıyor', 'Yaşam yolu sayın beliriyor', 'Numeroloji yorumun hazırlanıyor'],
-  },
-  compatibility: {
-    title: 'Bağ enerjisi çözülüyor',
-    lines: ['İki kişinin ritmi hizalanıyor', 'Duygusal akış okunuyor', 'Uyum analizin hazırlanıyor'],
-  },
-  angelNumbers: {
-    title: 'Sayının kapısı aralanıyor',
-    lines: ['Tekrarlayan işaret çözülüyor', 'Enerji mesajı seçiliyor', 'Melek sayısı yorumun geliyor'],
-  },
+const LOADING_COPY_KEYS = {
+  tarot: 'tarot',
+  yildizname: 'yildizname',
+  coffee: 'coffee',
+  rune: 'rune',
+  chinese: 'chinese',
+  kabala: 'kabala',
+  daily: 'daily',
+  numerology: 'numerology',
+  compatibility: 'compatibility',
+  angelNumbers: 'angelNumbers',
 };
 
 function Backdrop({ accent, drift, shimmer }) {
@@ -600,6 +561,7 @@ function AngelNumbersAnimation({ pulse, spin, accent }) {
 }
 
 export default function FortuneLoadingOverlay({ visible, readingType }) {
+  const { t } = useTranslation();
   const pulse = useRef(new Animated.Value(0)).current;
   const spin = useRef(new Animated.Value(0)).current;
   const rise = useRef(new Animated.Value(0)).current;
@@ -609,7 +571,17 @@ export default function FortuneLoadingOverlay({ visible, readingType }) {
   const [lineIndex, setLineIndex] = useState(0);
 
   const theme = THEMES[readingType] || THEMES.tarot;
-  const copy = LOADING_COPY[readingType] || LOADING_COPY.tarot;
+  const copyKey = LOADING_COPY_KEYS[readingType] || 'tarot';
+  const copy = {
+    badge: t(`loadingOverlay.${copyKey}.badge`),
+    title: t(`loadingOverlay.${copyKey}.title`),
+    lines: [
+      t(`loadingOverlay.${copyKey}.line1`),
+      t(`loadingOverlay.${copyKey}.line2`),
+      t(`loadingOverlay.${copyKey}.line3`),
+    ],
+    footer: t('loadingOverlay.footer'),
+  };
 
   useEffect(() => {
     if (!visible) return undefined;
@@ -713,7 +685,7 @@ export default function FortuneLoadingOverlay({ visible, readingType }) {
           <View style={styles.content}>
             <View style={[styles.badge, { borderColor: theme.accentSoft, backgroundColor: theme.accentSoft }]}>
               <View style={[styles.badgeDot, { backgroundColor: theme.accent }]} />
-              <Text style={styles.badgeText}>{theme.badge}</Text>
+              <Text style={styles.badgeText}>{copy.badge}</Text>
             </View>
 
             <View style={styles.heroBlock}>
@@ -754,7 +726,7 @@ export default function FortuneLoadingOverlay({ visible, readingType }) {
                   ]}
                 />
               </View>
-              <Text style={styles.footerText}>Bu birkaç saniye sürebilir. Yorumun senin için hazırlanıyor.</Text>
+              <Text style={styles.footerText}>{copy.footer}</Text>
             </View>
           </View>
         </LinearGradient>

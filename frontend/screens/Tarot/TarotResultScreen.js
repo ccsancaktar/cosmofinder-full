@@ -192,10 +192,73 @@ const getSectionIcon = (heading) => {
   return match ? SECTION_ICONS[match[1]] : 'document-text';
 };
 
-const summarizeMeaning = (card) => {
+const normalizeTarotKeyword = (value) =>
+  String(value || '')
+    .trim()
+    .toLocaleLowerCase('tr-TR')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/ı/g, 'i')
+    .replace(/ç/g, 'c')
+    .replace(/ğ/g, 'g')
+    .replace(/ö/g, 'o')
+    .replace(/ş/g, 's')
+    .replace(/ü/g, 'u')
+    .replace(/\s+/g, ' ');
+
+const TAROT_KEYWORD_KEYS = {
+  [normalizeTarotKeyword('Adaletsizlik')]: 'injustice',
+  [normalizeTarotKeyword('Aile mutluluğu')]: 'familyHappiness',
+  [normalizeTarotKeyword('Aile sorunları')]: 'familyIssues',
+  [normalizeTarotKeyword('Ani değişim')]: 'suddenChange',
+  [normalizeTarotKeyword('Ayrılış')]: 'departure',
+  [normalizeTarotKeyword('Aşk')]: 'love',
+  [normalizeTarotKeyword('Bağımlılık')]: 'dependence',
+  [normalizeTarotKeyword('Bağımsızlık')]: 'independence',
+  [normalizeTarotKeyword('Başarı')]: 'success',
+  [normalizeTarotKeyword('Bereket')]: 'abundance',
+  [normalizeTarotKeyword('Cimrilik')]: 'stinginess',
+  [normalizeTarotKeyword('Cömertlik')]: 'generosity',
+  [normalizeTarotKeyword('Denge')]: 'balance',
+  [normalizeTarotKeyword('Dengesizlik')]: 'imbalance',
+  [normalizeTarotKeyword('Değişim')]: 'change',
+  [normalizeTarotKeyword('Fırsat kaçırma')]: 'missedOpportunity',
+  [normalizeTarotKeyword('Geçiş')]: 'transition',
+  [normalizeTarotKeyword('Gizemlerin çözülmesi')]: 'mysteriesRevealed',
+  [normalizeTarotKeyword('Gurur')]: 'pride',
+  [normalizeTarotKeyword('Hayal kırıklığı')]: 'disappointment',
+  [normalizeTarotKeyword('Kalp kırıklığı')]: 'heartbreak',
+  [normalizeTarotKeyword('Kararsızlık')]: 'indecision',
+  [normalizeTarotKeyword('Kutlama')]: 'celebration',
+  [normalizeTarotKeyword('Mutluluk')]: 'joy',
+  [normalizeTarotKeyword('Netlik')]: 'clarity',
+  [normalizeTarotKeyword('Sabır')]: 'patience',
+  [normalizeTarotKeyword('Savunma')]: 'defense',
+  [normalizeTarotKeyword('Sezgi')]: 'intuition',
+  [normalizeTarotKeyword('Tamamlanma')]: 'completion',
+  [normalizeTarotKeyword('Umut')]: 'hope',
+  [normalizeTarotKeyword('Uzlaşma')]: 'compromise',
+  [normalizeTarotKeyword('Yalnızlık')]: 'isolation',
+  [normalizeTarotKeyword('Yaratıcılık')]: 'creativity',
+  [normalizeTarotKeyword('Yeni başlangıç')]: 'newBeginning',
+  [normalizeTarotKeyword('Yeni fırsatlar')]: 'newOpportunities',
+  [normalizeTarotKeyword('Yeniden doğuş')]: 'rebirth',
+  [normalizeTarotKeyword('Yorgunluk')]: 'fatigue',
+  [normalizeTarotKeyword('Yük')]: 'burden',
+  [normalizeTarotKeyword('Zafer')]: 'victory',
+  [normalizeTarotKeyword('Çalışma')]: 'work',
+  [normalizeTarotKeyword('Özgürlük')]: 'freedom',
+  [normalizeTarotKeyword('İçsel güç')]: 'innerStrength',
+  [normalizeTarotKeyword('İşbirliği')]: 'collaboration',
+};
+
+const summarizeMeaning = (card, locale, t) => {
   const base = card?.reversed ? card?.reversed_meaning : card?.meaning;
   if (!base) return '';
-  return String(base).split(',')[0]?.trim() || base;
+  const shortMeaning = String(base).split(',')[0]?.trim() || base;
+  if (locale === 'tr') return shortMeaning;
+  const key = TAROT_KEYWORD_KEYS[normalizeTarotKeyword(shortMeaning)];
+  return key ? t(`tarot.resultKeywords.${key}`, { defaultValue: shortMeaning }) : shortMeaning;
 };
 
 export default function TarotResultScreen({ route, navigation }) {
@@ -330,7 +393,7 @@ export default function TarotResultScreen({ route, navigation }) {
                       <Text style={styles.cardName}>
                         {getCardName(card)}
                       </Text>
-                      <Text style={styles.cardKeyword}>{summarizeMeaning(card)}</Text>
+                      <Text style={styles.cardKeyword}>{summarizeMeaning(card, locale, t)}</Text>
                     </View>
                   );
                 })}
@@ -409,12 +472,12 @@ export default function TarotResultScreen({ route, navigation }) {
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('TarotForm')} style={styles.newFortuneButton}>
               <Ionicons name="refresh" size={22} color="#FFFFFF" />
-              <Text style={styles.newFortuneButtonText}>{t('tarot.newFortune')}</Text>
+              <Text style={styles.newFortuneButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Ana Sayfa')} style={styles.homeButton}>
               <Ionicons name="home" size={22} color="#FFFFFF" />
-              <Text style={styles.homeButtonText}>{t('tarot.homePage')}</Text>
+              <Text style={styles.homeButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 

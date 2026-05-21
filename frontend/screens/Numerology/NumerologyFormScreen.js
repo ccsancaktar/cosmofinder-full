@@ -404,7 +404,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 22,
+    paddingHorizontal: 24,
     paddingTop: 20,
   },
   backButtonInCard: {
@@ -458,7 +458,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   content: {
-    paddingHorizontal: 18,
+    paddingHorizontal: 20,
     paddingTop: 18,
   },
   formCard: {

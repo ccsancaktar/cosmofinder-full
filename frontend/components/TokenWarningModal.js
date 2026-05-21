@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { TOKEN_COSTS } from '../context/TokenContext';
 import TokenIcon from './TokenIcon';
 
@@ -24,84 +25,56 @@ export default function TokenWarningModal({
   requiredTokens = 0,
   readingType = 'fal'
 }) {
+  const { t } = useTranslation();
   const getReadingTypeInfo = () => {
+    const readingKeyMap = {
+      tarot: 'tarot',
+      yildizname: 'yildizname',
+      rune: 'rune',
+      chinese: 'chinese',
+      coffee: 'coffee',
+      kabala: 'kabala',
+      daily: 'daily',
+      numerology: 'numerology',
+      compatibility: 'compatibility',
+      angel_numbers: 'angelNumbers',
+      fal: 'general',
+    };
+
+    const contentMap = {
+      tarot: { icon: 'card', tokenCost: TOKEN_COSTS.TAROT, descriptionKey: 'tarot' },
+      yildizname: { icon: 'star', tokenCost: TOKEN_COSTS.YILDIZNAME, descriptionKey: 'yildizname' },
+      rune: { icon: 'diamond', tokenCost: TOKEN_COSTS.RUNE, descriptionKey: 'rune' },
+      chinese: { icon: 'calendar', tokenCost: TOKEN_COSTS.CHINESE, descriptionKey: 'chinese' },
+      coffee: { icon: 'cafe', tokenCost: TOKEN_COSTS.COFFEE, descriptionKey: 'coffee' },
+      kabala: { icon: 'flower', tokenCost: TOKEN_COSTS.KABALA, descriptionKey: 'kabala' },
+      daily: { icon: 'sunny', tokenCost: TOKEN_COSTS.DAILY, descriptionKey: 'daily' },
+      numerology: { icon: 'grid', tokenCost: TOKEN_COSTS.NUMEROLOGY, descriptionKey: 'numerology' },
+      compatibility: { icon: 'heart-half', tokenCost: TOKEN_COSTS.COMPATIBILITY, descriptionKey: 'compatibility' },
+      angel_numbers: { icon: 'sparkles', tokenCost: TOKEN_COSTS.ANGEL, descriptionKey: 'angelNumbers' },
+      fal: { icon: 'sparkles', tokenCost: TOKEN_COSTS.DAILY, descriptionKey: 'general' },
+    };
+
+    const config = contentMap[readingType] || contentMap.fal;
+    const readingKey = readingKeyMap[readingType] || 'general';
+
     switch (readingType) {
       case 'tarot':
-        return {
-          icon: 'card',
-          title: 'Tarot Falı',
-          description: 'Tarot kartları ile geleceğinizi keşfedin',
-          tokenCost: TOKEN_COSTS.TAROT
-        };
       case 'yildizname':
-        return {
-          icon: 'star',
-          title: 'Yıldızname',
-          description: 'Doğum haritanızla kişisel yorumunuzu alın',
-          tokenCost: TOKEN_COSTS.YILDIZNAME
-        };
       case 'rune':
-        return {
-          icon: 'diamond',
-          title: 'Rune Falı',
-          description: 'Antik rune taşları ile yorumunuzu alın',
-          tokenCost: TOKEN_COSTS.RUNE
-        };
       case 'chinese':
-        return {
-          icon: 'calendar',
-          title: 'Çin Falı',
-          description: 'Ba-Zi ile detaylı kişisel analiz',
-          tokenCost: TOKEN_COSTS.CHINESE
-        };
       case 'coffee':
-        return {
-          icon: 'cafe',
-          title: 'Kahve Falı',
-          description: 'Kahve telvelerinden geleceğinizi okuyun',
-          tokenCost: TOKEN_COSTS.COFFEE
-        };
       case 'kabala':
-        return {
-          icon: 'flower',
-          title: 'Kabala',
-          description: 'Kabala bilgeliği ile yorumunuzu alın',
-          tokenCost: TOKEN_COSTS.KABALA
-        };
       case 'daily':
-        return {
-          icon: 'sunny',
-          title: 'Günlük Burç',
-          description: 'Bugünün burç yorumunu alın',
-          tokenCost: TOKEN_COSTS.DAILY
-        };
       case 'numerology':
-        return {
-          icon: 'grid',
-          title: 'Numeroloji',
-          description: 'İsim ve doğum tarihinizle sayılarınızın mesajını alın',
-          tokenCost: TOKEN_COSTS.NUMEROLOGY
-        };
       case 'compatibility':
-        return {
-          icon: 'heart-half',
-          title: 'Uyum Analizi',
-          description: 'İki kişi arasındaki duygusal ve enerjik uyumu keşfedin',
-          tokenCost: TOKEN_COSTS.COMPATIBILITY
-        };
       case 'angel_numbers':
-        return {
-          icon: 'sparkles',
-          title: 'Melek Sayıları',
-          description: 'Tekrarlayan sayıların bugünkü mesajını alın',
-          tokenCost: TOKEN_COSTS.ANGEL
-        };
       default:
         return {
-          icon: 'sparkles',
-          title: 'Fal',
-          description: 'Fal yorumunuzu alın',
-          tokenCost: TOKEN_COSTS.DAILY
+          icon: config.icon,
+          title: t(`reading.${readingKey}`),
+          description: t(`tokenWarning.readingDescriptions.${config.descriptionKey}`),
+          tokenCost: config.tokenCost
         };
     }
   };
@@ -126,9 +99,9 @@ export default function TokenWarningModal({
               <View style={styles.iconContainer}>
                 <Ionicons name={readingInfo.icon} size={48} color="#C5A100" />
               </View>
-              <Text style={styles.title}>Yetersiz Token</Text>
+              <Text style={styles.title}>{t('tokenWarning.title')}</Text>
               <Text style={styles.subtitle}>
-                {readingInfo.title} için yeterli tokeniniz bulunmuyor
+                {t('tokenWarning.subtitle', { title: readingInfo.title })}
               </Text>
             </View>
 
@@ -136,17 +109,17 @@ export default function TokenWarningModal({
             <View style={styles.tokenInfoContainer}>
               <View style={styles.tokenRow}>
                 <TokenIcon size={20} />
-                <Text style={styles.tokenLabel}>Mevcut Token:</Text>
+                <Text style={styles.tokenLabel}>{t('tokenWarning.currentTokens')}</Text>
                 <Text style={styles.tokenValue}>{currentBalance}</Text>
               </View>
               <View style={styles.tokenRow}>
                 <Ionicons name="card" size={20} color="#FF6B6B" />
-                <Text style={styles.tokenLabel}>Gerekli Token:</Text>
+                <Text style={styles.tokenLabel}>{t('tokenWarning.requiredTokens')}</Text>
                 <Text style={styles.tokenValue}>{readingInfo.tokenCost}</Text>
               </View>
               <View style={styles.tokenRow}>
                 <Ionicons name="trending-down" size={20} color="#FF6B6B" />
-                <Text style={styles.tokenLabel}>Eksik Token:</Text>
+                <Text style={styles.tokenLabel}>{t('tokenWarning.missingTokens')}</Text>
                 <Text style={styles.tokenValue}>{Math.max(0, readingInfo.tokenCost - currentBalance)}</Text>
               </View>
             </View>
@@ -155,15 +128,15 @@ export default function TokenWarningModal({
             <View style={styles.content}>
               <View style={styles.featureItem}>
                 <Ionicons name="star" size={20} color="#C5A100" />
-                <Text style={styles.featureText}>Token satın alarak sınırsız fal çekebilirsiniz</Text>
+                <Text style={styles.featureText}>{t('tokenWarning.featureBuy')}</Text>
               </View>
               <View style={styles.featureItem}>
                 <Ionicons name="play-circle" size={20} color="#C5A100" />
-                <Text style={styles.featureText}>Video izleyerek ücretsiz token kazanın</Text>
+                <Text style={styles.featureText}>{t('tokenWarning.featureVideo')}</Text>
               </View>
               <View style={styles.featureItem}>
                 <Ionicons name="diamond" size={20} color="#C5A100" />
-                <Text style={styles.featureText}>Premium üyelik ile sınırsız erişim</Text>
+                <Text style={styles.featureText}>{t('tokenWarning.featurePremium')}</Text>
               </View>
             </View>
 
@@ -174,7 +147,7 @@ export default function TokenWarningModal({
                 onPress={onPurchaseTokens}
               >
                 <Ionicons name="card" size={20} color="#000000" />
-                <Text style={styles.purchaseButtonText}>Token Satın Al</Text>
+                <Text style={styles.purchaseButtonText}>{t('tokenWarning.buyTokens')}</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
@@ -182,14 +155,14 @@ export default function TokenWarningModal({
                 onPress={onWatchVideo}
               >
                 <Ionicons name="play-circle" size={20} color="#C5A100" />
-                <Text style={styles.videoButtonText}>Video İzle</Text>
+                <Text style={styles.videoButtonText}>{t('tokenWarning.watchVideo')}</Text>
               </TouchableOpacity>
               
               <TouchableOpacity
                 style={styles.cancelButton}
                 onPress={onClose}
               >
-                <Text style={styles.cancelButtonText}>İptal</Text>
+                <Text style={styles.cancelButtonText}>{t('common.cancel')}</Text>
               </TouchableOpacity>
             </View>
           </LinearGradient>

@@ -303,12 +303,12 @@ export default function CoffeeResultScreen({ route, navigation }) {
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('Kahve')} style={styles.newFortuneButton}>
               <Ionicons name="refresh" size={24} color="#FFFFFF" />
-              <Text style={styles.newFortuneButtonText}>{t('coffee.newFortune')}</Text>
+              <Text style={styles.newFortuneButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Ana Sayfa')} style={styles.homeButton}>
               <Ionicons name="home" size={24} color="#FFFFFF" />
-              <Text style={styles.homeButtonText}>{t('coffee.homePage')}</Text>
+              <Text style={styles.homeButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 

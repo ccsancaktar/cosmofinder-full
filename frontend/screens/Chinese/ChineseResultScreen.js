@@ -393,12 +393,12 @@ export default function ChineseResultScreen({ route, navigation }) {
           <View style={styles.buttonContainer}>
             <TouchableOpacity onPress={() => navigation.navigate('Chinese')} style={styles.newFortuneButton}>
               <Ionicons name="refresh" size={22} color="#FFFFFF" />
-              <Text style={styles.newFortuneButtonText}>{t('chinese.newFortune')}</Text>
+              <Text style={styles.newFortuneButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Ana Sayfa')} style={styles.homeButton}>
               <Ionicons name="home" size={22} color="#FFFFFF" />
-              <Text style={styles.homeButtonText}>{t('chinese.homePage')}</Text>
+              <Text style={styles.homeButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 

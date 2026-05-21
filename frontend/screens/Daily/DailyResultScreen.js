@@ -169,7 +169,6 @@ export default function DailyResultScreen({ route, navigation }) {
       summaryTitle: 'Bugünün atmosferi sende nasıl çalışıyor?',
       luckyTitle: 'Şanslı Enerjiler',
       messageTitle: 'Kapanış Mesajı',
-      newReading: 'Yeni Günlük Fal',
       disclaimer: 'Bu yorum eğlence amaçlıdır ve gerçek hayat kararlarınızı etkilememelidir.',
     },
     en: {
@@ -182,7 +181,6 @@ export default function DailyResultScreen({ route, navigation }) {
       summaryTitle: 'How is today’s atmosphere working through you?',
       luckyTitle: 'Lucky Energies',
       messageTitle: 'Closing Message',
-      newReading: 'New Daily Reading',
       disclaimer: 'This reading is for entertainment purposes and should not direct major life decisions.',
     },
     de: {
@@ -195,7 +193,6 @@ export default function DailyResultScreen({ route, navigation }) {
       summaryTitle: 'Wie wirkt die heutige Atmosphäre auf dich?',
       luckyTitle: 'Glücksenergien',
       messageTitle: 'Abschlussbotschaft',
-      newReading: 'Neue Tagesdeutung',
       disclaimer: 'Diese Deutung dient nur der Unterhaltung und sollte keine wichtigen Lebensentscheidungen bestimmen.',
     },
   }[localeKey];
@@ -219,7 +216,7 @@ export default function DailyResultScreen({ route, navigation }) {
     .filter((line) => line !== '--' && line !== '—' && !/^(🌟|❤️|💼|⚡|🍀|🔮)/.test(line))
     .filter((line) => !NUMERIC_HEADING_MAP.some((item) => item.pattern.test(line)));
   const summaryLead = introLines[0] || summarySection?.points?.[0] || '';
-  const closingMessage = messageSection?.points?.join(' ') || '';
+  const closingMessages = (messageSection?.points || []).map((point) => cleanLine(point)).filter(Boolean);
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -312,25 +309,29 @@ export default function DailyResultScreen({ route, navigation }) {
             </View>
           )}
 
-          {!!closingMessage && (
+          {closingMessages.length > 0 && (
             <LinearGradient colors={['rgba(138,79,255,0.20)', 'rgba(138,79,255,0.06)']} style={styles.messageCard}>
               <View style={styles.specialHeader}>
                 <Ionicons name="planet" size={18} color="#D6B6FF" />
                 <Text style={styles.specialTitle}>{ui.messageTitle}</Text>
               </View>
-              <Text style={styles.messageText}>{closingMessage}</Text>
+              {closingMessages.map((message, index) => (
+                <Text key={`${message}-${index}`} style={[styles.messageText, index > 0 && styles.messageParagraph]}>
+                  {message}
+                </Text>
+              ))}
             </LinearGradient>
           )}
 
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.primaryButton} onPress={() => navigation.navigate('Daily')}>
               <Ionicons name="refresh" size={18} color="#FFFFFF" />
-              <Text style={styles.primaryButtonText}>{ui.newReading}</Text>
+              <Text style={styles.primaryButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.secondaryButton} onPress={() => navigation.navigate('Ana Sayfa')}>
               <Ionicons name="home" size={18} color="#FFFFFF" />
-              <Text style={styles.secondaryButtonText}>{t('navigation.home')}</Text>
+              <Text style={styles.secondaryButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 
@@ -359,7 +360,7 @@ const styles = StyleSheet.create({
     paddingBottom: 36,
   },
   hero: {
-    height: 210,
+    height: 244,
     position: 'relative',
   },
   heroImage: {
@@ -369,10 +370,10 @@ const styles = StyleSheet.create({
   },
   heroOverlay: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 8,
+    paddingHorizontal: 24,
+    paddingTop: 18,
     justifyContent: 'space-between',
-    paddingBottom: 24,
+    paddingBottom: 28,
   },
   backButton: {
     width: 40,
@@ -409,14 +410,14 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   heroSubtitle: {
-    maxWidth: 260,
+    maxWidth: 296,
     textAlign: 'center',
     color: 'rgba(255,255,255,0.84)',
     fontSize: 14,
     lineHeight: 21,
   },
   summaryCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 16,
     padding: 20,
     borderRadius: 24,
@@ -470,7 +471,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   sectionShell: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 14,
     borderRadius: 22,
     padding: 18,
@@ -513,7 +514,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
   },
   specialCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 14,
     padding: 18,
     borderRadius: 22,
@@ -560,7 +561,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   messageCard: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 14,
     padding: 18,
     borderRadius: 22,
@@ -571,11 +572,17 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.9)',
     fontSize: 15,
     lineHeight: 24,
+    width: '100%',
+    flexShrink: 1,
+    paddingRight: 4,
+  },
+  messageParagraph: {
+    marginTop: 12,
   },
   actionButtons: {
     flexDirection: 'row',
     gap: 12,
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 22,
   },
   primaryButton: {
@@ -613,7 +620,7 @@ const styles = StyleSheet.create({
   disclaimerCard: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     marginTop: 18,
     padding: 16,
     borderRadius: 18,

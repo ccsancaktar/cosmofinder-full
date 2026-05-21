@@ -304,12 +304,12 @@ const KabalaResultScreen = () => {
           <View style={styles.actionButtons}>
             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Kabala')}>
               <Ionicons name="refresh" size={20} color="#FFFFFF" />
-              <Text style={styles.actionButtonText}>{t('common.new')}</Text>
+              <Text style={styles.actionButtonText}>{t('common.newFortuneAction')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.actionButton} onPress={() => navigation.navigate('Ana Sayfa')}>
               <Ionicons name="home" size={20} color="#FFFFFF" />
-              <Text style={styles.actionButtonText}>{t('navigation.home')}</Text>
+              <Text style={styles.actionButtonText}>{t('common.homeAction')}</Text>
             </TouchableOpacity>
           </View>
 

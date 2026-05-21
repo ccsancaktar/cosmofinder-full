@@ -214,8 +214,24 @@ def get_numerology_prompt(language, **kwargs):
 """,
     }
 
+    length_rules = {
+        'tr': {
+            'free': "Her başlık altında en fazla 2-3 cümlelik tek paragraf yaz. Yorum kısa, net ve kolay okunur olsun; gereksiz uzatma yapma.",
+            'premium': "Her başlık altında daha katmanlı, daha zengin ve daha derin paragraflar yaz. İçgörüyü artır ama akıcılığı koru.",
+        },
+        'en': {
+            'free': "Under each heading, write only one concise paragraph of 2-3 sentences. Keep the reading compact, direct, and easy to scan.",
+            'premium': "Under each heading, write fuller, richer paragraphs with more nuance and layered insight while keeping the flow readable.",
+        },
+        'de': {
+            'free': "Schreibe unter jeder Überschrift nur einen kompakten Absatz mit 2-3 Sätzen. Die Deutung soll kurz, klar und leicht lesbar bleiben.",
+            'premium': "Schreibe unter jeder Überschrift ausführlichere, tiefere und reichhaltigere Absätze mit mehr Nuancen, ohne die Lesbarkeit zu verlieren.",
+        },
+    }
+
     if language == 'en':
         extra = premium_block['en'] if reading_tier == 'premium' else ''
+        length_instruction = length_rules['en']['premium'] if reading_tier == 'premium' else length_rules['en']['free']
         return f"""
 You are an experienced numerology guide with a premium, intuitive tone.
 
@@ -246,11 +262,12 @@ Cover these points naturally:
 6. End with a grounded but inspiring message for the current phase
 {extra}
 
-Avoid generic bullet lists. Write in short paragraphs under each heading.
+Avoid generic bullet lists. {length_instruction}
 """
 
     if language == 'de':
         extra = premium_block['de'] if reading_tier == 'premium' else ''
+        length_instruction = length_rules['de']['premium'] if reading_tier == 'premium' else length_rules['de']['free']
         return f"""
 Du bist ein erfahrener Numerologie-Guide mit einer edlen, intuitiven Sprache.
 
@@ -281,10 +298,11 @@ Decke diese Punkte natürlich ab:
 6. Beende die Deutung mit einer klaren, inspirierenden Botschaft für die aktuelle Phase
 {extra}
 
-Keine generischen Listen. Schreibe kurze, klare Absätze unter jeder Überschrift.
+Keine generischen Listen. {length_instruction}
 """
 
     extra = premium_block['tr'] if reading_tier == 'premium' else ''
+    length_instruction = length_rules['tr']['premium'] if reading_tier == 'premium' else length_rules['tr']['free']
     return f"""
 Sen deneyimli bir numeroloji uzmanısın. Yorumların sıcak, kişisel ve premium hissettiren bir tonda olmalı.
 
@@ -315,7 +333,7 @@ Yorum şu noktaları doğal biçimde kapsasın:
 6. Son bölümde mevcut dönem için ilham verici ama ayakları yere basan bir mesaj ver
 {extra}
 
-Maddeli kuru liste gibi yazma. Her başlık altında kısa ama dolu paragraflar kullan.
+Maddeli kuru liste gibi yazma. {length_instruction}
 """
 
 

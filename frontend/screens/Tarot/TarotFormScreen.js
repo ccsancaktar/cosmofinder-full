@@ -117,6 +117,9 @@ const TarotFormScreen = React.memo(() => {
                   </View>
                 </View>
 
+              </View>
+
+              <View style={styles.actionGroup}>
                 <FortunePrimaryButton
                   label={t('tarot.continueToCardSelection')}
                   onPress={() => navigation.navigate('TarotSelection', { niyet: hasPremium ? niyet.trim() : '' })}
@@ -179,7 +182,7 @@ const styles = StyleSheet.create({
     paddingBottom: 120,
   },
   content: {
-    paddingHorizontal: 18,
+    paddingHorizontal: 20,
     paddingTop: 18,
   },
   headerSection: {
@@ -267,11 +270,10 @@ const styles = StyleSheet.create({
   },
   intentionCard: {
     padding: 22,
-    backgroundColor: '#1B1B2F',
-    minHeight: 520,
+    backgroundColor: 'rgba(255,255,255,0.05)',
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: 'rgba(197,161,0,0.10)',
+    borderColor: 'rgba(255,255,255,0.06)',
   },
   eyebrow: {
     fontSize: 13,
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 25,
     color: '#D2D1DD',
-    marginBottom: 24,
+    marginBottom: 0,
     ...fontStyles.body,
   },
   inputContainer: {
@@ -432,13 +434,15 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     ...fontStyles.body,
   },
+  actionGroup: {
+    marginTop: 18,
+  },
   submitButton: {
-    marginBottom: 32,
+    marginBottom: 10,
   },
   secondaryButton: {
     alignItems: 'center',
     paddingVertical: 16,
-    marginTop: 10,
   },
   secondaryButtonText: {
     color: '#C5A100',

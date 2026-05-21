@@ -23,7 +23,7 @@ export default function CompatibilityBilgiScreen({ navigation }) {
         <LinearGradient colors={['#0D0B1F', '#1B1B2F', '#2A2A3F']} style={styles.gradientBg}>
           <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
             <View style={styles.headerSection}>
-              <LazyImage source={require('../../assets/backgrounds/yildizname.jpg')} style={styles.headerBackgroundImage} resizeMode="cover" showPlaceholder={false} fadeInDuration={450} />
+              <LazyImage source={require('../../assets/backgrounds/uyum.jpg')} style={styles.headerBackgroundImage} resizeMode="cover" showPlaceholder={false} fadeInDuration={450} />
               <LinearGradient colors={['rgba(0,0,0,0.60)', 'rgba(0,0,0,0.92)']} style={styles.headerGradient}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButtonInCard}>
                   <Ionicons name="arrow-back" size={24} color="#FFFFFF" />

@@ -177,7 +177,7 @@ export default function CompatibilityFormScreen({ navigation }) {
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
               <View style={styles.headerSection}>
                 <LazyImage
-                  source={require('../../assets/backgrounds/yildizname.jpg')}
+                  source={require('../../assets/backgrounds/uyum.jpg')}
                   style={styles.headerBackgroundImage}
                   resizeMode="cover"
                   showPlaceholder={false}
@@ -345,12 +345,12 @@ const styles = StyleSheet.create({
   scrollContent: { paddingBottom: 120 },
   headerSection: { height: 210, position: 'relative' },
   headerBackgroundImage: { position: 'absolute', width: '100%', height: '100%' },
-  headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 22, paddingTop: 20 },
+  headerGradient: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 24, paddingTop: 20 },
   backButtonInCard: { position: 'absolute', top: 20, left: 20, width: 42, height: 42, borderRadius: 21, backgroundColor: 'rgba(0,0,0,0.66)', alignItems: 'center', justifyContent: 'center' },
   infoButtonInCard: { position: 'absolute', top: 20, right: 20, width: 42, height: 42, borderRadius: 21, backgroundColor: 'rgba(0,0,0,0.44)', alignItems: 'center', justifyContent: 'center' },
   title: { fontSize: 34, fontWeight: '700', color: '#FFFFFF', textAlign: 'center', marginBottom: 10 },
   subtitle: { color: 'rgba(255,255,255,0.82)', fontSize: 16, lineHeight: 24, textAlign: 'center', maxWidth: 300 },
-  content: { paddingHorizontal: 18, paddingTop: 18 },
+  content: { paddingHorizontal: 20, paddingTop: 18 },
   formCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 20, borderWidth: 1, borderColor: 'rgba(197,161,0,0.10)', marginBottom: 16 },
   cardHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
   cardTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '700', marginBottom: 12 },
