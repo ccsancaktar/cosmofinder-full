@@ -264,98 +264,99 @@ const KabalaScreen = React.memo(({ navigation }) => {
               </LinearGradient>
             </View>
 
-            <ReadingModeCard
-              title={t('common.whoIsThisReadingFor')}
-              subtitle={t('common.readingModeHint')}
-              mode={readingMode}
-              onChangeMode={setReadingMode}
-              selfLabel={t('common.forMe')}
-              otherLabel={t('common.forSomeoneElse')}
-              badgeLabel={t('common.profileSummary')}
-              summaryTitle={t('common.profileInfoWillBeUsed')}
-              summaryDescription={t('common.profileInfoWillBeUsed')}
-              canUseProfile={hasProfileData}
-              missingMessage={t('common.profileInfoMissing')}
-              onPrimaryAction={() => navigation.navigate('EditProfile')}
-              primaryActionLabel={hasProfileData ? t('common.editProfileInfo') : t('common.completeProfile')}
-              summaryItems={
-                hasProfileData
-                  ? [
-                      { icon: 'person-outline', label: t('kabala.yourName'), value: profileName },
-                      { icon: 'calendar-outline', label: t('kabala.kabalabirthDate'), value: formatToDDMMYYYY(profileBirthDate) },
-                    ]
-                  : []
-              }
-            />
+            <View style={styles.content}>
+              <ReadingModeCard
+                title={t('common.whoIsThisReadingFor')}
+                subtitle={t('common.readingModeHint')}
+                mode={readingMode}
+                onChangeMode={setReadingMode}
+                selfLabel={t('common.forMe')}
+                otherLabel={t('common.forSomeoneElse')}
+                badgeLabel={t('common.profileSummary')}
+                summaryTitle={t('common.profileInfoWillBeUsed')}
+                summaryDescription={t('common.profileInfoWillBeUsed')}
+                canUseProfile={hasProfileData}
+                missingMessage={t('common.profileInfoMissing')}
+                onPrimaryAction={() => navigation.navigate('EditProfile')}
+                primaryActionLabel={hasProfileData ? t('common.editProfileInfo') : t('common.completeProfile')}
+                summaryItems={
+                  hasProfileData
+                    ? [
+                        { icon: 'person-outline', label: t('kabala.yourName'), value: profileName },
+                        { icon: 'calendar-outline', label: t('kabala.kabalabirthDate'), value: formatToDDMMYYYY(profileBirthDate) },
+                      ]
+                    : []
+                }
+              />
 
-            {readingMode === 'other' ? (
-              <View style={styles.formCard}>
-                <Text style={styles.formTitle}>{t('kabala.enterYourInfo')}</Text>
-                
-                <View style={styles.inputSection}>
-                  <Text style={styles.inputLabel}>{t('kabala.yourName')}</Text>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder={t('kabala.enterNamePlaceholder')}
-                    placeholderTextColor="#A1A1AA"
-                    value={isim}
-                    onChangeText={setIsim}
-                    autoCapitalize="words"
-                  />
-                  <Text style={styles.inputHint}>
-                    {t('kabala.nameHebrewHint')}
-                  </Text>
-                </View>
-
-                <View style={styles.inputSection}>
-                  <Text style={styles.inputLabel}>{t('kabala.kabalabirthDate')}</Text>
-                  <TouchableOpacity
-                    style={styles.dateButton}
-                    onPress={() => setShowDatePicker(true)}
-                  >
-                    <Text style={styles.dateButtonText}>
-                      {dogumTarihi ? formatToDDMMYYYY(dogumTarihi) : t('kabala.selectBirthDate')}
+              {readingMode === 'other' ? (
+                <View style={styles.formCard}>
+                  <Text style={styles.formTitle}>{t('kabala.enterYourInfo')}</Text>
+                  
+                  <View style={styles.inputSection}>
+                    <Text style={styles.inputLabel}>{t('kabala.yourName')}</Text>
+                    <TextInput
+                      style={styles.textInput}
+                      placeholder={t('kabala.enterNamePlaceholder')}
+                      placeholderTextColor="#A1A1AA"
+                      value={isim}
+                      onChangeText={setIsim}
+                      autoCapitalize="words"
+                    />
+                    <Text style={styles.inputHint}>
+                      {t('kabala.nameHebrewHint')}
                     </Text>
-                    <Ionicons name="calendar" size={20} color="#FFFFFF" />
-                  </TouchableOpacity>
-                  <Text style={styles.inputHint}>
-                    {t('kabala.birthDateHint')}
-                  </Text>
-                </View>
+                  </View>
 
-                <View style={styles.infoSection}>
-                  <Text style={styles.infoTitle}>{t('kabala.kabalaAnalysis')}</Text>
-                  <View style={styles.infoItems}>
-                    <View style={styles.infoItem}>
-                      <Text style={styles.hebrewLetter}>א</Text>
-                      <Text style={styles.infoText}>{t('kabala.hebrewNumerology')}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                      <Text style={styles.hebrewLetter}>ב</Text>
-                      <Text style={styles.infoText}>{t('kabala.sefirotEnergies')}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                      <Text style={styles.hebrewLetter}>ג</Text>
-                      <Text style={styles.infoText}>{t('kabala.spiritualPath')}</Text>
-                    </View>
-                    <View style={styles.infoItem}>
-                      <Text style={styles.hebrewLetter}>ד</Text>
-                      <Text style={styles.infoText}>{t('kabala.destinyAnalysis')}</Text>
+                  <View style={styles.inputSection}>
+                    <Text style={styles.inputLabel}>{t('kabala.kabalabirthDate')}</Text>
+                    <TouchableOpacity
+                      style={styles.dateButton}
+                      onPress={() => setShowDatePicker(true)}
+                    >
+                      <Text style={styles.dateButtonText}>
+                        {dogumTarihi ? formatToDDMMYYYY(dogumTarihi) : t('kabala.selectBirthDate')}
+                      </Text>
+                      <Ionicons name="calendar" size={20} color="#FFFFFF" />
+                    </TouchableOpacity>
+                    <Text style={styles.inputHint}>
+                      {t('kabala.birthDateHint')}
+                    </Text>
+                  </View>
+
+                  <View style={styles.infoSection}>
+                    <Text style={styles.infoTitle}>{t('kabala.kabalaAnalysis')}</Text>
+                    <View style={styles.infoItems}>
+                      <View style={styles.infoItem}>
+                        <Text style={styles.hebrewLetter}>א</Text>
+                        <Text style={styles.infoText}>{t('kabala.hebrewNumerology')}</Text>
+                      </View>
+                      <View style={styles.infoItem}>
+                        <Text style={styles.hebrewLetter}>ב</Text>
+                        <Text style={styles.infoText}>{t('kabala.sefirotEnergies')}</Text>
+                      </View>
+                      <View style={styles.infoItem}>
+                        <Text style={styles.hebrewLetter}>ג</Text>
+                        <Text style={styles.infoText}>{t('kabala.spiritualPath')}</Text>
+                      </View>
+                      <View style={styles.infoItem}>
+                        <Text style={styles.hebrewLetter}>ד</Text>
+                        <Text style={styles.infoText}>{t('kabala.destinyAnalysis')}</Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            ) : null}
+              ) : null}
 
-            {/* Submit Button */}
-            <FortunePrimaryButton
-              label={t('kabala.getKabalaFortune')}
-              loadingLabel={t('kabala.fortuneBeingPrepared')}
-              loading={loading || fortuneLoading}
-              disabled={loading || fortuneLoading}
-              onPress={handleSubmit}
-              style={styles.submitButton}
-            />
+              <FortunePrimaryButton
+                label={t('kabala.getKabalaFortune')}
+                loadingLabel={t('kabala.fortuneBeingPrepared')}
+                loading={loading || fortuneLoading}
+                disabled={loading || fortuneLoading}
+                onPress={handleSubmit}
+                style={styles.submitButton}
+              />
+            </View>
           </ScrollView>
         </TouchableWithoutFeedback>
       </LinearGradient>
@@ -491,8 +492,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 0,
     paddingBottom: 120,
+  },
+  content: {
+    paddingHorizontal: 18,
+    paddingTop: 18,
   },
   headerSection: {
     height: 240,
@@ -599,7 +603,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.05)',
     padding: 20,
     borderRadius: 24,
-    marginHorizontal: 18,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.10)',

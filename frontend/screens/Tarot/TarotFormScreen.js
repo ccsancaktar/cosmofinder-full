@@ -54,82 +54,84 @@ const TarotFormScreen = React.memo(() => {
               </LinearGradient>
             </View>
 
-            <View style={styles.intentionCard}>
-              <Text style={styles.eyebrow}>{t('tarot.writeIntention')}</Text>
-              <Text style={styles.intentionTitle}>{t('tarot.intentStepTitle')}</Text>
-              <Text style={styles.intentionDescription}>
-                {hasPremium ? t('tarot.intentStepDescriptionPremium') : t('tarot.intentStepDescriptionFree')}
-              </Text>
+            <View style={styles.content}>
+              <View style={styles.intentionCard}>
+                <Text style={styles.eyebrow}>{t('tarot.writeIntention')}</Text>
+                <Text style={styles.intentionTitle}>{t('tarot.intentStepTitle')}</Text>
+                <Text style={styles.intentionDescription}>
+                  {hasPremium ? t('tarot.intentStepDescriptionPremium') : t('tarot.intentStepDescriptionFree')}
+                </Text>
 
-              {hasPremium ? (
-                <View style={styles.inputContainer}>
-                  <TextInput
-                    style={styles.textInput}
-                    placeholder={t('tarot.intentionPlaceholder')}
-                    placeholderTextColor="#999"
-                    value={niyet}
-                    onChangeText={text => setNiyet(text.slice(0, 200))}
-                    multiline
-                    numberOfLines={4}
-                    textAlignVertical="top"
-                  />
-                  <Text style={styles.charCount}>{niyet.length} / 200</Text>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  activeOpacity={0.9}
-                  style={styles.lockedQuestionCard}
-                  onPress={() => navigation.navigate('Premium')}
-                >
-                  <View style={styles.lockedHeaderRow}>
-                    <View style={styles.lockedFieldLabelWrap}>
-                      <Text style={styles.lockedFieldLabel}>{t('tarot.writeIntention')}</Text>
-                      <View style={styles.premiumMiniBadge}>
-                        <Ionicons name="sparkles" size={11} color="#0D0B1F" />
-                  <Text style={styles.premiumMiniBadgeText}>{t('premium.title')}</Text>
+                {hasPremium ? (
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.textInput}
+                      placeholder={t('tarot.intentionPlaceholder')}
+                      placeholderTextColor="#999"
+                      value={niyet}
+                      onChangeText={text => setNiyet(text.slice(0, 200))}
+                      multiline
+                      numberOfLines={4}
+                      textAlignVertical="top"
+                    />
+                    <Text style={styles.charCount}>{niyet.length} / 200</Text>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    activeOpacity={0.9}
+                    style={styles.lockedQuestionCard}
+                    onPress={() => navigation.navigate('Premium')}
+                  >
+                    <View style={styles.lockedHeaderRow}>
+                      <View style={styles.lockedFieldLabelWrap}>
+                        <Text style={styles.lockedFieldLabel}>{t('tarot.writeIntention')}</Text>
+                        <View style={styles.premiumMiniBadge}>
+                          <Ionicons name="sparkles" size={11} color="#0D0B1F" />
+                          <Text style={styles.premiumMiniBadgeText}>{t('premium.title')}</Text>
+                        </View>
                       </View>
+                      <Ionicons name="lock-closed" size={18} color="#F5D06A" />
                     </View>
-                    <Ionicons name="lock-closed" size={18} color="#F5D06A" />
-                  </View>
 
-                  <View style={styles.lockedTextarea}>
-                    <Text style={styles.lockedPlaceholder}>{t('tarot.intentionPlaceholder')}</Text>
-                  </View>
-
-                  <View style={styles.lockedFooterRow}>
-                    <View style={styles.premiumPromptContent}>
-                      <Text style={styles.premiumPromptTitle}>{t('tarot.questionPremiumTitle')}</Text>
-                      <Text style={styles.premiumPromptText}>{t('tarot.questionPremiumDescription')}</Text>
+                    <View style={styles.lockedTextarea}>
+                      <Text style={styles.lockedPlaceholder}>{t('tarot.intentionPlaceholder')}</Text>
                     </View>
-                    <Ionicons name="chevron-forward" size={18} color="#F5D06A" />
-                  </View>
-                </TouchableOpacity>
-              )}
 
-              <View style={styles.previewCard}>
-                <View style={styles.previewIconWrap}>
-                  <Ionicons name="albums-outline" size={18} color="#F5D06A" />
+                    <View style={styles.lockedFooterRow}>
+                      <View style={styles.premiumPromptContent}>
+                        <Text style={styles.premiumPromptTitle}>{t('tarot.questionPremiumTitle')}</Text>
+                        <Text style={styles.premiumPromptText}>{t('tarot.questionPremiumDescription')}</Text>
+                      </View>
+                      <Ionicons name="chevron-forward" size={18} color="#F5D06A" />
+                    </View>
+                  </TouchableOpacity>
+                )}
+
+                <View style={styles.previewCard}>
+                  <View style={styles.previewIconWrap}>
+                    <Ionicons name="albums-outline" size={18} color="#F5D06A" />
+                  </View>
+                  <View style={styles.previewContent}>
+                    <Text style={styles.previewTitle}>{t('tarot.chooseYourSpread')}</Text>
+                    <Text style={styles.previewText}>{t('tarot.selectionSubtitle')}</Text>
+                  </View>
                 </View>
-                <View style={styles.previewContent}>
-                  <Text style={styles.previewTitle}>{t('tarot.chooseYourSpread')}</Text>
-                  <Text style={styles.previewText}>{t('tarot.selectionSubtitle')}</Text>
-                </View>
+
+                <FortunePrimaryButton
+                  label={t('tarot.continueToCardSelection')}
+                  onPress={() => navigation.navigate('TarotSelection', { niyet: hasPremium ? niyet.trim() : '' })}
+                  style={styles.submitButton}
+                />
+
+                {hasPremium ? (
+                  <TouchableOpacity
+                    style={styles.secondaryButton}
+                    onPress={() => navigation.navigate('TarotSelection', { niyet: '' })}
+                  >
+                    <Text style={styles.secondaryButtonText}>{t('tarot.skipIntention')}</Text>
+                  </TouchableOpacity>
+                ) : null}
               </View>
-
-              <FortunePrimaryButton
-                label={t('tarot.continueToCardSelection')}
-                onPress={() => navigation.navigate('TarotSelection', { niyet: hasPremium ? niyet.trim() : '' })}
-                style={styles.submitButton}
-              />
-
-              {hasPremium ? (
-                <TouchableOpacity
-                  style={styles.secondaryButton}
-                  onPress={() => navigation.navigate('TarotSelection', { niyet: '' })}
-                >
-                  <Text style={styles.secondaryButtonText}>{t('tarot.skipIntention')}</Text>
-                </TouchableOpacity>
-              ) : null}
             </View>
           </ScrollView>
         </LinearGradient>
@@ -175,6 +177,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 120,
+  },
+  content: {
+    paddingHorizontal: 18,
+    paddingTop: 18,
   },
   headerSection: {
     height: 240,
@@ -260,9 +266,12 @@ const styles = StyleSheet.create({
     ...fontStyles.body,
   },
   intentionCard: {
-    padding: 24,
+    padding: 22,
     backgroundColor: '#1B1B2F',
     minHeight: 520,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   eyebrow: {
     fontSize: 13,
