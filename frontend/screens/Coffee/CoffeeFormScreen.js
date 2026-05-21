@@ -309,6 +309,8 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
               </LinearGradient>
             </View>
 
+            <View style={styles.content}>
+
             <View style={styles.uploadCard}>
               <Text style={styles.cardTitle}>{t('coffee.coffeeCupPhotos')}</Text>
               <Text style={styles.cardText}>{t('coffee.photoInstructions')}</Text>
@@ -374,6 +376,7 @@ const CoffeeFormScreen = React.memo(({ navigation }) => {
               onPress={handleSubmit}
               style={styles.submitButton}
             />
+            </View>
           </ScrollView>
         </LinearGradient>
 
@@ -439,6 +442,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingBottom: 120,
+  },
+  content: {
+    paddingHorizontal: 18,
+    paddingTop: 18,
   },
   headerSection: {
     height: 240,
@@ -531,17 +538,19 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   uploadCard: {
-    backgroundColor: '#1B1B2F',
-    padding: 24,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
     marginBottom: 20,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   questionCard: {
-    backgroundColor: '#151529',
-    padding: 24,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
     marginBottom: 24,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
+    borderWidth: 1,
     borderColor: 'rgba(197, 161, 0, 0.12)',
   },
   cardTitle: {

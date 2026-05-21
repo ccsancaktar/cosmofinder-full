@@ -249,6 +249,8 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
                 </LinearGradient>
               </View>
 
+              <View style={styles.content}>
+
               <ReadingModeCard
                 title={t('common.whoIsThisReadingFor')}
                 subtitle={t('common.readingModeHint')}
@@ -321,6 +323,7 @@ const ChineseFormScreen = React.memo(({ navigation }) => {
                 onPress={handleSubmit}
                 style={styles.submitButton}
               />
+              </View>
             </ScrollView>
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
@@ -436,8 +439,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 0,
     paddingBottom: 120,
+  },
+  content: {
+    paddingHorizontal: 18,
+    paddingTop: 18,
   },
   header: {
     padding: 24,
@@ -555,7 +561,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.05)',
     padding: 20,
     borderRadius: 24,
-    marginHorizontal: 18,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.10)',
@@ -595,23 +600,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.05)',
     padding: 20,
     borderRadius: 24,
-    marginHorizontal: 18,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.10)',
   },
   tipsCard: {
-    backgroundColor: '#1B1B2F',
-    padding: 24,
-    borderRadius: 0,
-    marginHorizontal: 0,
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    padding: 20,
+    borderRadius: 24,
     marginBottom: 24,
-    elevation: Platform.OS === 'android' ? 4 : 0,
-    shadowColor: Platform.OS === 'ios' ? '#000' : 'transparent',
-    shadowOffset: Platform.OS === 'ios' ? { width: 0, height: 4 } : { width: 0, height: 0 },
-    shadowOpacity: Platform.OS === 'ios' ? 0.3 : 0,
-    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
-    width: '100%',
+    borderWidth: 1,
+    borderColor: 'rgba(197,161,0,0.10)',
   },
   tipsTitle: {
     fontSize: 20,

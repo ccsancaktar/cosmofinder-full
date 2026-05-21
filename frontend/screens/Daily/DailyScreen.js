@@ -255,6 +255,8 @@ const DailyScreen = () => {
             </LinearGradient>
           </View>
 
+          <View style={styles.content}>
+
           <ReadingModeCard
             title={t('common.whoIsThisReadingFor')}
             subtitle={t('common.readingModeHint')}
@@ -307,6 +309,7 @@ const DailyScreen = () => {
             onPress={handleDailyFortune}
             style={styles.submitButton}
           />
+          </View>
         </ScrollView>
       </LinearGradient>
       
@@ -420,8 +423,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    paddingHorizontal: 0,
     paddingBottom: 120,
+  },
+  content: {
+    paddingHorizontal: 18,
+    paddingTop: 18,
   },
   headerSection: {
     height: 240,
@@ -523,7 +529,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.05)',
     padding: 20,
     borderRadius: 24,
-    marginHorizontal: 18,
     marginBottom: 24,
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.10)',
