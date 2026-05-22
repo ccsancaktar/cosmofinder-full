@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import YildizNameForm from "../components/readings/YildizNameForm";
+import YildiznameForm from "../components/readings/YildiznameForm";
 import StarField from "../components/home/StarField";
 import ProtectedRoute from "../components/auth/ProtectedRoute";
 
@@ -46,7 +46,7 @@ function YildizNameContent() {
 
         {/* Fortune Form */}
         <main className="pb-16">
-          <YildizNameForm />
+          <YildiznameForm />
         </main>
         
         {/* Footer */}
