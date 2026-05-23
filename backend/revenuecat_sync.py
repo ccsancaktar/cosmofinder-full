@@ -64,10 +64,23 @@ def _sync_premium_subscription(user_id, subscriber):
     existing_subscription = PremiumSubscription.find_active_by_user_id(user_id)
 
     if not premium_entitlement:
-        if existing_subscription:
+        if existing_subscription and existing_subscription.purchase_source == "revenuecat":
             existing_subscription.is_active = False
             existing_subscription.auto_renew = False
             existing_subscription.save()
+            return {
+                "has_premium": False,
+                "plan_type": None,
+                "days_remaining": None,
+            }
+
+        if existing_subscription:
+            return {
+                "has_premium": True,
+                "plan_type": existing_subscription.plan_type,
+                "days_remaining": existing_subscription.days_remaining(),
+                "end_date": existing_subscription.end_date.isoformat() if existing_subscription.end_date else None,
+            }
 
         return {
             "has_premium": False,
@@ -80,10 +93,23 @@ def _sync_premium_subscription(user_id, subscriber):
     product_identifier = premium_entitlement.get("product_identifier")
 
     if expires_date and expires_date <= datetime.utcnow():
-        if existing_subscription:
+        if existing_subscription and existing_subscription.purchase_source == "revenuecat":
             existing_subscription.is_active = False
             existing_subscription.auto_renew = False
             existing_subscription.save()
+            return {
+                "has_premium": False,
+                "plan_type": None,
+                "days_remaining": None,
+            }
+
+        if existing_subscription:
+            return {
+                "has_premium": True,
+                "plan_type": existing_subscription.plan_type,
+                "days_remaining": existing_subscription.days_remaining(),
+                "end_date": existing_subscription.end_date.isoformat() if existing_subscription.end_date else None,
+            }
 
         return {
             "has_premium": False,
