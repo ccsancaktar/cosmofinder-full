@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
 import Button from "../common/Button";
-import { useNavigate } from "react-router-dom";
 
 export default function CTASection() {
-  const navigate = useNavigate();
+  const scrollToDownload = () => {
+    document.getElementById("download")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section className="py-16 md:py-24 relative overflow-hidden">
@@ -43,8 +44,8 @@ export default function CTASection() {
           </h2>
 
           <p className="text-gray-400 text-base md:text-lg max-w-xl mx-auto mb-8">
-            İlk falın ücretsiz! Hemen kayıt ol ve yapay zeka destekli mistik yorumlarla 
-            tanış.
+            CosmoFinder’ı telefonuna indir, hesabını uygulama içinde oluştur ve
+            yapay zeka destekli spiritüel yorumlarla tanış.
           </p>
 
           <motion.div
@@ -54,16 +55,16 @@ export default function CTASection() {
             <Button
               variant="primary"
               size="lg"
-              onClick={() => navigate("/register")}
+              onClick={scrollToDownload}
               className="inline-flex items-center gap-2"
             >
-              Ücretsiz Başla
+              İndirmeye Git
               <span>→</span>
             </Button>
           </motion.div>
 
           <p className="text-xs text-gray-400 mt-4">
-            Kredi kartı gerekmez • Hemen başla
+            Mobil uygulama üzerinden erişim • Yakında mağazalarda
           </p>
         </motion.div>
       </div>

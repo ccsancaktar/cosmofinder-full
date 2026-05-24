@@ -4,6 +4,10 @@ import Button from "../common/Button";
 
 export default function HeroSection() {
   const phoneImg = "/assets/images/mockup.png";
+  const scrollToDownload = () => {
+    document.getElementById("download")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center pt-20 md:pt-0 overflow-hidden">
       {/* Background Gradient Orbs */}
@@ -65,7 +69,7 @@ export default function HeroSection() {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button variant="primary" size="lg" className="w-full sm:w-auto">
+                <Button variant="primary" size="lg" className="w-full sm:w-auto" onClick={scrollToDownload}>
                   <span className="flex items-center justify-center gap-2">
                     🍎 App Store'den İndir
                   </span>
@@ -76,7 +80,7 @@ export default function HeroSection() {
                 whileHover={{ scale: 1.03, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <Button variant="secondary" size="lg" className="w-full sm:w-auto">
+                <Button variant="secondary" size="lg" className="w-full sm:w-auto" onClick={scrollToDownload}>
                   <span className="flex items-center justify-center gap-2">
                     ▶️ Google Play'den İndir
                   </span>
@@ -101,7 +105,7 @@ export default function HeroSection() {
               </div>
               <div className="w-px h-10 bg-white/10" />
               <div className="text-center">
-                <div className="text-2xl md:text-3xl font-bold text-white">7+</div>
+                <div className="text-2xl md:text-3xl font-bold text-white">10</div>
                 <div className="text-xs text-gray-400 mt-1">Fal Türü</div>
               </div>
             </div>

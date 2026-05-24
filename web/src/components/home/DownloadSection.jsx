@@ -45,11 +45,15 @@ export default function DownloadSection() {
             ve mistik yolculuğuna başla.
           </p>
 
+          <div className="mb-8 inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm text-primary">
+            App Store ve Google Play bağlantıları yayınla birlikte eklenecek.
+          </div>
+
           {/* Download Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <motion.a
-              href="#"
-              whileHover={{ scale: 1.05, y: -3 }}
+              href="mailto:info@cosmofinder.com?subject=CosmoFinder%20App%20Store%20Link"
+              whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.98 }}
               className="group relative flex items-center gap-4 px-8 py-5 bg-white text-dark-bg rounded-2xl font-semibold transition-all overflow-hidden"
             >
@@ -62,15 +66,15 @@ export default function DownloadSection() {
             </motion.a>
 
             <motion.a
-              href="#"
-              whileHover={{ scale: 1.05, y: -3 }}
+              href="mailto:info@cosmofinder.com?subject=CosmoFinder%20Google%20Play%20Link"
+              whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.98 }}
               className="group relative flex items-center gap-4 px-8 py-5 bg-white text-dark-bg rounded-2xl font-semibold transition-all overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               <Play className="w-8 h-8 fill-current relative z-10" size={32} />
               <div className="text-left relative z-10">
-                <div className="text-xs opacity-70 uppercase tracking-wider">İndir</div>
+                <div className="text-xs opacity-70 uppercase tracking-wider">Bilgi Al</div>
                 <div className="text-lg font-bold">Google Play</div>
               </div>
             </motion.a>
@@ -88,8 +92,8 @@ export default function DownloadSection() {
               <QrCode className="w-10 h-10 text-dark-bg" size={40} />
             </div>
             <div className="text-left">
-              <div className="text-sm font-medium text-white">QR Kod ile İndir</div>
-              <div className="text-xs text-gray-400">Kameranı tarat ve indir</div>
+              <div className="text-sm font-medium text-white">Bağlantı Talep Et</div>
+              <div className="text-xs text-gray-400">Store bağlantıları için bize yaz</div>
             </div>
           </motion.div>
         </motion.div>

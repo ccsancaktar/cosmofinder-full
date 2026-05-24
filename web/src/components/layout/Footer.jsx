@@ -22,19 +22,17 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Hızlı Bağlantılar</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <Link to="/readings" className="hover:text-primary transition">
-                  Fal Çek
-                </Link>
-              </li>
-              <li>
-                <Link to="/premium" className="hover:text-primary transition">
-                  Premium
-                </Link>
-              </li>
-              <li>
                 <Link to="/" className="hover:text-primary transition">
                   Anasayfa
                 </Link>
+              </li>
+              <li>
+                <Link to="/support" className="hover:text-primary transition">
+                  Destek
+                </Link>
+              </li>
+              <li>
+                <a href="#download" className="hover:text-primary transition">Uygulamayı İndir</a>
               </li>
             </ul>
           </div>
@@ -48,9 +46,14 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition">
+                <Link to="/terms" className="hover:text-primary transition">
                   Kullanım Şartları
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link to="/support" className="hover:text-primary transition">
+                  Destek
+                </Link>
               </li>
             </ul>
           </div>
@@ -59,7 +62,7 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">İletişim</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>info@cosmofinder.com</li>
-              <li>+90 (555) 000-0000</li>
+              <li>CosmoFinder Support</li>
             </ul>
           </div>
         </div>
