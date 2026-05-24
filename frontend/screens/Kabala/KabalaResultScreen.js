@@ -38,8 +38,16 @@ const cleanLine = (line) =>
     .replace(/\*\*/g, '')
     .replace(/^#+\s*/, '')
     .replace(/^[•·●▪◦]\s*/, '')
-    .replace(/^\-\s*/, '')
+    .replace(/^[-*]\s*/, '')
     .trim();
+
+const isLikelyUppercaseHeading = (line) => {
+  const cleaned = cleanLine(line).replace(/[:.]+$/, '').trim();
+  if (!cleaned || cleaned.length < 6 || cleaned.length > 90) return false;
+  const lettersOnly = cleaned.replace(/[^A-Za-zÇĞİÖŞÜçğıöşüÄÖÜäöüẞß\s]/g, '');
+  if (!lettersOnly.trim()) return false;
+  return lettersOnly === lettersOnly.toLocaleUpperCase('tr-TR');
+};
 
 const normalizeComparable = (line) =>
   stripTurkish(cleanLine(line))
@@ -78,9 +86,9 @@ const parseKabalaContent = (content, fallbackTitle = 'READING') => {
     }
 
     const headingMeta = resolveHeadingMeta(line);
-    if (headingMeta) {
+    if (headingMeta || isLikelyUppercaseHeading(line)) {
       if (currentSection) sections.push(currentSection);
-      currentSection = { title: line.replace(/[:.;]+$/g, '').trim(), key: headingMeta.key, points: [] };
+      currentSection = { title: line.replace(/[:.;]+$/g, '').trim(), key: headingMeta?.key || 'guidance', points: [] };
       return;
     }
 

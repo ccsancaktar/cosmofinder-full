@@ -43,9 +43,9 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">Yasal</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>
-                <a href="#" className="hover:text-primary transition">
+                <Link to="/privacy-policy" className="hover:text-primary transition">
                   Gizlilik Politikası
-                </a>
+                </Link>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition">

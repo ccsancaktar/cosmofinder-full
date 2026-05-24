@@ -133,6 +133,8 @@
     "premiumMembership": "Premium Membership",
     "becomePremium": "Become Premium",
     "new": "New",
+    "homeDailyBadge": "Daily Flow",
+    "homeAngelBadge": "Quick Message",
     "newFortuneAction": "New Fortune",
     "homeAction": "Home"
   },
@@ -520,7 +522,13 @@
     "birthPlacePlaceholder": "Your birth place",
     "chineseElement": "Chinese Element",
     "firstNameLastNameRequired": "First name and last name fields are required",
-    "updateError": "An error occurred while updating profile"
+    "updateError": "An error occurred while updating profile",
+    "deleteAccount": "Delete Account",
+    "deleteAccountTitle": "Delete account",
+    "deleteAccountMessage": "This permanently deletes your account, profile, reading history, and in-app data. Active App Store subscriptions must be managed separately in your Apple account settings.",
+    "deleteAccountConfirm": "Delete account",
+    "deleteAccountSuccess": "Your account has been deleted",
+    "deleteAccountError": "An error occurred while deleting your account"
   },
   "zodiac": {
     "aries": "Aries",

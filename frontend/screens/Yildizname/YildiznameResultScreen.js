@@ -112,8 +112,18 @@ const cleanLine = (line) =>
   line
     .replace(/\*\*/g, '')
     .replace(/^#+\s*/, '')
-    .replace(/^[-•]\s*/, '')
+    .replace(/^[-•*]\s*/, '')
     .trim();
+
+const isSeparatorLine = (line) => /^[-–—_]{2,}$/.test(cleanLine(line));
+
+const isLikelyUppercaseHeading = (line) => {
+  const cleaned = cleanLine(line).replace(/[:.]+$/, '').trim();
+  if (!cleaned || cleaned.length < 6 || cleaned.length > 90) return false;
+  const lettersOnly = cleaned.replace(/[^A-Za-zÇĞİÖŞÜçğıöşüÄÖÜäöüẞß\s]/g, '');
+  if (!lettersOnly.trim()) return false;
+  return lettersOnly === lettersOnly.toLocaleUpperCase('tr-TR');
+};
 
 const normalizeHeading = (line) => {
   const cleaned = cleanLine(line);
@@ -138,6 +148,10 @@ const parseYildiznameContent = (content, fallbackTitle = 'COMMENTARY') => {
   let cta = '';
 
   lines.forEach((rawLine) => {
+    if (isSeparatorLine(rawLine)) {
+      return;
+    }
+
     const line = normalizeHeading(rawLine);
 
     if (!line) {
@@ -154,13 +168,13 @@ const parseYildiznameContent = (content, fallbackTitle = 'COMMENTARY') => {
       return;
     }
 
-    if (isSectionHeading(line)) {
+    if (isSectionHeading(line) || isLikelyUppercaseHeading(line)) {
       if (currentSection) {
         sections.push(currentSection);
       }
 
       currentSection = {
-        title: line,
+        title: line.replace(/[:.]+$/, ''),
         points: [],
       };
       return;

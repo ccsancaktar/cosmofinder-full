@@ -143,6 +143,9 @@ export const authAPI = {
   // Şifre değiştir
   changePassword: (passwordData) => api.post('/auth/change-password', passwordData),
 
+  // Hesabı sil
+  deleteAccount: () => api.delete('/auth/account'),
+
   // Şifre sıfırlama isteği
   forgotPassword: (email) => api.post('/auth/forgot-password', { email }),
 

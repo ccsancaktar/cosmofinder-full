@@ -31,12 +31,8 @@ export default function HomeScreen({ navigation }) {
   const { hasPremium, fetchStatus } = usePremium();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [readings, setReadings] = useState([]);
-
-
-
   // Çok dilli readings array'ini oluştur
   useEffect(() => {
-    console.log('Readings array güncelleniyor');
     setReadings([
       {
         title: t('fortune.yildizname'),
@@ -321,7 +317,7 @@ export default function HomeScreen({ navigation }) {
                     end={{ x: 0, y: 1 }}
                   >
                     <View style={styles.featuredBadge}>
-                      <Text style={styles.featuredBadgeText}>Günün Akışı</Text>
+                      <Text style={styles.featuredBadgeText}>{t('common.homeDailyBadge')}</Text>
                     </View>
                     <View style={styles.cardOverlay}>
                       <Text style={styles.dailyCardTitle}>{dailyReading.title}</Text>
@@ -355,7 +351,7 @@ export default function HomeScreen({ navigation }) {
                     end={{ x: 0, y: 1 }}
                   >
                     <View style={styles.angelBadge}>
-                      <Text style={styles.angelBadgeText}>Hızlı Mesaj</Text>
+                      <Text style={styles.angelBadgeText}>{t('common.homeAngelBadge')}</Text>
                     </View>
                     <View style={styles.cardOverlay}>
                       <Text style={styles.angelCardTitle}>{angelReading.title}</Text>

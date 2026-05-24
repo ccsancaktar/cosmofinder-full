@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Readings from "./pages/Readings";
 import Premium from "./pages/Premium";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Dashboard from "./pages/Dashboard";
 import EditProfile from "./pages/EditProfile";
 import AddBalance from "./pages/AddBalance";
@@ -125,6 +126,7 @@ function AppContent() {
           <Route path="/kabala" element={<Kabala />} />
           <Route path="/daily" element={<Daily />} />
           <Route path="/premium" element={<Premium />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route
             path="/add-balance"
             element={
