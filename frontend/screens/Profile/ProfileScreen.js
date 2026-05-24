@@ -57,9 +57,9 @@ const elementMapping = {
 
 export default function ProfileScreen({ navigation }) {
   const { t } = useTranslation();
-  const { user, statistics, logout, loading, refreshProfile } = useAuth();
+  const { user, statistics, logout, deleteAccount, loading, refreshProfile } = useAuth();
   const { hasPremium } = usePremium();
-  const { showConfirm } = useNotification();
+  const { showConfirm, showAlert, hideAlert, showError, showSuccess } = useNotification();
   const [isUpdating, setIsUpdating] = useState(false);
   const [showLanguageModal, setShowLanguageModal] = useState(false);
   const displayName = user?.first_name?.trim() || t('profile.noName');
@@ -95,6 +95,28 @@ export default function ProfileScreen({ navigation }) {
       logout,
       null,
       'warning'
+    );
+  };
+
+  const handleDeleteAccount = () => {
+    showAlert(
+      t('profile.deleteAccountTitle'),
+      t('profile.deleteAccountMessage'),
+      'warning',
+      {
+        onConfirm: async () => {
+          hideAlert();
+          const result = await deleteAccount();
+          if (result.success) {
+            showSuccess(t('profile.deleteAccountSuccess'));
+          } else {
+            showError(result.error || t('profile.deleteAccountError'));
+          }
+        },
+        showCancel: true,
+        confirmText: t('profile.deleteAccountConfirm'),
+        cancelText: t('common.cancel'),
+      }
     );
   };
 
@@ -313,6 +335,16 @@ export default function ProfileScreen({ navigation }) {
             </View>
             <Ionicons name="chevron-forward" size={18} color="#C5A100" />
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.menuItem} onPress={handleDeleteAccount}>
+            <View style={styles.menuItemLeft}>
+              <Ionicons name="trash-outline" size={20} color="#E57373" />
+              <Text style={[styles.menuItemText, styles.deleteMenuText, fontStyles.body]}>
+                {t('profile.deleteAccount')}
+              </Text>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color="#E57373" />
+          </TouchableOpacity>
         </View>
         </ScrollView>
       </LinearGradient>
@@ -428,6 +460,9 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFFFFF',
     marginLeft: 12,
+  },
+  deleteMenuText: {
+    color: '#F3A6A6',
   },
   sectionHeading: {
     fontSize: 16,

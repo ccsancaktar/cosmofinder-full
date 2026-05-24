@@ -12,9 +12,10 @@ import jwt
 import os
 import re
 import secrets
+from pathlib import Path
 from rate_limiting import limiter
 
-from config import get_backend_public_url, load_environment
+from config import COFFEE_UPLOADS_DIR, get_backend_public_url, load_environment
 
 load_environment()
 
@@ -143,6 +144,34 @@ def consume_password_reset_token(token):
         {'$set': {'used': True, 'used_at': datetime.now()}}
     )
     return reset_doc, None
+
+
+def _delete_user_coffee_uploads(readings):
+    upload_root = Path(COFFEE_UPLOADS_DIR)
+
+    for reading in readings:
+        input_data = getattr(reading, 'input_data', {}) or {}
+        for relative_path in (input_data.get('image_paths') or []):
+            try:
+                file_path = upload_root / relative_path
+                if file_path.exists():
+                    file_path.unlink()
+            except Exception as exc:
+                current_app.logger.warning('Kahve yukleme dosyasi silinemedi: %s', exc)
+
+
+def _delete_user_account_data(user):
+    user_id = str(user._id)
+    readings = Reading.find_by_user_id(user_id)
+
+    _delete_user_coffee_uploads(readings)
+
+    db.readings.delete_many({'user_id': user_id})
+    db.token_transactions.delete_many({'user_id': user_id})
+    db.premium_subscriptions.delete_many({'user_id': user_id})
+    db.password_reset_tokens.delete_many({'user_id': user_id})
+    db.notification_dispatch_claims.delete_many({'user_id': user_id})
+    db.users.delete_one({'_id': user._id})
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -419,6 +448,30 @@ def change_password():
         
     except Exception as e:
         return jsonify({'error': f'Şifre değiştirme hatası: {str(e)}'}), 500
+
+
+@auth_bp.route('/account', methods=['DELETE'])
+@jwt_required()
+def delete_account():
+    try:
+        user_id = get_jwt_identity()
+        user = User.find_by_id(user_id)
+
+        if not user:
+            return jsonify({'error': 'Kullanıcı bulunamadı'}), 404
+
+        if user.is_admin():
+            return jsonify({'error': 'Yönetici hesabı uygulama içinden silinemez'}), 403
+
+        _delete_user_account_data(user)
+
+        return jsonify({
+            'success': True,
+            'message': 'Hesap ve ilişkili veriler silindi'
+        }), 200
+    except Exception as e:
+        current_app.logger.error(f'Hesap silme hatası: {str(e)}')
+        return jsonify({'error': f'Hesap silme hatası: {str(e)}'}), 500
 
 
 @auth_bp.route('/forgot-password', methods=['POST'])

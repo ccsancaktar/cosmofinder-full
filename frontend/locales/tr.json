@@ -131,10 +131,12 @@
   "perToken": "token",
   "buyToken": "Token Satın Al",
   "premiumMembership": "Premium Üyelik",
-  "becomePremium": "Premium Üye Ol",
-  "new": "Yeni",
-  "newFortuneAction": "Yeni Fal",
-  "homeAction": "Anasayfa"
+    "becomePremium": "Premium Üye Ol",
+    "new": "Yeni",
+    "homeDailyBadge": "Günün Akışı",
+    "homeAngelBadge": "Hızlı Mesaj",
+    "newFortuneAction": "Yeni Fal",
+    "homeAction": "Anasayfa"
   },
   "language": {
     "select": "Dil Seçin",
@@ -520,7 +522,13 @@
     "birthPlacePlaceholder": "Doğum yeriniz",
     "chineseElement": "Çin Elementi",
     "firstNameLastNameRequired": "Ad ve soyad alanları zorunludur",
-    "updateError": "Profil güncellenirken bir hata oluştu"
+    "updateError": "Profil güncellenirken bir hata oluştu",
+    "deleteAccount": "Hesabı Sil",
+    "deleteAccountTitle": "Hesabı sil",
+    "deleteAccountMessage": "Bu işlem hesabınızı, profilinizi, fal geçmişinizi ve uygulama içi verilerinizi kalıcı olarak siler. Aktif App Store abonelikleri Apple hesap ayarlarınızdan ayrıca yönetilmelidir.",
+    "deleteAccountConfirm": "Hesabı sil",
+    "deleteAccountSuccess": "Hesabınız silindi",
+    "deleteAccountError": "Hesabınız silinirken bir hata oluştu"
   },
   "zodiac": {
     "aries": "Koç",

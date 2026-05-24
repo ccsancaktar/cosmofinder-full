@@ -115,6 +115,19 @@ export const AuthProvider = ({ children }) => {
     return refreshPromise;
   }, []);
 
+  const clearLocalSession = async () => {
+    await AsyncStorage.removeItem('auth_token');
+    await AsyncStorage.removeItem('auth_user');
+
+    setToken(null);
+    setUser(null);
+    setStatistics({
+      total_readings: 0,
+      days_registered: 0
+    });
+    await purchasesService.logOut();
+  };
+
   const persistAuthSession = async (sessionToken, sessionUser) => {
     if (!sessionToken || !sessionUser) {
       throw new Error('Eksik oturum verisi döndü');
@@ -204,16 +217,7 @@ export const AuthProvider = ({ children }) => {
     }
     
     try {
-      await AsyncStorage.removeItem('auth_token');
-      await AsyncStorage.removeItem('auth_user');
-      
-      setToken(null);
-      setUser(null);
-      setStatistics({
-        total_readings: 0,
-        days_registered: 0
-      });
-      await purchasesService.logOut();
+      await clearLocalSession();
     } catch (error) {
       console.error('Logout storage hatası:', error);
     }
@@ -290,6 +294,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const deleteAccount = async () => {
+    try {
+      setLoading(true);
+      await authAPI.deleteAccount();
+      await clearLocalSession();
+      return { success: true };
+    } catch (error) {
+      console.error('Hesap silme hatası:', error);
+      return {
+        success: false,
+        error: normalizeErrorMessage(error, 'profile.deleteAccountError')
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
 
   const value = {
@@ -306,6 +327,7 @@ export const AuthProvider = ({ children }) => {
     skipOnboarding,
     changePassword,
     forgotPassword,
+    deleteAccount,
     refreshProfile,
     finalizeAuthenticatedSession,
     setToken,

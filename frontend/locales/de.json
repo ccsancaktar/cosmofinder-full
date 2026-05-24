@@ -133,6 +133,8 @@
     "premiumMembership": "Premium-Mitgliedschaft",
     "becomePremium": "Premium werden",
     "new": "Neu",
+    "homeDailyBadge": "Tagesfluss",
+    "homeAngelBadge": "Kurze Botschaft",
     "newFortuneAction": "Neue Wahrsagung",
     "homeAction": "Startseite"
   },
@@ -520,7 +522,13 @@
     "birthPlacePlaceholder": "Ihr Geburtsort",
     "chineseElement": "Chinesisches Element",
     "firstNameLastNameRequired": "Vorname und Nachname sind erforderlich",
-    "updateError": "Beim Aktualisieren des Profils ist ein Fehler aufgetreten"
+    "updateError": "Beim Aktualisieren des Profils ist ein Fehler aufgetreten",
+    "deleteAccount": "Konto löschen",
+    "deleteAccountTitle": "Konto löschen",
+    "deleteAccountMessage": "Dadurch werden dein Konto, dein Profil, dein Deutungsverlauf und deine In-App-Daten dauerhaft gelöscht. Aktive App-Store-Abonnements müssen separat in deinen Apple-Kontoeinstellungen verwaltet werden.",
+    "deleteAccountConfirm": "Konto löschen",
+    "deleteAccountSuccess": "Dein Konto wurde gelöscht",
+    "deleteAccountError": "Beim Löschen deines Kontos ist ein Fehler aufgetreten"
   },
   "zodiac": {
     "aries": "Widder",
