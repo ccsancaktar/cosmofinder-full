@@ -62,7 +62,8 @@ export default function Footer() {
             <h4 className="text-white font-semibold mb-4">İletişim</h4>
             <ul className="space-y-2 text-sm text-gray-400">
               <li>info@cosmofinder.com</li>
-              <li>CosmoFinder Support</li>
+              <li>Cihan Sancak</li>
+              <li>Bandırma / Balıkesir</li>
             </ul>
           </div>
         </div>

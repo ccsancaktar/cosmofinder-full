@@ -4,6 +4,7 @@ const termsSections = [
     body: [
       "CosmoFinder, kullanıcılara yapay zeka destekli fal, spiritüel yorum ve kişisel içgörü deneyimleri sunan dijital bir uygulamadır.",
       "Web sitesi tanıtım, bilgilendirme, destek ve yasal içerik sağlamak amacıyla kullanılır. Asıl uygulama deneyimi mobil uygulama üzerinden sunulur.",
+      "Bu hizmet bireysel yayıncı Cihan Sancak tarafından sunulmaktadır.",
     ],
   },
   {
@@ -48,6 +49,7 @@ const termsSections = [
     title: "İletişim",
     body: [
       "Bu kullanım şartlarıyla ilgili sorular için info@cosmofinder.com adresi üzerinden bizimle iletişime geçebilirsiniz.",
+      "Yayıncı bilgisi: Cihan Sancak, Bandırma / Balıkesir, Türkiye.",
     ],
   },
 ];

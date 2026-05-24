@@ -26,6 +26,13 @@ const supportSections = [
       "Destek taleplerine makul süre içinde dönüş yapmayı hedefliyoruz. Yoğun dönemlerde yanıt süresi uzayabilir.",
     ],
   },
+  {
+    title: "Yayıncı Bilgisi",
+    body: [
+      "CosmoFinder, bireysel yayıncı Cihan Sancak tarafından sunulmaktadır.",
+      "Konum bilgisi: Bandırma / Balıkesir, Türkiye.",
+    ],
+  },
 ];
 
 export default function Support() {
@@ -44,13 +51,15 @@ export default function Support() {
             soruları ve genel yardım için bu sayfayı kullanabilirsiniz.
           </p>
           <div className="mt-6 rounded-2xl border border-primary/20 bg-primary/10 p-5 text-sm text-gray-200">
-            <p className="font-semibold text-white">İletişim E-postası</p>
+            <p className="font-semibold text-white">Destek ve İletişim</p>
+            <p className="mt-2 text-gray-300">Yayıncı: Cihan Sancak</p>
             <a
               href="mailto:info@cosmofinder.com"
               className="mt-1 inline-block text-primary hover:text-primary/80"
             >
               info@cosmofinder.com
             </a>
+            <p className="mt-2 text-gray-300">Bandırma / Balıkesir, Türkiye</p>
           </div>
         </div>
 

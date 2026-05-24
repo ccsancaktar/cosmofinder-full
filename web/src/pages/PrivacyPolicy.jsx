@@ -72,6 +72,7 @@ const sections = [
     title: "Contact Us",
     body: [
       "If you have any questions about this Privacy Policy or our privacy practices, please contact us at info@cosmofinder.com.",
+      "Publisher information: Cihan Sancak, Bandirma / Balikesir, Turkiye.",
     ],
   },
 ];
