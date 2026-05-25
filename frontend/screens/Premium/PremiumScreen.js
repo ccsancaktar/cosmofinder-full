@@ -23,11 +23,12 @@ const PLAN_CARD_WIDTH = width - 40;
 
 export default function PremiumScreen({ navigation }) {
   const { t } = useTranslation();
-  const { showError, showSuccess } = useNotification();
+  const { showError, showSuccess, showInfo } = useNotification();
   const { hasPremium, daysRemaining, loading, fetchStatus, updateStatus } = usePremium();
   const [plans, setPlans] = useState([]);
   const [loadingPlanId, setLoadingPlanId] = useState(null);
   const [storeReady, setStoreReady] = useState(true);
+  const [isRestoring, setIsRestoring] = useState(false);
 
   useEffect(() => {
     fetchStatus();
@@ -105,6 +106,31 @@ export default function PremiumScreen({ navigation }) {
       showError(error?.message || t('premium.purchaseFailed'));
     } finally {
       setLoadingPlanId(null);
+    }
+  };
+
+  const handleRestorePurchases = async () => {
+    try {
+      setIsRestoring(true);
+      await purchasesService.restorePurchases();
+      const syncResult = await PaymentAPI.syncMobilePremiumPurchase();
+
+      updateStatus({
+        has_premium: Boolean(syncResult?.has_premium),
+        plan_type: syncResult?.plan_type || null,
+        days_remaining: syncResult?.days_remaining ?? null,
+      });
+
+      if (syncResult?.has_premium) {
+        showSuccess(t('premium.restorePurchaseSuccess'));
+      } else {
+        showInfo(t('premium.restorePurchaseEmpty'));
+      }
+    } catch (error) {
+      console.error('Restore purchase error:', error);
+      showError(error?.message || t('premium.restorePurchaseFailed'));
+    } finally {
+      setIsRestoring(false);
     }
   };
 
@@ -282,6 +308,21 @@ export default function PremiumScreen({ navigation }) {
             </View>
           </View>
         )}
+
+        <View style={styles.restoreSection}>
+          <Text style={styles.restoreTitle}>{t('premium.restorePurchase')}</Text>
+          <Text style={styles.restoreDescription}>{t('premium.restorePurchaseDescription')}</Text>
+          <TouchableOpacity
+            style={[styles.restoreButton, isRestoring && styles.restoreButtonDisabled]}
+            onPress={handleRestorePurchases}
+            disabled={isRestoring}
+          >
+            <Ionicons name="refresh-circle-outline" size={18} color="#F5D06A" />
+            <Text style={styles.restoreButtonText}>
+              {isRestoring ? t('premium.processing') : t('premium.restorePurchase')}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
       </ScrollView>
       </LinearGradient>
@@ -522,6 +563,48 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     textAlign: 'center',
     opacity: 0.7,
+  },
+  restoreSection: {
+    marginHorizontal: 20,
+    marginTop: 8,
+    marginBottom: 32,
+    padding: 18,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: 'rgba(197, 161, 0, 0.18)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
+  },
+  restoreTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#C5A100',
+    marginBottom: 6,
+  },
+  restoreDescription: {
+    fontSize: 13,
+    lineHeight: 20,
+    color: 'rgba(255,255,255,0.68)',
+    marginBottom: 14,
+  },
+  restoreButton: {
+    minHeight: 48,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(245, 208, 106, 0.35)',
+    backgroundColor: 'rgba(245, 208, 106, 0.08)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    paddingHorizontal: 16,
+  },
+  restoreButtonDisabled: {
+    opacity: 0.65,
+  },
+  restoreButtonText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#F5D06A',
   },
   storePendingCard: {
     width: '100%',
