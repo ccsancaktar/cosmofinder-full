@@ -317,22 +317,28 @@ export default function PremiumScreen({ navigation }) {
             <Text style={styles.restoreDescription}>{t('premium.premiumActiveInsightsDescription')}</Text>
 
             <View style={styles.activeInsightsGrid}>
-              <View style={styles.insightCard}>
+              <View style={[styles.insightCard, styles.insightCardHalf]}>
                 <Ionicons name="wallet-outline" size={18} color="#F5D06A" />
                 <Text style={styles.insightValue}>{tokenValueUnlocked}</Text>
                 <Text style={styles.insightLabel}>{t('premium.tokenValueUnlocked')}</Text>
               </View>
 
-              <View style={styles.insightCard}>
+              <View style={[styles.insightCard, styles.insightCardHalf]}>
                 <Ionicons name="sparkles-outline" size={18} color="#F5D06A" />
-                <Text style={styles.insightValue}>{t('premium.unlimitedShort')}</Text>
+                <Text style={styles.insightValueSmall}>{t('premium.unlimitedShort')}</Text>
                 <Text style={styles.insightLabel}>{t('premium.unlimitedReadings')}</Text>
               </View>
 
-              <View style={styles.insightCard}>
-                <Ionicons name="videocam-off-outline" size={18} color="#F5D06A" />
-                <Text style={styles.insightValue}>{t('premium.adFreeShort')}</Text>
-                <Text style={styles.insightLabel}>{t('premium.noAds')}</Text>
+              <View style={[styles.insightCard, styles.insightCardWide]}>
+                <View style={styles.insightWideRow}>
+                  <View style={styles.insightWideIconWrap}>
+                    <Ionicons name="videocam-off-outline" size={18} color="#F5D06A" />
+                  </View>
+                  <View style={styles.insightWideText}>
+                    <Text style={styles.insightValue}>{t('premium.adFreeShort')}</Text>
+                    <Text style={styles.insightLabel}>{t('premium.noAds')}</Text>
+                  </View>
+                </View>
               </View>
             </View>
 
@@ -652,23 +658,38 @@ const styles = StyleSheet.create({
   },
   activeInsightsGrid: {
     flexDirection: 'row',
-    gap: 10,
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
     marginTop: 6,
     marginBottom: 14,
   },
   insightCard: {
-    flex: 1,
-    minHeight: 108,
+    minHeight: 112,
     borderRadius: 18,
     backgroundColor: 'rgba(255,255,255,0.035)',
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.05)',
-    padding: 12,
+    padding: 14,
     alignItems: 'flex-start',
     justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  insightCardHalf: {
+    width: '48.5%',
+  },
+  insightCardWide: {
+    width: '100%',
+    minHeight: 84,
+    justifyContent: 'center',
   },
   insightValue: {
     fontSize: 18,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  insightValueSmall: {
+    fontSize: 16,
+    lineHeight: 22,
     fontWeight: '800',
     color: '#FFFFFF',
   },
@@ -677,6 +698,25 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: 'rgba(255,255,255,0.66)',
   },
+  insightWideRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+  },
+  insightWideIconWrap: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(245, 208, 106, 0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 208, 106, 0.16)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  insightWideText: {
+    flex: 1,
+  },
   restoreDisabledCard: {
     minHeight: 48,
     borderRadius: 16,
@@ -684,15 +724,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(125, 211, 110, 0.22)',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     paddingHorizontal: 14,
-    gap: 8,
+    paddingVertical: 12,
   },
   restoreDisabledText: {
     flex: 1,
     fontSize: 13,
     lineHeight: 19,
     color: 'rgba(255,255,255,0.78)',
+    marginLeft: 8,
   },
   storePendingCard: {
     width: '100%',
