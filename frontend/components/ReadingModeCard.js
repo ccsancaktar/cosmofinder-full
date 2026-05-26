@@ -20,7 +20,6 @@ const ReadingModeCard = ({
   missingMessage,
   onPrimaryAction,
   primaryActionLabel,
-  badgeLabel = 'Profil özeti',
 }) => {
   const summaryOpacity = useRef(new Animated.Value(mode === 'self' ? 1 : 0)).current;
   const summaryTranslate = useRef(new Animated.Value(mode === 'self' ? 0 : 12)).current;
@@ -68,7 +67,7 @@ const ReadingModeCard = ({
           onPress={() => onChangeMode('self')}
           activeOpacity={0.9}
         >
-          <Ionicons name="person" size={16} color={mode === 'self' ? '#0D0B1F' : '#C5A100'} />
+          <Ionicons name="person" size={14} color={mode === 'self' ? '#0D0B1F' : '#C5A100'} />
           <Text style={[styles.segmentText, mode === 'self' && styles.segmentTextActive]}>{selfLabel}</Text>
         </TouchableOpacity>
 
@@ -77,7 +76,7 @@ const ReadingModeCard = ({
           onPress={() => onChangeMode('other')}
           activeOpacity={0.9}
         >
-          <Ionicons name="people" size={16} color={mode === 'other' ? '#0D0B1F' : '#C5A100'} />
+          <Ionicons name="people" size={14} color={mode === 'other' ? '#0D0B1F' : '#C5A100'} />
           <Text style={[styles.segmentText, mode === 'other' && styles.segmentTextActive]}>{otherLabel}</Text>
         </TouchableOpacity>
       </View>
@@ -86,6 +85,8 @@ const ReadingModeCard = ({
         <Animated.View
           style={[
             styles.summaryCard,
+            canUseProfile && styles.summaryCardReady,
+            !canUseProfile && styles.summaryCardWarning,
             {
               opacity: summaryOpacity,
               transform: [{ translateY: summaryTranslate }],
@@ -94,11 +95,11 @@ const ReadingModeCard = ({
         >
           <View style={styles.summaryHeader}>
             <View style={[styles.summaryIcon, !canUseProfile && styles.summaryIconWarning]}>
-              <Ionicons name={canUseProfile ? 'checkmark' : 'alert'} size={16} color={canUseProfile ? '#C5A100' : '#F4B45F'} />
+              <Ionicons name={canUseProfile ? 'checkmark' : 'alert'} size={16} color={canUseProfile ? '#7DD36E' : '#F4B45F'} />
             </View>
             <View style={styles.summaryHeaderCopy}>
-              <Text style={styles.summaryTitle}>{canUseProfile ? badgeLabel : summaryTitle}</Text>
-              <Text style={styles.summaryDescription}>
+              {!canUseProfile ? <Text style={styles.summaryTitle}>{summaryTitle}</Text> : null}
+              <Text style={[styles.summaryDescription, canUseProfile && styles.summaryDescriptionReady]}>
                 {canUseProfile ? summaryDescription : missingMessage}
               </Text>
             </View>
@@ -145,19 +146,19 @@ const styles = StyleSheet.create({
   },
   segmentButton: {
     flex: 1,
-    minHeight: 52,
+    minHeight: 50,
     borderRadius: 14,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 8,
+    gap: 7,
   },
   segmentButtonActive: {
     backgroundColor: '#C5A100',
   },
   segmentText: {
     color: '#FFFFFF',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '700',
   },
   segmentTextActive: {
@@ -171,6 +172,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.10)',
   },
+  summaryCardReady: {
+    backgroundColor: 'rgba(125,211,110,0.08)',
+    borderColor: 'rgba(125,211,110,0.30)',
+  },
+  summaryCardWarning: {
+    backgroundColor: 'rgba(13,11,31,0.58)',
+  },
   summaryHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -179,7 +187,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: 'rgba(197,161,0,0.14)',
+    backgroundColor: 'rgba(125,211,110,0.14)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -200,6 +208,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: 'rgba(255,255,255,0.66)',
+  },
+  summaryDescriptionReady: {
+    color: '#E8F5E9',
   },
   primaryActionButton: {
     marginTop: 16,

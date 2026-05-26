@@ -64,6 +64,9 @@ const TarotFormScreen = React.memo(() => {
 
                 {hasPremium ? (
                   <View style={styles.inputContainer}>
+                    <View style={styles.optionalBadge}>
+                      <Text style={styles.optionalBadgeText}>{t('common.optional')}</Text>
+                    </View>
                     <TextInput
                       style={styles.textInput}
                       placeholder={t('tarot.intentionPlaceholder')}
@@ -107,16 +110,6 @@ const TarotFormScreen = React.memo(() => {
                   </TouchableOpacity>
                 )}
 
-                <View style={styles.previewCard}>
-                  <View style={styles.previewIconWrap}>
-                    <Ionicons name="albums-outline" size={18} color="#F5D06A" />
-                  </View>
-                  <View style={styles.previewContent}>
-                    <Text style={styles.previewTitle}>{t('tarot.chooseYourSpread')}</Text>
-                    <Text style={styles.previewText}>{t('tarot.selectionSubtitle')}</Text>
-                  </View>
-                </View>
-
               </View>
 
               <View style={styles.actionGroup}>
@@ -125,15 +118,6 @@ const TarotFormScreen = React.memo(() => {
                   onPress={() => navigation.navigate('TarotSelection', { niyet: hasPremium ? niyet.trim() : '' })}
                   style={styles.submitButton}
                 />
-
-                {hasPremium ? (
-                  <TouchableOpacity
-                    style={styles.secondaryButton}
-                    onPress={() => navigation.navigate('TarotSelection', { niyet: '' })}
-                  >
-                    <Text style={styles.secondaryButtonText}>{t('tarot.skipIntention')}</Text>
-                  </TouchableOpacity>
-                ) : null}
               </View>
             </View>
           </ScrollView>
@@ -276,28 +260,44 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(255,255,255,0.06)',
   },
   eyebrow: {
-    fontSize: 13,
+    fontSize: 12,
     color: '#F5D06A',
-    letterSpacing: 1.3,
+    letterSpacing: 1.1,
     textTransform: 'uppercase',
-    marginBottom: 10,
+    marginBottom: 8,
     ...fontStyles.bodyBold,
   },
   intentionTitle: {
-    fontSize: 26,
+    fontSize: 18,
     color: '#FFFFFF',
-    marginBottom: 14,
+    lineHeight: 26,
+    marginBottom: 10,
     ...fontStyles.headingBold,
   },
   intentionDescription: {
-    fontSize: 16,
-    lineHeight: 25,
+    fontSize: 15,
+    lineHeight: 23,
     color: '#D2D1DD',
-    marginBottom: 0,
+    marginBottom: 6,
     ...fontStyles.body,
   },
   inputContainer: {
-    marginBottom: 24,
+    marginBottom: 20,
+  },
+  optionalBadge: {
+    alignSelf: 'flex-start',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 999,
+    backgroundColor: 'rgba(245, 208, 106, 0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 208, 106, 0.20)',
+  },
+  optionalBadgeText: {
+    color: '#F5D06A',
+    fontSize: 12,
+    ...fontStyles.bodyBold,
   },
   lockedQuestionCard: {
     backgroundColor: 'rgba(245, 208, 106, 0.06)',
@@ -400,54 +400,11 @@ const styles = StyleSheet.create({
     marginTop: 8,
     ...fontStyles.body,
   },
-  previewCard: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 14,
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 20,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: 'rgba(245, 208, 106, 0.16)',
-    marginBottom: 24,
-  },
-  previewIconWrap: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(245, 208, 106, 0.12)',
-  },
-  previewContent: {
-    flex: 1,
-  },
-  previewTitle: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    marginBottom: 6,
-    ...fontStyles.headingBold,
-  },
-  previewText: {
-    color: '#C9C8D7',
-    fontSize: 15,
-    lineHeight: 22,
-    ...fontStyles.body,
-  },
   actionGroup: {
     marginTop: 18,
   },
   submitButton: {
     marginBottom: 10,
-  },
-  secondaryButton: {
-    alignItems: 'center',
-    paddingVertical: 16,
-  },
-  secondaryButtonText: {
-    color: '#C5A100',
-    fontSize: 15,
-    ...fontStyles.bodyBold,
   },
   bannerAdContainer: {
     position: 'absolute',

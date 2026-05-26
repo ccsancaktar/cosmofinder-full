@@ -295,12 +295,7 @@ export default function NumerologyFormScreen({ navigation }) {
                     </TouchableOpacity>
                     <Text style={styles.helperText}>{t('numerology.birthDateHint')}</Text>
                   </View>
-                ) : (
-                  <View style={styles.profileCard}>
-                    <Text style={styles.cardTitle}>{t('numerology.profileReadyTitle')}</Text>
-                    <Text style={styles.profileCardText}>{t('numerology.profileReadyBody')}</Text>
-                  </View>
-                )}
+                ) : null}
 
                 <FortunePrimaryButton
                   label={t('numerology.getReading')}
@@ -469,14 +464,6 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(197,161,0,0.10)',
     marginBottom: 18,
   },
-  profileCard: {
-    backgroundColor: 'rgba(255,255,255,0.05)',
-    borderRadius: 24,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(197,161,0,0.10)',
-    marginBottom: 18,
-  },
   cardTitle: {
     color: '#FFFFFF',
     fontSize: 18,
@@ -521,11 +508,6 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.54)',
     fontSize: 13,
     marginTop: 10,
-  },
-  profileCardText: {
-    color: 'rgba(255,255,255,0.74)',
-    fontSize: 14,
-    lineHeight: 22,
   },
   modalOverlay: {
     flex: 1,

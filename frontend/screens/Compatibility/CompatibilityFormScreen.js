@@ -196,6 +196,26 @@ export default function CompatibilityFormScreen({ navigation }) {
               </View>
 
               <View style={styles.content}>
+                <View style={styles.segmentCard}>
+                  <Text style={styles.cardTitle}>{t('compatibility.relationshipType')}</Text>
+                  <View style={styles.segmentWrap}>
+                    {RELATIONSHIP_OPTIONS.map((option) => {
+                      const active = iliskiTuru === option;
+                      return (
+                        <TouchableOpacity
+                          key={option}
+                          style={[styles.segmentButton, active && styles.segmentButtonActive]}
+                          onPress={() => setIliskiTuru(option)}
+                        >
+                          <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
+                            {t(`compatibility.${option}`)}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                </View>
+
                 <View style={styles.formCard}>
                   <View style={styles.cardHeaderRow}>
                     <Text style={styles.cardTitle}>{t('compatibility.personOne')}</Text>
@@ -241,26 +261,6 @@ export default function CompatibilityFormScreen({ navigation }) {
                       {formatDisplayDate(kisi2DogumTarihi)}
                     </Text>
                   </TouchableOpacity>
-                </View>
-
-                <View style={styles.segmentCard}>
-                  <Text style={styles.cardTitle}>{t('compatibility.relationshipType')}</Text>
-                  <View style={styles.segmentWrap}>
-                    {RELATIONSHIP_OPTIONS.map((option) => {
-                      const active = iliskiTuru === option;
-                      return (
-                        <TouchableOpacity
-                          key={option}
-                          style={[styles.segmentButton, active && styles.segmentButtonActive]}
-                          onPress={() => setIliskiTuru(option)}
-                        >
-                          <Text style={[styles.segmentText, active && styles.segmentTextActive]}>
-                            {t(`compatibility.${option}`)}
-                          </Text>
-                        </TouchableOpacity>
-                      );
-                    })}
-                  </View>
                 </View>
 
                 <FortunePrimaryButton
