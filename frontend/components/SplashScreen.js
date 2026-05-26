@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Dimensions, Animated, StatusBar, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Logo from './Logo';
 
 const { width, height } = Dimensions.get('window');
@@ -25,11 +26,11 @@ export default function SplashScreen() {
   }, [fadeAnim, scaleAnim]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar 
         barStyle="light-content" 
         backgroundColor="#0D0B1F"
-        translucent={Platform.OS === 'android'}
+        translucent={false}
         hidden={false}
       />
       <Animated.View
@@ -43,7 +44,7 @@ export default function SplashScreen() {
       >
         <Logo size="xxLarge" />
       </Animated.View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -55,7 +56,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: width,
     height: height,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   logoContainer: {
     justifyContent: 'center',

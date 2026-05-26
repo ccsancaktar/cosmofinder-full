@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremium } from '../../context/PremiumContext';
+import { TOKEN_COSTS } from '../../context/TokenContext';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../context/NotificationContext';
 import PaymentAPI from '../../services/paymentAPI';
@@ -29,6 +30,7 @@ export default function PremiumScreen({ navigation }) {
   const [loadingPlanId, setLoadingPlanId] = useState(null);
   const [storeReady, setStoreReady] = useState(true);
   const [isRestoring, setIsRestoring] = useState(false);
+  const tokenValueUnlocked = Object.values(TOKEN_COSTS).reduce((sum, value) => sum + Number(value || 0), 0);
 
   useEffect(() => {
     fetchStatus();
@@ -309,20 +311,52 @@ export default function PremiumScreen({ navigation }) {
           </View>
         )}
 
-        <View style={styles.restoreSection}>
-          <Text style={styles.restoreTitle}>{t('premium.restorePurchase')}</Text>
-          <Text style={styles.restoreDescription}>{t('premium.restorePurchaseDescription')}</Text>
-          <TouchableOpacity
-            style={[styles.restoreButton, isRestoring && styles.restoreButtonDisabled]}
-            onPress={handleRestorePurchases}
-            disabled={isRestoring}
-          >
-            <Ionicons name="refresh-circle-outline" size={18} color="#F5D06A" />
-            <Text style={styles.restoreButtonText}>
-              {isRestoring ? t('premium.processing') : t('premium.restorePurchase')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {hasPremium ? (
+          <View style={styles.activeInsightsSection}>
+            <Text style={styles.restoreTitle}>{t('premium.premiumActiveInsightsTitle')}</Text>
+            <Text style={styles.restoreDescription}>{t('premium.premiumActiveInsightsDescription')}</Text>
+
+            <View style={styles.activeInsightsGrid}>
+              <View style={styles.insightCard}>
+                <Ionicons name="wallet-outline" size={18} color="#F5D06A" />
+                <Text style={styles.insightValue}>{tokenValueUnlocked}</Text>
+                <Text style={styles.insightLabel}>{t('premium.tokenValueUnlocked')}</Text>
+              </View>
+
+              <View style={styles.insightCard}>
+                <Ionicons name="sparkles-outline" size={18} color="#F5D06A" />
+                <Text style={styles.insightValue}>{t('premium.unlimitedShort')}</Text>
+                <Text style={styles.insightLabel}>{t('premium.unlimitedReadings')}</Text>
+              </View>
+
+              <View style={styles.insightCard}>
+                <Ionicons name="videocam-off-outline" size={18} color="#F5D06A" />
+                <Text style={styles.insightValue}>{t('premium.adFreeShort')}</Text>
+                <Text style={styles.insightLabel}>{t('premium.noAds')}</Text>
+              </View>
+            </View>
+
+            <View style={styles.restoreDisabledCard}>
+              <Ionicons name="checkmark-circle-outline" size={18} color="#7DD36E" />
+              <Text style={styles.restoreDisabledText}>{t('premium.restorePurchaseActiveInfo')}</Text>
+            </View>
+          </View>
+        ) : (
+          <View style={styles.restoreSection}>
+            <Text style={styles.restoreTitle}>{t('premium.restorePurchase')}</Text>
+            <Text style={styles.restoreDescription}>{t('premium.restorePurchaseDescription')}</Text>
+            <TouchableOpacity
+              style={[styles.restoreButton, isRestoring && styles.restoreButtonDisabled]}
+              onPress={handleRestorePurchases}
+              disabled={isRestoring}
+            >
+              <Ionicons name="refresh-circle-outline" size={18} color="#F5D06A" />
+              <Text style={styles.restoreButtonText}>
+                {isRestoring ? t('premium.processing') : t('premium.restorePurchase')}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
       </ScrollView>
       </LinearGradient>
@@ -605,6 +639,60 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#F5D06A',
+  },
+  activeInsightsSection: {
+    marginHorizontal: 20,
+    marginTop: 8,
+    marginBottom: 32,
+    padding: 18,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: 'rgba(125, 211, 110, 0.22)',
+    backgroundColor: 'rgba(255,255,255,0.03)',
+  },
+  activeInsightsGrid: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 6,
+    marginBottom: 14,
+  },
+  insightCard: {
+    flex: 1,
+    minHeight: 108,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255,255,255,0.035)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.05)',
+    padding: 12,
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+  insightValue: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#FFFFFF',
+  },
+  insightLabel: {
+    fontSize: 12,
+    lineHeight: 18,
+    color: 'rgba(255,255,255,0.66)',
+  },
+  restoreDisabledCard: {
+    minHeight: 48,
+    borderRadius: 16,
+    backgroundColor: 'rgba(125, 211, 110, 0.10)',
+    borderWidth: 1,
+    borderColor: 'rgba(125, 211, 110, 0.22)',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    gap: 8,
+  },
+  restoreDisabledText: {
+    flex: 1,
+    fontSize: 13,
+    lineHeight: 19,
+    color: 'rgba(255,255,255,0.78)',
   },
   storePendingCard: {
     width: '100%',

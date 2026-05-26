@@ -99,28 +99,27 @@ export default function App() {
     };
   }, []);
 
-  // Fontlar yüklenene kadar loading ekranı göster
-  if (!fontsLoaded || showSplash) {
-    return <SplashScreen />;
-  }
-
   return (
     <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-      <ErrorBoundary>
-        <LanguageProvider>
-          <QueryProvider>
-              <AuthProvider>
-                <TokenProvider>
-                  <PremiumProvider>
-                    <NotificationProvider>
-                      <AppNavigator />
-                    </NotificationProvider>
-                  </PremiumProvider>
-                </TokenProvider>
-              </AuthProvider>
-          </QueryProvider>
-        </LanguageProvider>
-      </ErrorBoundary>
+      {!fontsLoaded || showSplash ? (
+        <SplashScreen />
+      ) : (
+        <ErrorBoundary>
+          <LanguageProvider>
+            <QueryProvider>
+                <AuthProvider>
+                  <TokenProvider>
+                    <PremiumProvider>
+                      <NotificationProvider>
+                        <AppNavigator />
+                      </NotificationProvider>
+                    </PremiumProvider>
+                  </TokenProvider>
+                </AuthProvider>
+            </QueryProvider>
+          </LanguageProvider>
+        </ErrorBoundary>
+      )}
     </SafeAreaProvider>
   );
-} 
+}

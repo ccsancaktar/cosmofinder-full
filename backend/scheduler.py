@@ -16,8 +16,8 @@ ANGEL_NOTIFICATION_SEQUENCE = ["111", "222", "333", "444", "555", "777", "888", 
 
 
 def _display_name(user):
-    full_name = f"{user.first_name or ''} {user.last_name or ''}".strip()
-    return full_name or user.username or "Değerli Kullanıcı"
+    first_name = (user.first_name or '').strip()
+    return first_name or user.username or "Değerli Kullanıcı"
 
 
 def _iter_users(query):

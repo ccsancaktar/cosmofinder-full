@@ -202,7 +202,7 @@ export default function HomeScreen({ navigation }) {
       <StatusBar 
         barStyle="light-content" 
         backgroundColor="#0D0B1F"
-        translucent={Platform.OS === 'android'}
+        translucent={false}
         hidden={false}
       />
       
@@ -430,7 +430,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   header: {
     flexDirection: 'row',
@@ -438,7 +437,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    marginTop: Platform.OS === 'android' ? 8 : 0,
     height: 68,
     width: '100%',
     zIndex: 9998,

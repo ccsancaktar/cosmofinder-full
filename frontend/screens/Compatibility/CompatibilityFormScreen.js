@@ -200,7 +200,7 @@ export default function CompatibilityFormScreen({ navigation }) {
                   <View style={styles.cardHeaderRow}>
                     <Text style={styles.cardTitle}>{t('compatibility.personOne')}</Text>
                     <TouchableOpacity style={styles.profileUseButton} onPress={useProfileForFirstPerson}>
-                      <Ionicons name="sparkles" size={14} color="#C5A100" />
+                      <Ionicons name="sparkles" size={16} color="#0D0B1F" />
                       <Text style={styles.profileUseText}>{t('compatibility.useMyProfile')}</Text>
                     </TouchableOpacity>
                   </View>
@@ -354,8 +354,21 @@ const styles = StyleSheet.create({
   formCard: { backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: 24, padding: 20, borderWidth: 1, borderColor: 'rgba(197,161,0,0.10)', marginBottom: 16 },
   cardHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 },
   cardTitle: { color: '#FFFFFF', fontSize: 18, fontWeight: '700', marginBottom: 12 },
-  profileUseButton: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 999, backgroundColor: 'rgba(197,161,0,0.10)' },
-  profileUseText: { color: '#C5A100', fontSize: 12, fontWeight: '700', marginLeft: 6 },
+  profileUseButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 999,
+    backgroundColor: '#F5D06A',
+    borderWidth: 1,
+    borderColor: 'rgba(245,208,106,0.85)',
+    shadowColor: Platform.OS === 'ios' ? '#F5D06A' : 'transparent',
+    shadowOpacity: Platform.OS === 'ios' ? 0.18 : 0,
+    shadowRadius: Platform.OS === 'ios' ? 8 : 0,
+    elevation: Platform.OS === 'android' ? 3 : 0,
+  },
+  profileUseText: { color: '#0D0B1F', fontSize: 13, fontWeight: '800', marginLeft: 6 },
   label: { color: '#FFFFFF', fontSize: 14, fontWeight: '600', marginBottom: 8 },
   input: { height: 56, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', paddingHorizontal: 18, color: '#FFFFFF', marginBottom: 16 },
   dateButton: { height: 56, borderRadius: 18, backgroundColor: 'rgba(255,255,255,0.05)', borderWidth: 1, borderColor: 'rgba(255,255,255,0.08)', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 18 },

@@ -92,17 +92,12 @@ const ReadingModeCard = ({
             },
           ]}
         >
-          <View style={styles.summaryPill}>
-            <Ionicons name="sparkles-outline" size={12} color="#C5A100" />
-            <Text style={styles.summaryPillText}>{badgeLabel}</Text>
-          </View>
-
           <View style={styles.summaryHeader}>
-            <View style={styles.summaryIcon}>
-              <Ionicons name="sparkles" size={16} color="#C5A100" />
+            <View style={[styles.summaryIcon, !canUseProfile && styles.summaryIconWarning]}>
+              <Ionicons name={canUseProfile ? 'checkmark' : 'alert'} size={16} color={canUseProfile ? '#C5A100' : '#F4B45F'} />
             </View>
             <View style={styles.summaryHeaderCopy}>
-              <Text style={styles.summaryTitle}>{summaryTitle}</Text>
+              <Text style={styles.summaryTitle}>{canUseProfile ? badgeLabel : summaryTitle}</Text>
               <Text style={styles.summaryDescription}>
                 {canUseProfile ? summaryDescription : missingMessage}
               </Text>
@@ -123,7 +118,7 @@ const ReadingModeCard = ({
             </View>
           ) : null}
 
-          {onPrimaryAction && primaryActionLabel ? (
+          {!canUseProfile && onPrimaryAction && primaryActionLabel ? (
             <TouchableOpacity style={styles.primaryActionButton} onPress={onPrimaryAction} activeOpacity={0.9}>
               <Text style={styles.primaryActionText}>{primaryActionLabel}</Text>
               <Ionicons name="arrow-forward" size={16} color="#0D0B1F" />
@@ -190,24 +185,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(197,161,0,0.10)',
   },
-  summaryPill: {
-    alignSelf: 'flex-start',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: 'rgba(197,161,0,0.12)',
-    borderRadius: 999,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(197,161,0,0.14)',
-  },
-  summaryPillText: {
-    color: '#C5A100',
-    fontSize: 12,
-    fontWeight: '700',
-  },
   summaryHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -220,6 +197,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
+  },
+  summaryIconWarning: {
+    backgroundColor: 'rgba(244,180,95,0.14)',
   },
   summaryHeaderCopy: {
     flex: 1,
@@ -237,16 +217,16 @@ const styles = StyleSheet.create({
   },
   summaryList: {
     marginTop: 14,
-    gap: 10,
+    gap: 8,
   },
   summaryRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgba(255,255,255,0.04)',
-    borderRadius: 16,
+    backgroundColor: 'rgba(255,255,255,0.035)',
+    borderRadius: 14,
     paddingHorizontal: 12,
-    paddingVertical: 10,
+    paddingVertical: 9,
     borderWidth: 1,
     borderColor: 'rgba(255,255,255,0.04)',
   },

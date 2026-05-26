@@ -51,6 +51,7 @@ def build_tarot_prompt(language, **kwargs):
 
                 ÖNEMLİ KURALLAR:
                 - Yorumu doğrudan kullanıcının sorusuna bağla
+                - Her bölümde kullanıcının asıl sorusuna veya kaygısına açıkça değin
                 - Kartların anlamını tek tek değil, birbirleriyle ilişkili bir açılım olarak yorumla
                 - Genel fal metni yazma; bu üç kartın soruya verdiği cevabı kur
                 - Her bölümde sebep + sonuç + yön ver
@@ -104,6 +105,7 @@ def build_tarot_prompt(language, **kwargs):
             ÖNEMLİ:
             - Yorum kısa ama güçlü olsun
             - Kartların mesajını doğrudan soruya bağla
+            - Her bölümde kullanıcının asıl sorusuna veya kaygısına açıkça değin
             - Her şeyi açma; detayların bir kısmını örtülü bırak
             - Genel konuşma yapma, bu soruya ve bu kartlara özel kal
             - Başlıkları aynen koru
@@ -159,6 +161,7 @@ def build_tarot_prompt(language, **kwargs):
 
                 IMPORTANT RULES:
                 - Tie the reading directly to the user's question
+                - In every section, explicitly reflect the user's question or concern
                 - Read the cards as one connected spread, not as isolated definitions
                 - Avoid generic fortune language
                 - In each section give cause + effect + direction
@@ -212,6 +215,7 @@ def build_tarot_prompt(language, **kwargs):
             IMPORTANT:
             - Keep it concise but meaningful
             - Connect the message of the cards directly to the question
+            - In every section, explicitly reflect the user's question or concern
             - Do not reveal every deep layer
             - Stay specific to this spread and this question
             - Keep the headings exactly as written
@@ -264,6 +268,7 @@ def build_tarot_prompt(language, **kwargs):
 
             WICHTIG:
             - Beziehe die Deutung direkt auf die Frage
+            - Spiegele in jedem Abschnitt die konkrete Frage oder Sorge des Nutzers
             - Lies die Karten als zusammenhängende Legung
             - Schreibe keine allgemeine Wahrsage-Sprache
             - Gib in jedem Abschnitt Ursache + Wirkung + Richtung
@@ -317,6 +322,7 @@ def build_tarot_prompt(language, **kwargs):
         WICHTIG:
         - Halte die Deutung kurz, aber aussagekräftig
         - Verbinde die Karten direkt mit der Frage
+        - Spiegele in jedem Abschnitt die konkrete Frage oder Sorge des Nutzers
         - Öffne nicht alle tiefen Ebenen
         - Bleibe bei dieser konkreten Legung und dieser Frage
         - Behalte die Überschriften genau bei
