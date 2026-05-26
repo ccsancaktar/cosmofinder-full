@@ -13,7 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { usePremium } from '../../context/PremiumContext';
-import { TOKEN_COSTS } from '../../context/TokenContext';
 import { useTranslation } from 'react-i18next';
 import { useNotification } from '../../context/NotificationContext';
 import PaymentAPI from '../../services/paymentAPI';
@@ -30,7 +29,6 @@ export default function PremiumScreen({ navigation }) {
   const [loadingPlanId, setLoadingPlanId] = useState(null);
   const [storeReady, setStoreReady] = useState(true);
   const [isRestoring, setIsRestoring] = useState(false);
-  const tokenValueUnlocked = Object.values(TOKEN_COSTS).reduce((sum, value) => sum + Number(value || 0), 0);
 
   useEffect(() => {
     fetchStatus();
@@ -319,8 +317,8 @@ export default function PremiumScreen({ navigation }) {
             <View style={styles.activeInsightsGrid}>
               <View style={[styles.insightCard, styles.insightCardHalf]}>
                 <Ionicons name="wallet-outline" size={18} color="#F5D06A" />
-                <Text style={styles.insightValue}>{tokenValueUnlocked}</Text>
-                <Text style={styles.insightLabel}>{t('premium.tokenValueUnlocked')}</Text>
+                <Text style={styles.insightValue}>{t('premium.noTokenShort')}</Text>
+                <Text style={styles.insightLabel}>{t('premium.noTokenSpending')}</Text>
               </View>
 
               <View style={[styles.insightCard, styles.insightCardHalf]}>
@@ -340,11 +338,6 @@ export default function PremiumScreen({ navigation }) {
                   </View>
                 </View>
               </View>
-            </View>
-
-            <View style={styles.restoreDisabledCard}>
-              <Ionicons name="checkmark-circle-outline" size={18} color="#7DD36E" />
-              <Text style={styles.restoreDisabledText}>{t('premium.restorePurchaseActiveInfo')}</Text>
             </View>
           </View>
         ) : (
@@ -716,24 +709,6 @@ const styles = StyleSheet.create({
   },
   insightWideText: {
     flex: 1,
-  },
-  restoreDisabledCard: {
-    minHeight: 48,
-    borderRadius: 16,
-    backgroundColor: 'rgba(125, 211, 110, 0.10)',
-    borderWidth: 1,
-    borderColor: 'rgba(125, 211, 110, 0.22)',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  restoreDisabledText: {
-    flex: 1,
-    fontSize: 13,
-    lineHeight: 19,
-    color: 'rgba(255,255,255,0.78)',
-    marginLeft: 8,
   },
   storePendingCard: {
     width: '100%',
