@@ -104,20 +104,6 @@ const ReadingModeCard = ({
             </View>
           </View>
 
-          {canUseProfile ? (
-            <View style={styles.summaryList}>
-              {summaryItems.map((item) => (
-                <View key={`${item.label}-${item.value || 'empty'}`} style={styles.summaryRow}>
-                  <View style={styles.summaryLabelWrap}>
-                    <Ionicons name={item.icon || 'ellipse'} size={16} color="#C5A100" />
-                    <Text style={styles.summaryLabel}>{item.label}</Text>
-                  </View>
-                  <Text style={styles.summaryValue}>{item.value}</Text>
-                </View>
-              ))}
-            </View>
-          ) : null}
-
           {!canUseProfile && onPrimaryAction && primaryActionLabel ? (
             <TouchableOpacity style={styles.primaryActionButton} onPress={onPrimaryAction} activeOpacity={0.9}>
               <Text style={styles.primaryActionText}>{primaryActionLabel}</Text>
@@ -214,39 +200,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
     color: 'rgba(255,255,255,0.66)',
-  },
-  summaryList: {
-    marginTop: 14,
-    gap: 8,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(255,255,255,0.035)',
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 9,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.04)',
-  },
-  summaryLabelWrap: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  summaryLabel: {
-    color: 'rgba(255,255,255,0.62)',
-    fontSize: 14,
-    marginLeft: 10,
-  },
-  summaryValue: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '700',
-    marginLeft: 12,
-    maxWidth: '48%',
-    textAlign: 'right',
   },
   primaryActionButton: {
     marginTop: 16,
