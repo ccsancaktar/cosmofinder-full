@@ -5,10 +5,9 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
   ActivityIndicator,
-  Image,
-  Platform
+  Platform,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -138,6 +137,28 @@ export default function ProfileScreen({ navigation }) {
 
   const handleLanguageChange = () => {
     setShowLanguageModal(true);
+  };
+
+  const openExternalPage = async (url) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+      if (!supported) {
+        showError(t('profile.linkOpenError'));
+        return;
+      }
+
+      await Linking.openURL(url);
+    } catch (error) {
+      showError(t('profile.linkOpenError'));
+    }
+  };
+
+  const handleOpenPrivacyPolicy = () => {
+    openExternalPage('https://www.cosmofinder.com/privacy-policy');
+  };
+
+  const handleOpenTerms = () => {
+    openExternalPage('https://www.cosmofinder.com/terms');
   };
 
   const formatDateForDisplay = (dateString) => {
@@ -327,7 +348,29 @@ export default function ProfileScreen({ navigation }) {
             </View>
             <Ionicons name="chevron-forward" size={18} color="#C5A100" />
           </TouchableOpacity>
+        </View>
 
+        <View style={styles.menuSection}>
+          <Text style={styles.sectionHeading}>{t('profile.legal')}</Text>
+
+          <TouchableOpacity style={styles.menuItem} onPress={handleOpenPrivacyPolicy}>
+            <View style={styles.menuItemLeft}>
+              <Ionicons name="shield-checkmark-outline" size={20} color="#C5A100" />
+              <Text style={[styles.menuItemText, fontStyles.body]}>{t('profile.privacy')}</Text>
+            </View>
+            <Ionicons name="open-outline" size={18} color="#C5A100" />
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.menuItem} onPress={handleOpenTerms}>
+            <View style={styles.menuItemLeft}>
+              <Ionicons name="document-text-outline" size={20} color="#C5A100" />
+              <Text style={[styles.menuItemText, fontStyles.body]}>{t('profile.terms')}</Text>
+            </View>
+            <Ionicons name="open-outline" size={18} color="#C5A100" />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.menuSection}>
           <TouchableOpacity style={styles.menuItem} onPress={handleLogout}>
             <View style={styles.menuItemLeft}>
               <Ionicons name="log-out-outline" size={20} color="#C5A100" />
